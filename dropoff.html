@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drop-Off Manifest &amp; Verified Recyclers — ReCircuit (UN SDG 12)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['Fraunces', 'Georgia', 'serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace']
+          },
+          colors: {
+            paper: '#F4F3EF',
+            ink: '#111210',
+            obsidian: '#141715',
+            line: '#DDDAD2',
+            limeaccent: '#B8F25A',
+            forest: '#164E3B',
+            vermilion: '#D94326'
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="min-h-screen flex flex-col selection:bg-limeaccent selection:text-ink">
+
+  <!-- Architectural Top Header -->
+  <header class="sticky top-0 z-40 bg-paper/95 backdrop-blur-md border-b hairline no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <a href="index.html" class="flex items-center gap-3 min-w-0 group">
+        <div class="w-9 h-9 rounded-lg bg-obsidian text-limeaccent flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <i data-lucide="orbit" class="w-4 h-4"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <span class="font-editorial text-lg font-bold tracking-tight text-ink leading-none">ReCircuit</span>
+            <span class="text-[10px] uppercase font-mono font-semibold tracking-wider px-1.5 py-0.5 rounded bg-obsidian text-limeaccent">SDG 12</span>
+          </div>
+          <p class="text-[11px] text-stone-500 truncate hidden sm:block">Smart E-Waste &amp; Critical Mineral Recovery</p>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-1">
+        <a href="index.html" class="nav-link"><i data-lucide="home" class="w-3.5 h-3.5"></i>Home</a>
+        <a href="lookup.html" class="nav-link"><i data-lucide="search" class="w-3.5 h-3.5"></i>Smart Directory</a>
+        <a href="calculator.html" class="nav-link"><i data-lucide="calculator" class="w-3.5 h-3.5"></i>Urban Mine Calculator</a>
+        <a href="triage.html" class="nav-link"><i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>Triage &amp; Safety</a>
+        <a href="dropoff.html" class="nav-link active"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>Drop-Off Manifest</a>
+        <a href="quiz.html" class="nav-link"><i data-lucide="help-circle" class="w-3.5 h-3.5"></i>Myth Quiz</a>
+      </nav>
+
+      <!-- Utility Controls -->
+      <div class="flex items-center gap-2.5">
+        <div class="hidden lg:flex items-center text-xs border hairline rounded-lg bg-white px-2 py-1 gap-1.5 shadow-sm">
+          <i data-lucide="globe" class="w-3.5 h-3.5 text-stone-400"></i>
+          <select id="region-selector" class="bg-transparent text-xs text-stone-700 font-medium focus:outline-none cursor-pointer">
+            <option value="IN">India (CPCB EPR 2022)</option>
+            <option value="US">USA (EPA RCRA)</option>
+            <option value="EU">Global / EU (WEEE)</option>
+          </select>
+        </div>
+
+        <a href="dropoff.html" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-obsidian text-paper hover:bg-stone-800 transition-colors text-xs font-semibold shadow-sm">
+          <i data-lucide="package" class="w-3.5 h-3.5 text-limeaccent"></i>
+          <span class="hidden sm:inline">My Manifest</span>
+          <span class="manifest-counter hidden w-4 h-4 rounded-full bg-limeaccent text-ink text-[10px] font-bold flex items-center justify-center">0</span>
+        </a>
+
+        <button id="mobile-menu-btn" class="md:hidden p-1.5 rounded-md hover:bg-stone-200 text-stone-700" aria-label="Toggle Menu">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobile-menu" class="md:hidden hidden border-t hairline bg-paper px-4 py-3 space-y-1">
+      <a href="index.html" class="nav-link w-full py-2"><i data-lucide="home" class="w-4 h-4"></i>Home</a>
+      <a href="lookup.html" class="nav-link w-full py-2"><i data-lucide="search" class="w-4 h-4"></i>Smart Directory (36+ Items)</a>
+      <a href="calculator.html" class="nav-link w-full py-2"><i data-lucide="calculator" class="w-4 h-4"></i>Urban Mine &amp; Repair Calculator</a>
+      <a href="triage.html" class="nav-link w-full py-2"><i data-lucide="shield-alert" class="w-4 h-4"></i>15s Triage &amp; Thermal Emergency</a>
+      <a href="dropoff.html" class="nav-link active w-full py-2"><i data-lucide="map-pin" class="w-4 h-4"></i>Drop-Off Manifest &amp; Centers</a>
+      <a href="quiz.html" class="nav-link w-full py-2"><i data-lucide="help-circle" class="w-4 h-4"></i>Wish-Cycling Myth Quiz</a>
+    </div>
+  </header>
+
+  <!-- Main Manifest & Directory Container -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full space-y-12">
+    
+    <!-- Page Header -->
+    <div class="border-b hairline pb-6 space-y-2">
+      <div class="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-stone-500">
+        <i data-lucide="clipboard-check" class="w-3.5 h-3.5 text-forest"></i>
+        <span>Certified Logistics Manifest &bull; UN SDG 12.4</span>
+      </div>
+      <h1 class="font-editorial text-3xl sm:text-4xl font-bold text-ink">Drop-Off Box Manifest &amp; Centers</h1>
+      <p class="text-sm text-stone-600 max-w-2xl leading-relaxed">
+        Assemble your household e-waste manifest, complete physical prep verification, generate printable container slips, and locate certified CPCB, EPA, and WEEE dismantlers.
+      </p>
+    </div>
+
+    <!-- SECTION 1: MY DROP-OFF MANIFEST -->
+    <section class="bg-white rounded-2xl border hairline p-6 sm:p-8 shadow-sm space-y-6">
+      
+      <!-- Manifest Header & Actions -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b hairline pb-4">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-stone-500 font-semibold">Household Collection Bin</span>
+          <h2 class="font-editorial text-xl sm:text-2xl font-bold text-ink">My Drop-Off Manifest</h2>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="copy-manifest-btn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border hairline bg-paper hover:bg-stone-200 text-ink text-xs font-semibold transition-colors">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span>Copy Manifest</span>
+          </button>
+          <button onclick="window.print()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border hairline bg-paper hover:bg-stone-200 text-ink text-xs font-semibold transition-colors">
+            <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+            <span>1-Click Print Label</span>
+          </button>
+          <button id="clear-manifest-btn" class="text-xs font-semibold text-stone-400 hover:text-vermilion transition-colors px-2">
+            Clear All
+          </button>
+        </div>
+      </div>
+
+      <!-- Manifest Items List -->
+      <div id="manifest-items-list" class="space-y-3">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Empty Manifest State -->
+      <div id="manifest-empty" class="hidden text-center py-12 bg-paper rounded-xl border hairline space-y-2">
+        <i data-lucide="package-open" class="w-8 h-8 text-stone-400 mx-auto"></i>
+        <h3 class="font-editorial text-base font-bold text-ink">Your Drop-Off Manifest is Empty</h3>
+        <p class="text-xs text-stone-500 max-w-sm mx-auto">
+          Browse the <a href="lookup.html" class="text-ink font-semibold underline">Smart Directory</a> or use the <a href="calculator.html" class="text-ink font-semibold underline">Urban Mine Calculator</a> to add items to your box.
+        </p>
+      </div>
+
+      <!-- Physical Preparation Verification Checklist -->
+      <div class="p-5 rounded-xl bg-paper border hairline space-y-3">
+        <div class="flex items-center gap-2 text-xs font-bold text-ink uppercase font-mono">
+          <i data-lucide="shield-check" class="w-4 h-4 text-forest"></i>
+          <span>Physical Pre-Drop Safety Checklist (Verify Before Heading Out)</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-stone-700">
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" class="mt-0.5 rounded border-stone-300 text-obsidian focus:ring-obsidian" checked />
+            <span><strong>NIST SP 800-88 Data Erase:</strong> Encrypted and factory-reset all phones, laptops, and storage drives.</span>
+          </label>
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" class="mt-0.5 rounded border-stone-300 text-obsidian focus:ring-obsidian" checked />
+            <span><strong>Terminal Isolation:</strong> Electrical tape wrapped firmly over all battery contacts and exposed terminals.</span>
+          </label>
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" class="mt-0.5 rounded border-stone-300 text-obsidian focus:ring-obsidian" />
+            <span><strong>Toner / Liquid Isolation:</strong> Ink cartridges and e-liquids sealed tightly in leak-proof ziplock bags.</span>
+          </label>
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" class="mt-0.5 rounded border-stone-300 text-obsidian focus:ring-obsidian" />
+            <span><strong>Swelling / Damage Check:</strong> Confirmed no swollen batteries are packed in the general box (use Red Box).</span>
+          </label>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SECTION 2: VERIFIED DROP-OFF RECYCLER DIRECTORY -->
+    <section class="space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b hairline pb-4">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-stone-500 font-semibold">Official Network</span>
+          <h2 class="font-editorial text-2xl font-bold text-ink">Verified Drop-Off &amp; Dismantler Directory</h2>
+        </div>
+
+        <!-- Directory Region Filter Tabs -->
+        <div class="flex items-center gap-1.5" id="center-region-tabs">
+          <button data-reg="all" class="reg-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-obsidian text-paper transition-all">All Hubs (12)</button>
+          <button data-reg="India" class="reg-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-white border hairline text-stone-700 hover:border-ink transition-all">India (CPCB)</button>
+          <button data-reg="USA" class="reg-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-white border hairline text-stone-700 hover:border-ink transition-all">USA (EPA)</button>
+          <button data-reg="Global" class="reg-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-white border hairline text-stone-700 hover:border-ink transition-all">Global / EU</button>
+        </div>
+      </div>
+
+      <!-- Centers Grid -->
+      <div id="centers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Architectural Footer -->
+  <footer class="border-t hairline bg-white text-stone-600 py-12 px-4 sm:px-6 lg:px-8 mt-16 no-print">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-md bg-obsidian text-limeaccent flex items-center justify-center">
+            <i data-lucide="orbit" class="w-4 h-4"></i>
+          </div>
+          <span class="font-editorial text-lg font-bold text-ink">ReCircuit</span>
+        </div>
+        <p class="text-xs leading-relaxed text-stone-500">
+          Aligned with UN Sustainable Development Goal 12. Grounded take-back infrastructure.
+        </p>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Pages &amp; Tools</div>
+        <ul class="space-y-1.5">
+          <li><a href="index.html" class="hover:text-ink">Home &amp; SDG 12 Hub</a></li>
+          <li><a href="lookup.html" class="hover:text-ink">Smart Directory</a></li>
+          <li><a href="calculator.html" class="hover:text-ink">Urban Mining Calculator</a></li>
+          <li><a href="triage.html" class="hover:text-ink">15s Triage &amp; Thermal Safety</a></li>
+          <li><a href="dropoff.html" class="hover:text-ink font-semibold">Drop-Off Manifest &amp; Hubs</a></li>
+          <li><a href="quiz.html" class="hover:text-ink">Wish-Cycling Myth Quiz</a></li>
+        </ul>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Authorized Standards</div>
+        <ul class="space-y-1.5 text-stone-500">
+          <li>&bull; CPCB Extended Producer Responsibility (EPR)</li>
+          <li>&bull; EPA R2v3 / SERI Responsible Recycling</li>
+          <li>&bull; Basel Convention on Transboundary Wastes</li>
+          <li>&bull; e-Stewards Standard for Ethical Recycling</li>
+        </ul>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Repository</div>
+        <p class="text-xs text-stone-500 leading-relaxed">
+          Open-source submission for the Global SDG Hackathon on Devpost.
+        </p>
+        <a 
+          href="https://github.com/naman-swami/ReCircuit-Smart-E-Waste-Household-Recycling-Guide-UN-SDG-12-" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border hairline bg-paper hover:bg-stone-200 text-ink font-semibold transition-colors"
+        >
+          <i data-lucide="github" class="w-4 h-4"></i>
+          <span>GitHub Source</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/shared.js"></script>
+  <script>
+    let activeCenterRegion = 'all';
+
+    function renderManifest() {
+      const container = document.getElementById('manifest-items-list');
+      const emptyState = document.getElementById('manifest-empty');
+      const manifest = AppState.manifest || [];
+
+      if (manifest.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      container.innerHTML = manifest.map(entry => {
+        const item = ITEMS.find(i => i.id === entry.id) || {
+          id: entry.id, code: 'EW-X', name: 'Unknown Item', stream: 'ewaste', icon: '📦'
+        };
+
+        return `
+          <div class="flex items-center justify-between p-4 rounded-xl bg-paper border hairline">
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="text-2xl">${item.icon || '📦'}</span>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white font-semibold text-stone-600">${item.code}</span>
+                  <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-limeaccent/30 text-forest font-semibold">${item.stream}</span>
+                </div>
+                <h4 class="font-editorial text-sm font-bold text-ink truncate mt-0.5">${item.name}</h4>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1.5 bg-white border hairline rounded-lg px-2 py-1">
+                <button onclick="AppState.updateQty(${item.id}, ${(entry.qty || 1) - 1})" class="w-5 h-5 rounded hover:bg-stone-100 flex items-center justify-center font-bold text-xs text-stone-600">-</button>
+                <span class="w-5 text-center font-mono font-bold text-xs text-ink">${entry.qty || 1}</span>
+                <button onclick="AppState.updateQty(${item.id}, ${(entry.qty || 1) + 1})" class="w-5 h-5 rounded hover:bg-stone-100 flex items-center justify-center font-bold text-xs text-stone-600">+</button>
+              </div>
+
+              <button onclick="AppState.removeFromManifest(${item.id})" class="p-1.5 rounded-lg hover:bg-red-50 text-stone-400 hover:text-vermilion transition-colors">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderCenters() {
+      const grid = document.getElementById('centers-grid');
+      const filtered = DROPOFF_CENTERS.filter(c => {
+        if (activeCenterRegion === 'all') return true;
+        if (activeCenterRegion === 'Global') return c.country !== 'India' && c.country !== 'USA';
+        return c.country === activeCenterRegion;
+      });
+
+      grid.innerHTML = filtered.map(c => {
+        const streamBadges = (c.accepts || []).map(s => 
+          `<span class="text-[9px] font-mono uppercase px-2 py-0.5 rounded bg-stone-100 text-stone-700 border hairline font-semibold">${s}</span>`
+        ).join('');
+
+        return `
+          <div class="item-card p-5 flex flex-col justify-between space-y-4">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-paper border hairline font-bold text-stone-600 uppercase">${c.country} &bull; ${c.city}</span>
+                <span class="text-[10px] font-semibold text-forest flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Verified</span>
+              </div>
+
+              <h3 class="font-editorial text-base font-bold text-ink leading-snug">${c.name}</h3>
+              <p class="text-xs text-stone-600 leading-relaxed">${c.address}</p>
+
+              <div class="pt-1">
+                <div class="text-[10px] font-mono text-stone-400 uppercase">Accepted Waste:</div>
+                <div class="flex flex-wrap gap-1 mt-1">
+                  ${streamBadges}
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t hairline space-y-2">
+              <div class="text-[11px] font-mono text-stone-500">
+                <strong>Standard:</strong> ${c.certification}
+              </div>
+              <div class="flex items-center justify-between text-xs font-semibold text-ink">
+                <span class="font-mono text-stone-600">${c.phone}</span>
+                <span class="text-forest">&bull; Drop-Off Open</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function copyManifestToClipboard() {
+      const manifest = AppState.manifest || [];
+      if (manifest.length === 0) {
+        AppState.showToast('Your manifest is empty.');
+        return;
+      }
+
+      let text = `========================================\n`;
+      text += `ReCircuit — Household Drop-Off Manifest\n`;
+      text += `UN SDG 12: Responsible Consumption\n`;
+      text += `Date: ${new Date().toLocaleDateString()}\n`;
+      text += `Region Standard: ${AppState.region}\n`;
+      text += `========================================\n\n`;
+
+      manifest.forEach((entry, idx) => {
+        const item = ITEMS.find(i => i.id === entry.id) || { name: 'Item', code: 'EW' };
+        text += `${idx + 1}. [${item.code}] ${item.name} — Qty: ${entry.qty || 1}\n`;
+        text += `   Stream: ${item.stream.toUpperCase()} | Hazard: ${item.hazard}\n`;
+        text += `   Safety Prep: Terminals taped, data wiped per NIST 800-88.\n\n`;
+      });
+
+      text += `Verification: Prepared in accordance with CPCB / EPA / WEEE guidelines.\n`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        AppState.showToast('Manifest copied to clipboard!');
+      }).catch(() => {
+        AppState.showToast('Manifest text ready');
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderManifest();
+      renderCenters();
+
+      // Listen for manifest updates
+      window.addEventListener('manifestUpdated', renderManifest);
+
+      // Copy manifest
+      document.getElementById('copy-manifest-btn').addEventListener('click', copyManifestToClipboard);
+
+      // Clear manifest
+      document.getElementById('clear-manifest-btn').addEventListener('click', () => {
+        if (confirm('Clear all items from your manifest?')) {
+          AppState.clearManifest();
+        }
+      });
+
+      // Region tabs
+      document.querySelectorAll('.reg-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.reg-pill').forEach(b => {
+            b.className = 'reg-pill px-3 py-1.5 rounded-lg text-xs font-medium bg-white border hairline text-stone-700 hover:border-ink transition-all';
+          });
+          btn.className = 'reg-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-obsidian text-paper transition-all';
+          activeCenterRegion = btn.getAttribute('data-reg');
+          renderCenters();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

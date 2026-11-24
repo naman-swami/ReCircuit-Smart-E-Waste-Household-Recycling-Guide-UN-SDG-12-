@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>15s Disposal Triage &amp; Thermal Emergency — ReCircuit (UN SDG 12)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['Fraunces', 'Georgia', 'serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace']
+          },
+          colors: {
+            paper: '#F4F3EF',
+            ink: '#111210',
+            obsidian: '#141715',
+            line: '#DDDAD2',
+            limeaccent: '#B8F25A',
+            forest: '#164E3B',
+            vermilion: '#D94326'
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="min-h-screen flex flex-col selection:bg-limeaccent selection:text-ink">
+
+  <!-- Architectural Top Header -->
+  <header class="sticky top-0 z-40 bg-paper/95 backdrop-blur-md border-b hairline no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <a href="index.html" class="flex items-center gap-3 min-w-0 group">
+        <div class="w-9 h-9 rounded-lg bg-obsidian text-limeaccent flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <i data-lucide="orbit" class="w-4 h-4"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <span class="font-editorial text-lg font-bold tracking-tight text-ink leading-none">ReCircuit</span>
+            <span class="text-[10px] uppercase font-mono font-semibold tracking-wider px-1.5 py-0.5 rounded bg-obsidian text-limeaccent">SDG 12</span>
+          </div>
+          <p class="text-[11px] text-stone-500 truncate hidden sm:block">Smart E-Waste &amp; Critical Mineral Recovery</p>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-1">
+        <a href="index.html" class="nav-link"><i data-lucide="home" class="w-3.5 h-3.5"></i>Home</a>
+        <a href="lookup.html" class="nav-link"><i data-lucide="search" class="w-3.5 h-3.5"></i>Smart Directory</a>
+        <a href="calculator.html" class="nav-link"><i data-lucide="calculator" class="w-3.5 h-3.5"></i>Urban Mine Calculator</a>
+        <a href="triage.html" class="nav-link active"><i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>Triage &amp; Safety</a>
+        <a href="dropoff.html" class="nav-link"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>Drop-Off Manifest</a>
+        <a href="quiz.html" class="nav-link"><i data-lucide="help-circle" class="w-3.5 h-3.5"></i>Myth Quiz</a>
+      </nav>
+
+      <!-- Utility Controls -->
+      <div class="flex items-center gap-2.5">
+        <div class="hidden lg:flex items-center text-xs border hairline rounded-lg bg-white px-2 py-1 gap-1.5 shadow-sm">
+          <i data-lucide="globe" class="w-3.5 h-3.5 text-stone-400"></i>
+          <select id="region-selector" class="bg-transparent text-xs text-stone-700 font-medium focus:outline-none cursor-pointer">
+            <option value="IN">India (CPCB EPR 2022)</option>
+            <option value="US">USA (EPA RCRA)</option>
+            <option value="EU">Global / EU (WEEE)</option>
+          </select>
+        </div>
+
+        <a href="dropoff.html" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-obsidian text-paper hover:bg-stone-800 transition-colors text-xs font-semibold shadow-sm">
+          <i data-lucide="package" class="w-3.5 h-3.5 text-limeaccent"></i>
+          <span class="hidden sm:inline">My Manifest</span>
+          <span class="manifest-counter hidden w-4 h-4 rounded-full bg-limeaccent text-ink text-[10px] font-bold flex items-center justify-center">0</span>
+        </a>
+
+        <button id="mobile-menu-btn" class="md:hidden p-1.5 rounded-md hover:bg-stone-200 text-stone-700" aria-label="Toggle Menu">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobile-menu" class="md:hidden hidden border-t hairline bg-paper px-4 py-3 space-y-1">
+      <a href="index.html" class="nav-link w-full py-2"><i data-lucide="home" class="w-4 h-4"></i>Home</a>
+      <a href="lookup.html" class="nav-link w-full py-2"><i data-lucide="search" class="w-4 h-4"></i>Smart Directory (36+ Items)</a>
+      <a href="calculator.html" class="nav-link w-full py-2"><i data-lucide="calculator" class="w-4 h-4"></i>Urban Mine &amp; Repair Calculator</a>
+      <a href="triage.html" class="nav-link active w-full py-2"><i data-lucide="shield-alert" class="w-4 h-4"></i>15s Triage &amp; Thermal Emergency</a>
+      <a href="dropoff.html" class="nav-link w-full py-2"><i data-lucide="map-pin" class="w-4 h-4"></i>Drop-Off Manifest &amp; Centers</a>
+      <a href="quiz.html" class="nav-link w-full py-2"><i data-lucide="help-circle" class="w-4 h-4"></i>Wish-Cycling Myth Quiz</a>
+    </div>
+  </header>
+
+  <!-- Main Triage & Emergency Container -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full space-y-12">
+    
+    <!-- Page Header -->
+    <div class="border-b hairline pb-6 space-y-2">
+      <div class="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-vermilion">
+        <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+        <span>Safety-Critical Diagnostic Hub &bull; UN SDG 12.4</span>
+      </div>
+      <h1 class="font-editorial text-3xl sm:text-4xl font-bold text-ink">15-Second Triage &amp; Battery Emergency</h1>
+      <p class="text-sm text-stone-600 max-w-2xl leading-relaxed">
+        Route any unknown gadget to repair, certified e-waste, or hazardous waste in 4 quick taps. Features the life-saving Red Box containment guide for swollen and hissing lithium batteries.
+      </p>
+    </div>
+
+    <!-- SECTION 1: 15-SECOND TRIAGE WIZARD -->
+    <section class="bg-white rounded-2xl border hairline p-6 sm:p-8 shadow-sm space-y-6">
+      <div class="flex items-center justify-between border-b hairline pb-4">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-stone-500 font-semibold">Interactive Decision Matrix</span>
+          <h2 class="font-editorial text-xl sm:text-2xl font-bold text-ink mt-0.5">Household Gadget Triage Wizard</h2>
+        </div>
+        <button id="reset-wizard-btn" class="text-xs font-semibold text-stone-500 hover:text-ink">
+          Restart Diagnostic
+        </button>
+      </div>
+
+      <!-- Question Steps Container -->
+      <div id="wizard-steps-container" class="space-y-6">
+        
+        <!-- Step 1: Functionality -->
+        <div class="p-5 rounded-xl bg-paper border hairline space-y-3" id="step-1">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-obsidian text-paper text-xs font-mono font-bold flex items-center justify-center">1</span>
+            <h3 class="font-editorial text-base font-bold text-ink">Does the device power on and function normally?</h3>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+            <button class="triage-opt px-4 py-3 rounded-xl bg-white border hairline hover:border-ink text-left text-xs font-semibold text-stone-800 transition-all" data-q="1" data-val="working">
+              🟢 Yes, fully working
+            </button>
+            <button class="triage-opt px-4 py-3 rounded-xl bg-white border hairline hover:border-ink text-left text-xs font-semibold text-stone-800 transition-all" data-q="1" data-val="fixable">
+              🟡 Minor defect (cracked screen / weak battery)
+            </button>
+            <button class="triage-opt px-4 py-3 rounded-xl bg-white border hairline hover:border-ink text-left text-xs font-semibold text-stone-800 transition-all" data-q="1" data-val="dead">
+              🔴 Completely dead / water damaged
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Personal Data -->
+        <div class="p-5 rounded-xl bg-paper border hairline space-y-3 hidden" id="step-2">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-obsidian text-paper text-xs font-mono font-bold flex items-center justify-center">2</span>
+            <h3 class="font-editorial text-base font-bold text-ink">Does it store personal data, passwords, or biometrics?</h3>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <button class="triage-opt px-4 py-3 rounded-xl bg-white border hairline hover:border-ink text-left text-xs font-semibold text-stone-800 transition-all" data-q="2" data-val="data">
+              🔒 Yes (Phone, PC, Tablet, Smart TV, Watch, SSD)
+            </button>
+            <button class="triage-opt px-4 py-3 rounded-xl bg-white border hairline hover:border-ink text-left text-xs font-semibold text-stone-800 transition-all" data-q="2" data-val="nodata">
+              🔌 No (Cable, bulb, power bank, basic appliance)
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Battery Check -->
+        <div class="p-5 rounded-xl bg-paper border hairline space-y-3 hidden" id="step-3">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-obsidian text-paper text-xs font-mono font-bold flex items-center justify-center">3</span>
+            <h3 class="font-editorial text-base font-bold text-ink">Does it have a rechargeable battery?</h3>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <button class="triage-opt px-4 py-3 rounded-xl bg-white border hairline hover:border-ink text-left text-xs font-semibold text-stone-800 transition-all" data-q="3" data-val="battery">
+              🔋 Yes (Internal Li-ion, pouch, or 18650 cell)
+            </button>
+            <button class="triage-opt px-4 py-3 rounded-xl bg-white border hairline hover:border-ink text-left text-xs font-semibold text-stone-800 transition-all" data-q="3" data-val="nobattery">
+              ⚡ No (AC wall plug only or corded)
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 4: Battery Damage & Distress -->
+        <div class="p-5 rounded-xl bg-paper border hairline space-y-3 hidden" id="step-4">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-vermilion text-paper text-xs font-mono font-bold flex items-center justify-center">4</span>
+            <h3 class="font-editorial text-base font-bold text-vermilion">Is the battery swollen, hissing, overheating, or dented?</h3>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <button class="triage-opt px-4 py-3 rounded-xl bg-red-50 border border-red-300 hover:border-red-600 text-left text-xs font-bold text-vermilion transition-all" data-q="4" data-val="swollen">
+              🔥 YES — Swelling, bulging, or warm to touch
+            </button>
+            <button class="triage-opt px-4 py-3 rounded-xl bg-white border hairline hover:border-ink text-left text-xs font-semibold text-stone-800 transition-all" data-q="4" data-val="intact">
+              🛡️ NO — Case is flat and undamaged
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Triage Result Card -->
+      <div id="triage-result" class="hidden p-6 rounded-2xl border hairline space-y-4 transition-all">
+        <div class="flex items-center gap-3">
+          <div id="result-icon-box" class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0">
+            ✅
+          </div>
+          <div>
+            <div class="text-[10px] font-mono uppercase tracking-wider font-semibold" id="result-badge">Optimal Routing</div>
+            <h3 class="font-editorial text-xl font-bold text-ink" id="result-title">Donate or Resell</h3>
+          </div>
+        </div>
+
+        <p class="text-sm text-stone-700 leading-relaxed font-medium" id="result-description">
+          Your device has remaining functional life. Extending its life saves far more carbon than recycling it prematurely.
+        </p>
+
+        <div class="p-4 rounded-xl bg-white border hairline space-y-2 text-xs">
+          <div class="font-bold text-ink uppercase font-mono text-[11px]">Recommended Action Steps:</div>
+          <ul id="result-action-steps" class="space-y-1.5 text-stone-600 list-disc list-inside">
+            <!-- Injected action steps -->
+          </ul>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <a href="dropoff.html" class="px-4 py-2 rounded-lg bg-obsidian text-paper text-xs font-semibold hover:bg-stone-800 transition-colors">
+            Find Drop-Off Centers &rarr;
+          </a>
+          <a href="lookup.html" class="px-4 py-2 rounded-lg border hairline bg-paper hover:bg-stone-200 text-ink text-xs font-semibold transition-colors">
+            Look up exact item specs
+          </a>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SECTION 2: RED BOX BATTERY THERMAL RUNAWAY EMERGENCY PROTOCOL -->
+    <section class="rounded-2xl obsidian-grid text-paper p-6 sm:p-10 border border-red-500/30 shadow-2xl space-y-8" id="red-box-emergency">
+      
+      <!-- Warning Header -->
+      <div class="space-y-3 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-vermilion/20 text-red-300 text-xs font-mono font-semibold border border-red-500/40">
+          <i data-lucide="flame" class="w-3.5 h-3.5 text-vermilion"></i>
+          <span>LIFE-SAFETY CRITICAL &bull; UN3480 EMERGENCY PROTOCOL</span>
+        </div>
+        <h2 class="font-editorial text-2xl sm:text-4xl font-bold text-white tracking-tight">
+          The "Red Box" Lithium Battery Thermal Protocol
+        </h2>
+        <p class="text-stone-300 text-sm leading-relaxed">
+          A swollen, bulging, hissing, or overheating lithium battery is experiencing internal cell shorting and gas buildup. It can undergo <strong>thermal runaway (&gt;600&deg;C)</strong> within seconds, releasing toxic hydrofluoric acid gas and shooting jet flames. Follow these 4 immediate containment imperatives.
+        </p>
+      </div>
+
+      <!-- 4 Immediate Containment Steps -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        
+        <div class="p-5 rounded-xl bg-white/5 border border-red-500/20 space-y-3">
+          <div class="w-9 h-9 rounded-lg bg-vermilion/20 text-vermilion font-mono font-bold flex items-center justify-center text-sm border border-vermilion/30">
+            01
+          </div>
+          <h3 class="font-editorial text-base font-bold text-white">DO NOT Charge or Puncture</h3>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Immediately unplug from chargers. Never pierce, press, or attempt to "flatten" a swollen battery pouch. Puncturing the separator triggers instantaneous thermal ignition.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-white/5 border border-red-500/20 space-y-3">
+          <div class="w-9 h-9 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-bold flex items-center justify-center text-sm border border-amber-500/30">
+            02
+          </div>
+          <h3 class="font-editorial text-base font-bold text-white">Tape Terminal Contacts</h3>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Wrap non-conductive PVC electrical tape or duct tape completely over exposed battery terminals and connector pins to prevent friction shorts.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-white/5 border border-red-500/20 space-y-3">
+          <div class="w-9 h-9 rounded-lg bg-blue-500/20 text-blue-300 font-mono font-bold flex items-center justify-center text-sm border border-blue-500/30">
+            03
+          </div>
+          <h3 class="font-editorial text-base font-bold text-white">Dry Sand Container</h3>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Submerge the battery in a metal or ceramic bucket filled with <strong>dry sand, cat litter, or baking soda</strong>. NEVER use water &mdash; lithium reacts violently with water forming hydrogen gas.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-white/5 border border-red-500/20 space-y-3">
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-limeaccent font-mono font-bold flex items-center justify-center text-sm border border-limeaccent/30">
+            04
+          </div>
+          <h3 class="font-editorial text-base font-bold text-white">10m Outdoor Perimeter</h3>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Move the container outside to a ventilated, non-flammable area (concrete patio, driveway) at least 10 meters away from structures. Transport directly to hazardous waste.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Action Footer for Protocol -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
+        <div class="flex items-center gap-2 text-xs text-stone-400 font-mono">
+          <i data-lucide="printer" class="w-4 h-4 text-limeaccent"></i>
+          <span>Keep a physical copy in your workshop or garage:</span>
+        </div>
+        <button onclick="window.print()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-ink text-xs font-bold hover:bg-stone-200 transition-colors shadow-lg">
+          <i data-lucide="printer" class="w-4 h-4 text-stone-700"></i>
+          <span>1-Click Print Emergency Safety Sheet</span>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Architectural Footer -->
+  <footer class="border-t hairline bg-white text-stone-600 py-12 px-4 sm:px-6 lg:px-8 mt-16 no-print">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-md bg-obsidian text-limeaccent flex items-center justify-center">
+            <i data-lucide="orbit" class="w-4 h-4"></i>
+          </div>
+          <span class="font-editorial text-lg font-bold text-ink">ReCircuit</span>
+        </div>
+        <p class="text-xs leading-relaxed text-stone-500">
+          Aligned with UN Sustainable Development Goal 12. Complete scientific metadata for 36+ household items.
+        </p>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Pages &amp; Tools</div>
+        <ul class="space-y-1.5">
+          <li><a href="index.html" class="hover:text-ink">Home &amp; SDG 12 Hub</a></li>
+          <li><a href="lookup.html" class="hover:text-ink">Smart Directory</a></li>
+          <li><a href="calculator.html" class="hover:text-ink">Urban Mining Calculator</a></li>
+          <li><a href="triage.html" class="hover:text-ink font-semibold">15s Triage &amp; Thermal Safety</a></li>
+          <li><a href="dropoff.html" class="hover:text-ink">Drop-Off Manifest &amp; Hubs</a></li>
+          <li><a href="quiz.html" class="hover:text-ink">Wish-Cycling Myth Quiz</a></li>
+        </ul>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Safety Standards</div>
+        <ul class="space-y-1.5 text-stone-500">
+          <li>&bull; UN3480 / UN38.3 Lithium Battery Safety</li>
+          <li>&bull; NFPA 855: Energy Storage System Safety</li>
+          <li>&bull; OSHA 1910.120: Hazardous Waste Operations</li>
+          <li>&bull; CISA Cyber Incident Response Guidelines</li>
+        </ul>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Repository</div>
+        <p class="text-xs text-stone-500 leading-relaxed">
+          Open-source submission for the Global SDG Hackathon on Devpost.
+        </p>
+        <a 
+          href="https://github.com/naman-swami/ReCircuit-Smart-E-Waste-Household-Recycling-Guide-UN-SDG-12-" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border hairline bg-paper hover:bg-stone-200 text-ink font-semibold transition-colors"
+        >
+          <i data-lucide="github" class="w-4 h-4"></i>
+          <span>GitHub Source</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/shared.js"></script>
+  <script>
+    // Triage State
+    const answers = {
+      q1: null,
+      q2: null,
+      q3: null,
+      q4: null
+    };
+
+    function handleTriageClick(q, val) {
+      answers[`q${q}`] = val;
+
+      if (q === 1) {
+        if (val === 'working') {
+          showResult('donate');
+          return;
+        } else if (val === 'fixable') {
+          showResult('repair');
+          return;
+        } else {
+          document.getElementById('step-2').classList.remove('hidden');
+        }
+      } else if (q === 2) {
+        document.getElementById('step-3').classList.remove('hidden');
+      } else if (q === 3) {
+        if (val === 'battery') {
+          document.getElementById('step-4').classList.remove('hidden');
+        } else {
+          showResult('recycle_nobattery');
+        }
+      } else if (q === 4) {
+        if (val === 'swollen') {
+          showResult('emergency');
+          document.getElementById('red-box-emergency').scrollIntoView({ behavior: 'smooth' });
+        } else {
+          showResult('recycle_battery');
+        }
+      }
+    }
+
+    function showResult(type) {
+      const resCard = document.getElementById('triage-result');
+      const iconBox = document.getElementById('result-icon-box');
+      const badge = document.getElementById('result-badge');
+      const title = document.getElementById('result-title');
+      const desc = document.getElementById('result-description');
+      const steps = document.getElementById('result-action-steps');
+
+      resCard.classList.remove('hidden');
+
+      if (type === 'donate') {
+        iconBox.className = 'w-12 h-12 rounded-xl bg-emerald-100 text-forest flex items-center justify-center text-2xl shrink-0';
+        iconBox.textContent = '🎁';
+        badge.textContent = 'Waste Prevention (SDG 12.5 Priority)';
+        badge.className = 'text-[10px] font-mono uppercase tracking-wider font-semibold text-forest';
+        title.textContent = 'Donate, Resell, or Refurbish';
+        desc.textContent = 'This device is fully functional! Throwing or even recycling it early destroys embodied manufacturing value. Re-homing it avoids ~85 to 300 kg CO₂e.';
+        steps.innerHTML = `
+          <li>Wipe all personal accounts and restore factory settings.</li>
+          <li>Donate to a local school, library, community center, or sell on peer-to-peer markets.</li>
+          <li>Check manufacturer trade-in value (Apple, Samsung, Best Buy).</li>
+        `;
+      } else if (type === 'repair') {
+        iconBox.className = 'w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl shrink-0';
+        iconBox.textContent = '🔧';
+        badge.textContent = 'Right-to-Repair Opportunity';
+        badge.className = 'text-[10px] font-mono uppercase tracking-wider font-semibold text-amber-800';
+        title.textContent = 'Perform Component Repair or Battery Swap';
+        desc.textContent = 'A simple battery replacement or screen swap extends life by 1.5 to 3 years, saving 4× more carbon than early recycling and saving you hundreds of dollars.';
+        steps.innerHTML = `
+          <li>Consult iFixit repairability guides for step-by-step disassembly.</li>
+          <li>Order an OEM or certified replacement battery/display.</li>
+          <li>Visit an authorized third-party repair specialist before retiring the unit.</li>
+        `;
+      } else if (type === 'emergency') {
+        iconBox.className = 'w-12 h-12 rounded-xl bg-red-100 text-vermilion flex items-center justify-center text-2xl shrink-0';
+        iconBox.textContent = '🚨';
+        badge.textContent = 'IMMEDIATE HAZARD (UN3480)';
+        badge.className = 'text-[10px] font-mono uppercase tracking-wider font-semibold text-vermilion';
+        title.textContent = 'Red Box Containment Required!';
+        desc.textContent = 'This battery is in danger of thermal runaway! Do not charge, pierce, or throw in household trash. Follow the Red Box protocol below immediately.';
+        steps.innerHTML = `
+          <li>Tape exposed electrical contacts immediately.</li>
+          <li>Isolate in a metal bucket filled with dry sand or cat litter.</li>
+          <li>Relocate outdoors (10m perimeter) and contact your municipal hazardous waste depot.</li>
+        `;
+      } else if (type === 'recycle_battery') {
+        iconBox.className = 'w-12 h-12 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center text-2xl shrink-0';
+        iconBox.textContent = '🔋';
+        badge.textContent = 'Certified E-Waste & Battery Stream';
+        badge.className = 'text-[10px] font-mono uppercase tracking-wider font-semibold text-blue-800';
+        title.textContent = 'Terminal Tape & Drop-Off at Certified Recycler';
+        desc.textContent = 'The device is non-functional but contains a sound rechargeable battery and recoverable gold/cobalt.';
+        steps.innerHTML = `
+          <li>Tape over battery contact terminals with non-conductive electrical tape.</li>
+          <li>If data-bearing, apply NIST 800-88 cryptographic erase or physical drill-out.</li>
+          <li>Route to a CPCB (India), Call2Recycle (USA), or WEEE (EU) collection point.</li>
+        `;
+      } else {
+        iconBox.className = 'w-12 h-12 rounded-xl bg-stone-100 text-stone-800 flex items-center justify-center text-2xl shrink-0';
+        iconBox.textContent = '♻️';
+        badge.textContent = 'Small Appliance / E-Waste';
+        badge.className = 'text-[10px] font-mono uppercase tracking-wider font-semibold text-stone-800';
+        title.textContent = 'Standard Certified E-Waste Drop-Off';
+        desc.textContent = 'Contains no live battery risk, but contains copper, aluminum, and circuits that belong in formal e-waste collection.';
+        steps.innerHTML = `
+          <li>Bundle cords neatly using twist-ties or rubber bands.</li>
+          <li>Add to your ReCircuit Drop-Off Box manifest.</li>
+          <li>Drop off at your local e-waste collection clinic or scrap dealer.</li>
+        `;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.triage-opt').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const q = parseInt(btn.getAttribute('data-q'));
+          const val = btn.getAttribute('data-val');
+          
+          // Visual selection highlight
+          const parent = btn.parentElement;
+          parent.querySelectorAll('.triage-opt').forEach(b => {
+            b.classList.remove('ring-2', 'ring-obsidian', 'bg-stone-100');
+          });
+          btn.classList.add('ring-2', 'ring-obsidian', 'bg-stone-100');
+
+          handleTriageClick(q, val);
+        });
+      });
+
+      document.getElementById('reset-wizard-btn').addEventListener('click', () => {
+        answers.q1 = null; answers.q2 = null; answers.q3 = null; answers.q4 = null;
+        document.querySelectorAll('.triage-opt').forEach(b => {
+          b.classList.remove('ring-2', 'ring-obsidian', 'bg-stone-100');
+        });
+        document.getElementById('step-2').classList.add('hidden');
+        document.getElementById('step-3').classList.add('hidden');
+        document.getElementById('step-4').classList.add('hidden');
+        document.getElementById('triage-result').classList.add('hidden');
+      });
+    });
+  </script>
+</body>
+</html>

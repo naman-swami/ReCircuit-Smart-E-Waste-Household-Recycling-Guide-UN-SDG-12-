@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wish-Cycling &amp; Circular Economy Quiz — ReCircuit (UN SDG 12)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['Fraunces', 'Georgia', 'serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace']
+          },
+          colors: {
+            paper: '#F4F3EF',
+            ink: '#111210',
+            obsidian: '#141715',
+            line: '#DDDAD2',
+            limeaccent: '#B8F25A',
+            forest: '#164E3B',
+            vermilion: '#D94326'
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="min-h-screen flex flex-col selection:bg-limeaccent selection:text-ink">
+
+  <!-- Architectural Top Header -->
+  <header class="sticky top-0 z-40 bg-paper/95 backdrop-blur-md border-b hairline no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <a href="index.html" class="flex items-center gap-3 min-w-0 group">
+        <div class="w-9 h-9 rounded-lg bg-obsidian text-limeaccent flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <i data-lucide="orbit" class="w-4 h-4"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <span class="font-editorial text-lg font-bold tracking-tight text-ink leading-none">ReCircuit</span>
+            <span class="text-[10px] uppercase font-mono font-semibold tracking-wider px-1.5 py-0.5 rounded bg-obsidian text-limeaccent">SDG 12</span>
+          </div>
+          <p class="text-[11px] text-stone-500 truncate hidden sm:block">Smart E-Waste &amp; Critical Mineral Recovery</p>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-1">
+        <a href="index.html" class="nav-link"><i data-lucide="home" class="w-3.5 h-3.5"></i>Home</a>
+        <a href="lookup.html" class="nav-link"><i data-lucide="search" class="w-3.5 h-3.5"></i>Smart Directory</a>
+        <a href="calculator.html" class="nav-link"><i data-lucide="calculator" class="w-3.5 h-3.5"></i>Urban Mine Calculator</a>
+        <a href="triage.html" class="nav-link"><i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>Triage &amp; Safety</a>
+        <a href="dropoff.html" class="nav-link"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>Drop-Off Manifest</a>
+        <a href="quiz.html" class="nav-link active"><i data-lucide="help-circle" class="w-3.5 h-3.5"></i>Myth Quiz</a>
+      </nav>
+
+      <!-- Utility Controls -->
+      <div class="flex items-center gap-2.5">
+        <div class="hidden lg:flex items-center text-xs border hairline rounded-lg bg-white px-2 py-1 gap-1.5 shadow-sm">
+          <i data-lucide="globe" class="w-3.5 h-3.5 text-stone-400"></i>
+          <select id="region-selector" class="bg-transparent text-xs text-stone-700 font-medium focus:outline-none cursor-pointer">
+            <option value="IN">India (CPCB EPR 2022)</option>
+            <option value="US">USA (EPA RCRA)</option>
+            <option value="EU">Global / EU (WEEE)</option>
+          </select>
+        </div>
+
+        <a href="dropoff.html" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-obsidian text-paper hover:bg-stone-800 transition-colors text-xs font-semibold shadow-sm">
+          <i data-lucide="package" class="w-3.5 h-3.5 text-limeaccent"></i>
+          <span class="hidden sm:inline">My Manifest</span>
+          <span class="manifest-counter hidden w-4 h-4 rounded-full bg-limeaccent text-ink text-[10px] font-bold flex items-center justify-center">0</span>
+        </a>
+
+        <button id="mobile-menu-btn" class="md:hidden p-1.5 rounded-md hover:bg-stone-200 text-stone-700" aria-label="Toggle Menu">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobile-menu" class="md:hidden hidden border-t hairline bg-paper px-4 py-3 space-y-1">
+      <a href="index.html" class="nav-link w-full py-2"><i data-lucide="home" class="w-4 h-4"></i>Home</a>
+      <a href="lookup.html" class="nav-link w-full py-2"><i data-lucide="search" class="w-4 h-4"></i>Smart Directory (36+ Items)</a>
+      <a href="calculator.html" class="nav-link w-full py-2"><i data-lucide="calculator" class="w-4 h-4"></i>Urban Mine &amp; Repair Calculator</a>
+      <a href="triage.html" class="nav-link w-full py-2"><i data-lucide="shield-alert" class="w-4 h-4"></i>15s Triage &amp; Thermal Emergency</a>
+      <a href="dropoff.html" class="nav-link w-full py-2"><i data-lucide="map-pin" class="w-4 h-4"></i>Drop-Off Manifest &amp; Centers</a>
+      <a href="quiz.html" class="nav-link active w-full py-2"><i data-lucide="help-circle" class="w-4 h-4"></i>Wish-Cycling Myth Quiz</a>
+    </div>
+  </header>
+
+  <!-- Main Quiz Container -->
+  <main class="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 w-full space-y-8">
+    
+    <!-- Quiz Header -->
+    <div class="border-b hairline pb-6 space-y-2 text-center max-w-2xl mx-auto">
+      <div class="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-stone-500">
+        <i data-lucide="brain" class="w-3.5 h-3.5 text-forest"></i>
+        <span>Behavioral Science &bull; UN SDG 12 Literacy</span>
+      </div>
+      <h1 class="font-editorial text-3xl sm:text-4xl font-bold text-ink">Wish-Cycling Myth-Buster Quiz</h1>
+      <p class="text-sm text-stone-600 leading-relaxed">
+        Wish-cycling—putting things in recycling bins hoping they will be recycled—destroys municipal sorting equipment and sparks dangerous truck fires. Test your knowledge on 6 real scenarios.
+      </p>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="space-y-1.5">
+      <div class="flex items-center justify-between text-xs font-mono text-stone-500">
+        <span id="question-progress-label">Question 1 of 6</span>
+        <span id="score-counter">Score: 0 / 6</span>
+      </div>
+      <div class="w-full h-1.5 bg-stone-200 rounded-full overflow-hidden">
+        <div id="progress-bar-fill" class="h-full bg-obsidian transition-all duration-300 w-1/6"></div>
+      </div>
+    </div>
+
+    <!-- Question Card -->
+    <div id="quiz-card" class="bg-white rounded-2xl border hairline p-6 sm:p-8 shadow-sm space-y-6">
+      <div class="space-y-3">
+        <span class="text-xs font-mono uppercase tracking-wider text-stone-400 font-semibold" id="question-tag">Scenario 01</span>
+        <h2 class="font-editorial text-xl sm:text-2xl font-bold text-ink leading-snug" id="question-scenario">
+          You just finished a disposable vape and upgraded your wireless earbuds. Neither works anymore. What is the safest household disposal action?
+        </h2>
+      </div>
+
+      <!-- Options List -->
+      <div class="space-y-3 pt-2" id="options-container">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Explanation & SDG Context (hidden until answered) -->
+      <div id="explanation-box" class="hidden p-5 rounded-xl bg-paper border hairline space-y-3">
+        <div class="flex items-center gap-2">
+          <span id="explanation-icon" class="text-lg">💡</span>
+          <span class="text-xs font-bold uppercase font-mono tracking-wide" id="explanation-status">Correct!</span>
+        </div>
+        <p class="text-xs text-stone-700 leading-relaxed font-medium" id="explanation-text">
+          Explanation here.
+        </p>
+        <div class="pt-2 border-t hairline text-[11px] text-stone-500 font-mono" id="sdg-context-text">
+          SDG 12.4 Context.
+        </div>
+      </div>
+
+      <!-- Navigation / Next Button -->
+      <div class="pt-4 border-t hairline flex items-center justify-between">
+        <span class="text-xs text-stone-400 font-mono">Select an option to check explanation</span>
+        <button id="next-q-btn" class="hidden inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-obsidian text-paper hover:bg-stone-800 transition-colors text-xs font-bold shadow-sm">
+          <span>Next Scenario</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Final Scorecard Card (hidden until finished) -->
+    <div id="scorecard-card" class="hidden bg-white rounded-2xl border hairline p-8 shadow-lg text-center space-y-6">
+      <div class="w-16 h-16 rounded-2xl bg-obsidian text-limeaccent flex items-center justify-center mx-auto text-3xl">
+        🏆
+      </div>
+
+      <div class="space-y-2">
+        <span class="text-xs font-mono uppercase tracking-wider text-stone-500 font-semibold">Quiz Completed</span>
+        <h2 class="font-editorial text-3xl font-bold text-ink">You Scored <span id="final-score" class="text-forest">6 / 6</span></h2>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-limeaccent/30 text-forest text-xs font-mono font-bold mt-1" id="badge-title">
+          Certified E-Waste Guardian &bull; UN SDG 12 Champion
+        </div>
+      </div>
+
+      <p class="text-sm text-stone-600 max-w-lg mx-auto leading-relaxed" id="final-feedback">
+        Outstanding! You understand the critical difference between Wish-Cycling and scientific materials recovery. You're ready to protect waste workers and prevent landfill contamination.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-3 pt-4 border-t hairline">
+        <button id="retake-quiz-btn" class="px-5 py-2.5 rounded-xl bg-obsidian text-paper text-xs font-bold hover:bg-stone-800 transition-colors shadow-sm">
+          Retake Quiz
+        </button>
+        <a href="lookup.html" class="px-5 py-2.5 rounded-xl border hairline hover:bg-stone-100 text-xs font-bold text-ink transition-colors">
+          Explore All 36 Items &rarr;
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Architectural Footer -->
+  <footer class="border-t hairline bg-white text-stone-600 py-12 px-4 sm:px-6 lg:px-8 mt-16 no-print">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-md bg-obsidian text-limeaccent flex items-center justify-center">
+            <i data-lucide="orbit" class="w-4 h-4"></i>
+          </div>
+          <span class="font-editorial text-lg font-bold text-ink">ReCircuit</span>
+        </div>
+        <p class="text-xs leading-relaxed text-stone-500">
+          Aligned with UN Sustainable Development Goal 12. Grounded take-back infrastructure.
+        </p>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Pages &amp; Tools</div>
+        <ul class="space-y-1.5">
+          <li><a href="index.html" class="hover:text-ink">Home &amp; SDG 12 Hub</a></li>
+          <li><a href="lookup.html" class="hover:text-ink">Smart Directory</a></li>
+          <li><a href="calculator.html" class="hover:text-ink">Urban Mining Calculator</a></li>
+          <li><a href="triage.html" class="hover:text-ink">15s Triage &amp; Thermal Safety</a></li>
+          <li><a href="dropoff.html" class="hover:text-ink">Drop-Off Manifest &amp; Hubs</a></li>
+          <li><a href="quiz.html" class="hover:text-ink font-semibold">Wish-Cycling Myth Quiz</a></li>
+        </ul>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Educational Citations</div>
+        <ul class="space-y-1.5 text-stone-500">
+          <li>&bull; UN Global E-Waste Monitor (UNITAR / ITU)</li>
+          <li>&bull; US EPA Lithium-ion Battery Advisory</li>
+          <li>&bull; WHO Guidelines on E-Waste Exposures</li>
+          <li>&bull; Central Pollution Control Board (CPCB) India</li>
+        </ul>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Repository</div>
+        <p class="text-xs text-stone-500 leading-relaxed">
+          Open-source submission for the Global SDG Hackathon on Devpost.
+        </p>
+        <a 
+          href="https://github.com/naman-swami/ReCircuit-Smart-E-Waste-Household-Recycling-Guide-UN-SDG-12-" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border hairline bg-paper hover:bg-stone-200 text-ink font-semibold transition-colors"
+        >
+          <i data-lucide="github" class="w-4 h-4"></i>
+          <span>GitHub Source</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/shared.js"></script>
+  <script>
+    let currentQIndex = 0;
+    let score = 0;
+    let answered = false;
+
+    function renderQuestion() {
+      answered = false;
+      const q = QUIZ_QUESTIONS[currentQIndex];
+      const total = QUIZ_QUESTIONS.length;
+
+      document.getElementById('question-progress-label').textContent = `Question ${currentQIndex + 1} of ${total}`;
+      document.getElementById('score-counter').textContent = `Score: ${score} / ${total}`;
+      document.getElementById('progress-bar-fill').style.width = `${((currentQIndex + 1) / total) * 100}%`;
+
+      document.getElementById('question-tag').textContent = `Scenario 0${currentQIndex + 1}`;
+      document.getElementById('question-scenario').textContent = q.scenario;
+
+      // Render options
+      const container = document.getElementById('options-container');
+      container.innerHTML = q.options.map((opt, idx) => `
+        <button 
+          onclick="handleSelectOption(${idx})"
+          id="opt-btn-${idx}"
+          class="quiz-option-btn w-full p-4 rounded-xl bg-paper border hairline hover:border-ink text-left text-xs sm:text-sm font-semibold text-stone-800 transition-all flex items-start gap-3"
+        >
+          <span class="w-6 h-6 rounded-lg bg-white border hairline text-xs font-mono font-bold flex items-center justify-center shrink-0 text-stone-600 mt-0.5">${String.fromCharCode(65 + idx)}</span>
+          <span class="leading-relaxed">${opt}</span>
+        </button>
+      `).join('');
+
+      document.getElementById('explanation-box').classList.add('hidden');
+      document.getElementById('next-q-btn').classList.add('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function handleSelectOption(chosenIdx) {
+      if (answered) return;
+      answered = true;
+
+      const q = QUIZ_QUESTIONS[currentQIndex];
+      const isCorrect = chosenIdx === q.correctIndex;
+      if (isCorrect) score++;
+
+      // Style chosen and correct buttons
+      document.querySelectorAll('.quiz-option-btn').forEach((btn, idx) => {
+        btn.disabled = true;
+        btn.classList.remove('hover:border-ink');
+        if (idx === q.correctIndex) {
+          btn.className = 'quiz-option-btn w-full p-4 rounded-xl bg-emerald-50 border-2 border-forest text-left text-xs sm:text-sm font-bold text-forest transition-all flex items-start gap-3';
+        } else if (idx === chosenIdx && !isCorrect) {
+          btn.className = 'quiz-option-btn w-full p-4 rounded-xl bg-red-50 border-2 border-vermilion text-left text-xs sm:text-sm font-bold text-vermilion transition-all flex items-start gap-3';
+        } else {
+          btn.className = 'quiz-option-btn w-full p-4 rounded-xl bg-paper border hairline opacity-40 text-left text-xs sm:text-sm text-stone-500 flex items-start gap-3';
+        }
+      });
+
+      // Show explanation
+      const expBox = document.getElementById('explanation-box');
+      const expStatus = document.getElementById('explanation-status');
+      const expIcon = document.getElementById('explanation-icon');
+      const expText = document.getElementById('explanation-text');
+      const sdgText = document.getElementById('sdg-context-text');
+
+      expBox.classList.remove('hidden');
+      if (isCorrect) {
+        expStatus.textContent = 'Correct Answer';
+        expStatus.className = 'text-xs font-bold uppercase font-mono tracking-wide text-forest';
+        expIcon.textContent = '✅';
+      } else {
+        expStatus.textContent = 'Incorrect (Common Household Pitfall)';
+        expStatus.className = 'text-xs font-bold uppercase font-mono tracking-wide text-vermilion';
+        expIcon.textContent = '⚠️';
+      }
+
+      expText.textContent = q.explanation;
+      sdgText.textContent = q.sdgContext || 'UN SDG 12 Responsible Consumption & Production';
+
+      // Show next button
+      document.getElementById('next-q-btn').classList.remove('hidden');
+      document.getElementById('score-counter').textContent = `Score: ${score} / ${QUIZ_QUESTIONS.length}`;
+    }
+
+    function nextQuestion() {
+      currentQIndex++;
+      if (currentQIndex < QUIZ_QUESTIONS.length) {
+        renderQuestion();
+      } else {
+        showScorecard();
+      }
+    }
+
+    function showScorecard() {
+      document.getElementById('quiz-card').classList.add('hidden');
+      const card = document.getElementById('scorecard-card');
+      card.classList.remove('hidden');
+
+      const total = QUIZ_QUESTIONS.length;
+      document.getElementById('final-score').textContent = `${score} / ${total}`;
+
+      const badge = document.getElementById('badge-title');
+      const feedback = document.getElementById('final-feedback');
+
+      if (score === total) {
+        badge.textContent = '🏅 Master E-Waste Guardian (UN SDG 12 Champion)';
+        feedback.textContent = 'Flawless score! You possess expert knowledge on battery fire hazards, chemical handling, data sanitization, and the circular waste hierarchy.';
+      } else if (score >= 4) {
+        badge.textContent = '🥈 Certified Circular Practitioner';
+        feedback.textContent = 'Great job! You have strong circular awareness and know how to avoid the most dangerous recycling pitfalls in household waste.';
+      } else {
+        badge.textContent = '🌱 Circular Apprentice (Keep Learning)';
+        feedback.textContent = 'Good start! Review the Smart Directory to understand why taping battery terminals and keeping grease out of cardboard are critical for human safety and materials recovery.';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderQuestion();
+
+      document.getElementById('next-q-btn').addEventListener('click', nextQuestion);
+      document.getElementById('retake-quiz-btn').addEventListener('click', () => {
+        currentQIndex = 0;
+        score = 0;
+        document.getElementById('scorecard-card').classList.add('hidden');
+        document.getElementById('quiz-card').classList.remove('hidden');
+        renderQuestion();
+      });
+    });
+  </script>
+</body>
+</html>
