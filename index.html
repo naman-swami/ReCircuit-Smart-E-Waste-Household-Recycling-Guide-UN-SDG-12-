@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReCircuit — Smart E-Waste &amp; Household Recycling Guide (UN SDG 12)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['Fraunces', 'Georgia', 'serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace']
+          },
+          colors: {
+            paper: '#F4F3EF',
+            ink: '#111210',
+            obsidian: '#141715',
+            line: '#DDDAD2',
+            limeaccent: '#B8F25A',
+            forest: '#164E3B',
+            vermilion: '#D94326'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    :root {
+      --bg-paper: #F4F3EF;
+      --ink: #111210;
+      --obsidian: #141715;
+      --line: #DDDAD2;
+      --lime: #B8F25A;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-paper);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-editorial {
+      font-family: 'Fraunces', Georgia, serif;
+      letter-spacing: -0.025em;
+    }
+    .font-code {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    .hairline {
+      border-color: var(--line);
+    }
+    .tab-btn {
+      position: relative;
+      color: #5C5B56;
+      transition: color 0.18s ease;
+    }
+    .tab-btn:hover {
+      color: #111210;
+    }
+    .tab-btn[aria-selected="true"] {
+      color: #111210;
+    }
+    .tab-btn[aria-selected="true"]::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background-color: #111210;
+    }
+    .item-card {
+      background-color: #FFFFFF;
+      border: 1px solid #DDDAD2;
+      transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .item-card:hover {
+      border-color: #111210;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -12px rgba(17, 18, 16, 0.16);
+    }
+    .item-card:hover .card-arrow {
+      transform: translateX(3px);
+    }
+    .card-arrow {
+      transition: transform 0.18s ease;
+    }
+    .drawer-panel {
+      transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .obsidian-grid {
+      background-color: #141715;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #FFFFFF; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-limeaccent selection:text-ink">
+
+  <!-- Architectural Top Header -->
+  <header class="sticky top-0 z-40 bg-paper/92 backdrop-blur-md border-b hairline no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <!-- Brand Mark -->
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-lg bg-obsidian text-limeaccent flex items-center justify-center shrink-0">
+          <i data-lucide="orbit" class="w-4 h-4"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2.5">
+            <span class="font-bold text-ink tracking-tight text-base sm:text-lg">ReCircuit</span>
+            <span class="hidden md:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border hairline bg-white font-code text-[10px] font-medium text-neutral-700 uppercase tracking-wider">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+              SDG 12.4 / 12.5
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Controls -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div class="flex items-center gap-1.5 bg-white border hairline rounded-lg px-2.5 py-1.5">
+          <i data-lucide="globe" class="w-3.5 h-3.5 text-neutral-500 hidden sm:block"></i>
+          <label for="regionSelect" class="sr-only">Disposal Region</label>
+          <select id="regionSelect" class="bg-transparent font-code text-[11px] sm:text-xs font-medium text-ink focus:outline-none cursor-pointer">
+            <option value="global">GLOBAL · UN/UNEP</option>
+            <option value="india">INDIA · CPCB 2022</option>
+            <option value="us">USA · EPA / R2</option>
+          </select>
+        </div>
+
+        <button id="navBoxBtn" type="button" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-obsidian hover:bg-neutral-800 text-white text-xs font-medium transition">
+          <i data-lucide="layers" class="w-3.5 h-3.5 text-limeaccent"></i>
+          <span class="hidden sm:inline">Manifest</span>
+          <span id="navBoxCount" class="font-code inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded bg-limeaccent text-ink text-[11px] font-semibold">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Asymmetric Editorial Hero + Obsidian Telemetry Bento -->
+  <section class="border-b hairline no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+      <div class="grid lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+        <!-- Editorial Left Column -->
+        <div class="lg:col-span-7 flex flex-col justify-between">
+          <div>
+            <div class="font-code text-[11px] uppercase tracking-[0.14em] text-neutral-500 mb-3 flex items-center gap-2">
+              <span>HOUSEHOLD DISPOSAL INTELLIGENCE</span>
+              <span class="text-neutral-300">/</span>
+              <span class="text-emerald-800 font-semibold">UN SDG 12</span>
+            </div>
+            <h1 class="font-editorial text-3xl sm:text-5xl font-normal text-ink leading-[1.08]">
+              Zero wish-cycling.<br />
+              <span class="italic text-emerald-900">Zero bin fires.</span>
+            </h1>
+            <p class="mt-4 text-neutral-600 text-sm sm:text-[15px] max-w-xl leading-relaxed">
+              Instant disposal verdicts for 20 household electronics, batteries, and tricky recyclables—paired with a 15-second triage engine, CISA data-wipe checklists, and a printable drop-off manifest.
+            </p>
+          </div>
+
+          <!-- Integrated Command Search Bar -->
+          <div class="mt-6">
+            <div class="relative max-w-xl">
+              <i data-lucide="search" class="w-4 h-4 text-neutral-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+              <input id="heroSearchInput" type="text" placeholder="Type any item: power bank, phone, CFL bulb, pizza box..." class="w-full pl-11 pr-20 py-3.5 rounded-xl bg-white border border-neutral-300 text-sm text-ink placeholder:text-neutral-400 shadow-xs focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition" />
+              <span class="hidden sm:inline-flex items-center gap-1 absolute right-3.5 top-1/2 -translate-y-1/2 px-2 py-1 rounded border hairline bg-paper font-code text-[10px] text-neutral-500">
+                / Search
+              </span>
+            </div>
+            <div class="mt-2.5 flex flex-wrap items-center gap-1.5 text-xs text-neutral-500">
+              <span class="font-code text-[10px] uppercase tracking-wider text-neutral-400 mr-1">Quick:</span>
+              <button type="button" data-quick-term="power bank" class="px-2 py-0.5 rounded bg-white border hairline hover:border-ink text-neutral-700 transition">Power Bank</button>
+              <button type="button" data-quick-term="smartphone" class="px-2 py-0.5 rounded bg-white border hairline hover:border-ink text-neutral-700 transition">Smartphone</button>
+              <button type="button" data-quick-term="coin" class="px-2 py-0.5 rounded bg-white border hairline hover:border-ink text-neutral-700 transition">Coin Battery</button>
+              <button type="button" data-quick-term="pizza" class="px-2 py-0.5 rounded bg-white border hairline hover:border-ink text-neutral-700 transition">Pizza Box</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dark Obsidian Telemetry Card -->
+        <div class="lg:col-span-5 obsidian-grid text-white rounded-2xl p-5 sm:p-6 border border-neutral-800 flex flex-col justify-between shadow-lg">
+          <div class="flex items-center justify-between gap-2 pb-3 border-b border-white/10">
+            <span class="font-code text-[11px] uppercase tracking-[0.12em] text-neutral-400">GLOBAL E-WASTE TELEMETRY</span>
+            <a href="https://ewastemonitor.info/the-global-e-waste-monitor-2024/" target="_blank" rel="noopener noreferrer" class="font-code text-[10px] text-limeaccent hover:underline uppercase tracking-wider">
+              UN GEM 2024 ↗
+            </a>
+          </div>
+
+          <!-- Visual Gap Bar -->
+          <div class="my-4">
+            <div class="flex items-baseline justify-between mb-1.5">
+              <span class="text-xs text-neutral-300">Documented Formal Recycling (2022)</span>
+              <span class="font-code text-lg font-semibold text-limeaccent">22.3%</span>
+            </div>
+            <div class="w-full h-2.5 rounded-full bg-white/10 overflow-hidden flex">
+              <div class="h-full bg-limeaccent" style="width: 22.3%"></div>
+              <div class="h-full bg-vermilion/70" style="width: 77.7%"></div>
+            </div>
+            <div class="flex items-center justify-between mt-1.5 font-code text-[10px] text-neutral-400">
+              <span>13.8 Mt formally recycled</span>
+              <span>77.7% unaccounted · <a href="https://www.who.int/news-room/fact-sheets/detail/electronic-waste-(e-waste)" target="_blank" rel="noopener noreferrer" class="underline hover:text-white">WHO</a></span>
+            </div>
+          </div>
+
+          <!-- 3 Crisp Tabular Metrics -->
+          <div class="grid grid-cols-3 gap-2.5 pt-3 border-t border-white/10">
+            <div class="rounded-lg bg-white/5 border border-white/10 p-2.5">
+              <div class="font-code text-[10px] text-neutral-400 uppercase">2023 Mass</div>
+              <div class="font-code text-lg font-semibold text-white mt-0.5">65 Mt</div>
+              <a href="https://sdgs.un.org/goals/goal12" target="_blank" rel="noopener noreferrer" class="text-[10px] text-neutral-400 hover:text-limeaccent underline">UN DESA</a>
+            </div>
+            <div class="rounded-lg bg-white/5 border border-white/10 p-2.5">
+              <div class="font-code text-[10px] text-neutral-400 uppercase">Metals Value</div>
+              <div class="font-code text-lg font-semibold text-white mt-0.5">$91B</div>
+              <a href="https://unitar.org/about/news-stories/press/global-e-waste-monitor-2024-electronic-waste-rising-five-times-faster-documented-e-waste-recycling" target="_blank" rel="noopener noreferrer" class="text-[10px] text-neutral-400 hover:text-limeaccent underline">UNITAR</a>
+            </div>
+            <div class="rounded-lg bg-white/5 border border-white/10 p-2.5">
+              <div class="font-code text-[10px] text-neutral-400 uppercase">2030 Est.</div>
+              <div class="font-code text-lg font-semibold text-rose-300 mt-0.5">82 Mt</div>
+              <a href="https://ewastemonitor.info/the-global-e-waste-monitor-2024/" target="_blank" rel="noopener noreferrer" class="text-[10px] text-neutral-400 hover:text-limeaccent underline">+32% vs ’22</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architectural Underline Navigation Rail -->
+  <nav class="bg-white border-b hairline no-print" aria-label="Primary workspace sections">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center gap-6 sm:gap-8 overflow-x-auto" role="tablist">
+        <button type="button" role="tab" data-tab="lookup" aria-selected="true" class="tab-btn shrink-0 py-4 text-xs sm:text-sm font-medium inline-flex items-center gap-2">
+          <span class="font-code text-[11px] opacity-50">01</span>
+          <span>Smart Lookup</span>
+        </button>
+        <button type="button" role="tab" data-tab="wizard" aria-selected="false" class="tab-btn shrink-0 py-4 text-xs sm:text-sm font-medium inline-flex items-center gap-2">
+          <span class="font-code text-[11px] opacity-50">02</span>
+          <span>15-Sec Triage</span>
+        </button>
+        <button type="button" role="tab" data-tab="prep" aria-selected="false" class="tab-btn shrink-0 py-4 text-xs sm:text-sm font-medium inline-flex items-center gap-2">
+          <span class="font-code text-[11px] opacity-50">03</span>
+          <span>Data &amp; Battery Prep</span>
+        </button>
+        <button type="button" role="tab" data-tab="impact" aria-selected="false" class="tab-btn shrink-0 py-4 text-xs sm:text-sm font-medium inline-flex items-center gap-2">
+          <span class="font-code text-[11px] opacity-50">04</span>
+          <span>Drop-Off Manifest</span>
+        </button>
+        <button type="button" role="tab" data-tab="quiz" aria-selected="false" class="tab-btn shrink-0 py-4 text-xs sm:text-sm font-medium inline-flex items-center gap-2">
+          <span class="font-code text-[11px] opacity-50">05</span>
+          <span>Myth-Buster Quiz</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-9">
+
+    <!-- Subtle Regulatory Protocol Strip -->
+    <div id="regionNotice" class="mb-7 rounded-xl bg-white border hairline px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-neutral-700 no-print">
+      <div class="flex items-start sm:items-center gap-2.5">
+        <span class="font-code text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-paper border hairline text-ink font-semibold shrink-0">PROTOCOL</span>
+        <span id="regionNoticeText" class="leading-relaxed"></span>
+      </div>
+      <a id="regionNoticeLink" href="https://sdgs.un.org/goals/goal12" target="_blank" rel="noopener noreferrer" class="font-code text-[11px] font-medium text-ink hover:text-emerald-800 underline shrink-0">
+        Official Portal ↗
+      </a>
+    </div>
+
+    <!-- TAB 1: SMART LOOKUP -->
+    <section id="tab-lookup" class="tab-panel space-y-6">
+      <div class="bg-white rounded-xl border hairline p-4 space-y-4">
+        <div class="flex flex-col md:flex-row gap-3">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+            <input id="searchInput" type="text" placeholder="Filter 20 items by name, material, or hazard (e.g., copper, mercury, lithium, charger)..." class="w-full pl-10 pr-10 py-2.5 rounded-lg bg-paper/60 border hairline text-sm text-ink placeholder:text-neutral-400 focus:bg-white focus:outline-none focus:border-ink transition" />
+            <button id="clearSearchBtn" type="button" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-ink" aria-label="Clear search">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <label for="streamFilter" class="sr-only">Filter by Disposal Stream</label>
+            <select id="streamFilter" class="w-full md:w-56 px-3 py-2.5 rounded-lg border hairline text-xs sm:text-sm bg-white text-ink font-medium focus:outline-none focus:border-ink">
+              <option value="all">All Disposal Streams</option>
+              <option value="ewaste">Certified E-Waste Recycler</option>
+              <option value="battery">Battery / HHW Drop-Off</option>
+              <option value="curbside">Curbside Recycling</option>
+              <option value="trash">Municipal Trash (Do Not Recycle)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+          <div id="categoryPills" class="flex flex-wrap gap-1.5">
+            <button type="button" data-cat="all" class="cat-pill px-3 py-1.5 rounded-md text-xs font-medium bg-obsidian text-white">All Items (20)</button>
+            <button type="button" data-cat="E-Waste & Tech" class="cat-pill px-3 py-1.5 rounded-md text-xs font-medium bg-paper text-neutral-700 border hairline hover:border-ink">E-Waste &amp; Tech</button>
+            <button type="button" data-cat="Batteries & Bulbs" class="cat-pill px-3 py-1.5 rounded-md text-xs font-medium bg-paper text-neutral-700 border hairline hover:border-ink">Batteries &amp; Bulbs</button>
+            <button type="button" data-cat="Appliances" class="cat-pill px-3 py-1.5 rounded-md text-xs font-medium bg-paper text-neutral-700 border hairline hover:border-ink">Appliances</button>
+            <button type="button" data-cat="Tricky Household" class="cat-pill px-3 py-1.5 rounded-md text-xs font-medium bg-paper text-neutral-700 border hairline hover:border-ink">Tricky Household</button>
+          </div>
+          <div id="lookupCount" class="font-code text-[11px] text-neutral-500">20 / 20 ITEMS</div>
+        </div>
+      </div>
+
+      <div id="itemsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- TAB 2: 15-SECOND TRIAGE WIZARD -->
+    <section id="tab-wizard" class="tab-panel hidden">
+      <div class="max-w-3xl mx-auto bg-white rounded-2xl border hairline overflow-hidden">
+        <div class="bg-obsidian text-white px-6 py-5 flex items-center justify-between gap-4">
+          <div>
+            <div class="font-code text-[10px] uppercase tracking-[0.14em] text-limeaccent">DIAGNOSTIC ENGINE</div>
+            <h2 class="font-editorial text-xl sm:text-2xl mt-0.5">15-Second Smart Disposal Triage</h2>
+          </div>
+          <button id="wizardResetBtn" type="button" class="px-3 py-1.5 rounded-lg border border-white/20 hover:bg-white/10 font-code text-[11px] text-white transition shrink-0">
+            RESET
+          </button>
+        </div>
+
+        <div class="p-6 sm:p-8">
+          <div class="flex items-center gap-3 mb-7">
+            <div class="flex-1 h-1.5 rounded-full bg-paper overflow-hidden">
+              <div id="wizardProgress" class="h-full bg-obsidian transition-all duration-300" style="width: 25%"></div>
+            </div>
+            <span id="wizardStepLabel" class="font-code text-[11px] font-medium text-neutral-500 uppercase">Step 1 / 4</span>
+          </div>
+
+          <div id="wizardBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: DATA WIPE & BATTERY SAFETY PREP -->
+    <section id="tab-prep" class="tab-panel hidden space-y-6">
+      <div class="bg-white rounded-2xl border hairline p-5 sm:p-7">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-5 border-b hairline">
+          <div>
+            <div class="font-code text-[10px] uppercase tracking-[0.14em] text-neutral-500">SECURITY &amp; FIRE PREVENTION</div>
+            <h2 class="font-editorial text-2xl text-ink mt-1">Pre-Disposal Data Wipe &amp; Battery Checklist</h2>
+            <p class="text-xs sm:text-sm text-neutral-600 mt-1">
+              Grounded in
+              <a href="https://www.cisa.gov/news-events/news/proper-disposal-electronic-devices" target="_blank" rel="noopener noreferrer" class="text-ink font-medium underline">CISA</a>
+              and
+              <a href="https://www.epa.gov/recycle/used-lithium-ion-batteries" target="_blank" rel="noopener noreferrer" class="text-ink font-medium underline">US EPA</a>
+              standards. Complete every step before handing off a device.
+            </p>
+          </div>
+          <button id="resetPrepBtn" type="button" class="px-3.5 py-2 rounded-lg border hairline text-xs font-medium text-neutral-700 hover:border-ink hover:text-ink transition self-start md:self-auto">
+            Reset Device Checks
+          </button>
+        </div>
+
+        <div id="prepDeviceTabs" class="flex flex-wrap gap-2 mt-5"></div>
+
+        <div class="mt-6 grid lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-8 space-y-2.5" id="prepChecklistContainer"></div>
+
+          <div class="lg:col-span-4">
+            <div class="rounded-xl bg-obsidian text-white p-5 space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="font-code text-[10px] uppercase tracking-[0.14em] text-neutral-400">DROP-OFF READINESS</span>
+                <span id="prepPercentText" class="font-code text-xl font-semibold text-limeaccent">0%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                <div id="prepProgressBar" class="h-full bg-limeaccent transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div id="prepStatusBanner" class="rounded-lg p-3.5 text-xs leading-relaxed bg-white/5 border border-white/10 text-neutral-200">
+                Check off each safety step before dropping off or donating your item.
+              </div>
+              <div class="pt-3 border-t border-white/10 text-xs text-neutral-400 space-y-1.5">
+                <p class="font-code text-[10px] uppercase tracking-wider text-neutral-300">Field Protocol Note</p>
+                <p class="leading-relaxed">Personal accounts and unencrypted drives expose identity data, while untaped lithium-ion terminals can short-circuit and ignite in sorting trucks.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: DROP-OFF MANIFEST & SDG 12 IMPACT -->
+    <section id="tab-impact" class="tab-panel hidden space-y-6">
+      <div class="grid lg:grid-cols-12 gap-6">
+        <!-- Personal Drop-Off Manifest -->
+        <div class="lg:col-span-7 bg-white rounded-2xl border hairline p-5 sm:p-6 flex flex-col">
+          <div class="flex flex-wrap items-start justify-between gap-3 pb-4 border-b hairline">
+            <div>
+              <div class="font-code text-[10px] uppercase tracking-[0.14em] text-neutral-500">SORTING DISPATCH SLIP</div>
+              <h2 class="font-editorial text-2xl text-ink mt-0.5">Household Drop-Off Manifest</h2>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5 no-print">
+              <button id="loadDemoBoxBtn" type="button" class="px-3 py-1.5 rounded-lg bg-obsidian hover:bg-neutral-800 text-limeaccent text-xs font-medium transition">
+                Load Sample Junk Drawer
+              </button>
+              <button id="copyBoxBtn" type="button" class="px-2.5 py-1.5 rounded-lg border hairline hover:border-ink text-neutral-700 text-xs font-medium transition">
+                Copy
+              </button>
+              <button id="printBoxBtn" type="button" class="px-2.5 py-1.5 rounded-lg border hairline hover:border-ink text-neutral-700 text-xs font-medium transition">
+                Print
+              </button>
+              <button id="clearBoxBtn" type="button" class="px-2.5 py-1.5 rounded-lg border border-rose-200 hover:bg-rose-50 text-rose-700 text-xs font-medium transition">
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <div id="boxContent" class="mt-5 flex-1"></div>
+        </div>
+
+        <!-- Stream Breakdown Chart -->
+        <div class="lg:col-span-5 bg-white rounded-2xl border hairline p-5 sm:p-6 flex flex-col">
+          <div class="font-code text-[10px] uppercase tracking-[0.14em] text-neutral-500">STREAM COMPOSITION</div>
+          <h3 id="streamChartTitle" class="font-editorial text-xl text-ink mt-0.5">Drop-Off Stream Breakdown</h3>
+          <p id="streamChartSub" class="text-xs text-neutral-500 mt-1 mb-4">Add items to see your personal sorting split, or view global composition.</p>
+          <div class="relative h-72 w-full">
+            <canvas id="streamChart"></canvas>
+          </div>
+          <div class="mt-4 pt-3 border-t hairline text-[11px] text-neutral-500 flex items-center justify-between gap-2">
+            <span>UN GEM 2024 material mass fallback (62 Mt total)</span>
+            <a href="https://unitar.org/about/news-stories/press/global-e-waste-monitor-2024-electronic-waste-rising-five-times-faster-documented-e-waste-recycling" target="_blank" rel="noopener noreferrer" class="font-code underline text-ink shrink-0">UNITAR ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Global SDG 12 E-Waste Trajectory Chart -->
+      <div class="bg-white rounded-2xl border hairline p-5 sm:p-6">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+          <div>
+            <div class="font-code text-[10px] uppercase tracking-[0.14em] text-neutral-500">MACRO SDG 12 TRAJECTORY (2022–2030)</div>
+            <h3 class="font-editorial text-xl sm:text-2xl text-ink mt-0.5">The Global E-Waste Gap vs. 60% Formal Recycling Target</h3>
+            <p class="text-xs sm:text-sm text-neutral-600 mt-1">
+              Reaching 60% formal collection and recycling by 2030 generates net societal and health benefits exceeding costs by over US $38 billion.
+            </p>
+          </div>
+          <a href="https://ewastemonitor.info/the-global-e-waste-monitor-2024/" target="_blank" rel="noopener noreferrer" class="font-code text-[11px] font-medium text-ink underline shrink-0">
+            UN GEM 2024 &amp; SDG 12 ↗
+          </a>
+        </div>
+        <div class="relative h-72 w-full">
+          <canvas id="globalGapChart"></canvas>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-3 mt-6">
+          <div class="rounded-xl bg-paper border hairline p-4">
+            <div class="font-code text-[10px] uppercase tracking-wider text-neutral-500">CO₂e Avoided (2022)</div>
+            <div class="font-code text-xl font-semibold text-ink mt-1">93 Mt</div>
+            <p class="text-xs text-neutral-600 mt-1 leading-relaxed">41 Mt via recaptured refrigerants + 52 Mt via avoided primary metals mining.</p>
+          </div>
+          <div class="rounded-xl bg-paper border hairline p-4">
+            <div class="font-code text-[10px] uppercase tracking-wider text-neutral-500">Primary Ore Avoided</div>
+            <div class="font-code text-xl font-semibold text-ink mt-1">900 Mt</div>
+            <p class="text-xs text-neutral-600 mt-1 leading-relaxed">Reclaimed through documented urban mining ($28B secondary raw materials).</p>
+          </div>
+          <div class="rounded-xl bg-paper border hairline p-4">
+            <div class="font-code text-[10px] uppercase tracking-wider text-neutral-500">Rare Earth Demand Met</div>
+            <div class="font-code text-xl font-semibold text-vermilion mt-1">1.0%</div>
+            <p class="text-xs text-neutral-600 mt-1 leading-relaxed">Only 1% of global rare earth element demand is currently met by e-waste recycling.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: MYTH-BUSTER QUIZ -->
+    <section id="tab-quiz" class="tab-panel hidden">
+      <div class="max-w-3xl mx-auto bg-white rounded-2xl border hairline overflow-hidden">
+        <div class="bg-obsidian text-white px-6 py-5 flex items-center justify-between gap-4">
+          <div>
+            <div class="font-code text-[10px] uppercase tracking-[0.14em] text-limeaccent">SDG 12 LITERACY CHECK</div>
+            <h2 class="font-editorial text-xl sm:text-2xl mt-0.5">Wish-Cycling &amp; E-Waste Myth-Buster</h2>
+          </div>
+          <div class="text-right shrink-0">
+            <div class="font-code text-[10px] uppercase tracking-wider text-neutral-400">SCORE</div>
+            <div id="quizScoreBadge" class="font-code text-xl font-semibold text-limeaccent">0 / 8</div>
+          </div>
+        </div>
+        <div id="quizContainer" class="p-6 sm:p-8"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Right-Side Architectural Slide-Over Drawer (Item Detail) -->
+  <div id="itemModal" class="fixed inset-0 z-50 hidden justify-end bg-ink/50 backdrop-blur-[2px]" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="drawer-panel bg-white w-full max-w-xl h-full flex flex-col shadow-2xl border-l hairline">
+      <div class="px-6 py-5 border-b hairline flex items-start justify-between gap-4 bg-paper/60">
+        <div>
+          <div id="modalBadges" class="flex flex-wrap gap-1.5 mb-2"></div>
+          <h3 id="modalTitle" class="font-editorial text-2xl text-ink leading-tight"></h3>
+        </div>
+        <button id="closeModalBtn" type="button" class="p-2 rounded-lg border hairline bg-white text-neutral-500 hover:text-ink hover:border-ink transition" aria-label="Close details">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div id="modalBody" class="flex-1 overflow-y-auto p-6 space-y-5 text-sm text-neutral-700"></div>
+
+      <div class="px-6 py-4 border-t hairline bg-paper/80 flex flex-wrap items-center justify-between gap-3">
+        <a id="modalSourceLink" href="https://sdgs.un.org/goals/goal12" target="_blank" rel="noopener noreferrer" class="font-code text-[11px] font-medium text-neutral-700 hover:text-ink underline inline-flex items-center gap-1">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span>Verify Source</span>
+        </a>
+        <div class="flex items-center gap-2">
+          <button id="modalAddBtn" type="button" class="px-4 py-2.5 rounded-lg bg-obsidian hover:bg-neutral-800 text-limeaccent text-xs font-semibold transition">
+            + Add to Manifest
+          </button>
+          <button id="modalDoneBtn" type="button" class="px-4 py-2.5 rounded-lg border hairline bg-white hover:border-ink text-ink text-xs font-medium transition">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Minimalist Obsidian Toast -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden items-center gap-2.5 px-4 py-3 rounded-xl bg-obsidian text-white text-xs font-medium shadow-2xl border border-white/15">
+    <span class="w-2 h-2 rounded-full bg-limeaccent shrink-0"></span>
+    <span id="toastText"></span>
+  </div>
+
+  <!-- Editorial Footer -->
+  <footer class="bg-white border-t hairline mt-12 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-neutral-500">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-ink">ReCircuit</span>
+        <span class="text-neutral-300">·</span>
+        <span>UN SDG 12 Responsible Consumption &amp; Production</span>
+      </div>
+      <div class="flex flex-wrap gap-x-4 gap-y-1 font-code text-[11px]">
+        <a href="https://sdgs.un.org/goals/goal12" target="_blank" rel="noopener noreferrer" class="hover:text-ink underline">UN SDG 12</a>
+        <a href="https://ewastemonitor.info/the-global-e-waste-monitor-2024/" target="_blank" rel="noopener noreferrer" class="hover:text-ink underline">GEM 2024</a>
+        <a href="https://www.epa.gov/recycle/used-lithium-ion-batteries" target="_blank" rel="noopener noreferrer" class="hover:text-ink underline">US EPA</a>
+        <a href="https://www.cisa.gov/news-events/news/proper-disposal-electronic-devices" target="_blank" rel="noopener noreferrer" class="hover:text-ink underline">CISA</a>
+        <a href="https://eprewaste.cpcb.gov.in/" target="_blank" rel="noopener noreferrer" class="hover:text-ink underline">India CPCB</a>
+        <a href="https://www.who.int/news-room/fact-sheets/detail/electronic-waste-(e-waste)" target="_blank" rel="noopener noreferrer" class="hover:text-ink underline">WHO</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // 1. GROUNDED DATASETS (100% tool-verified UN, WHO, EPA, CISA, CPCB sources)
+    // =========================================================================
+    const REGION_INFO = {
+      global: {
+        name: 'Global (UN / UNEP)',
+        notice: 'UN SDG 12 & Global E-waste Monitor best practices. Always use formally registered e-waste recyclers — never informal open burning or municipal trash.',
+        url: 'https://sdgs.un.org/goals/goal12',
+        ewasteDrop: 'Certified municipal e-waste drop-off point, manufacturer take-back, or retail electronics collection bin.',
+        batteryDrop: 'Dedicated battery recycling kiosk or local household hazardous waste (HHW) facility.'
+      },
+      india: {
+        name: 'India (CPCB Rules 2022)',
+        notice: 'India E-Waste (Management) Rules, 2022 (effective April 1, 2023): hand electronics only to CPCB-registered recyclers/dismantlers or brand EPR take-back centers — never informal scrap dealers.',
+        url: 'https://eprewaste.cpcb.gov.in/',
+        ewasteDrop: 'CPCB-registered e-waste recycler, authorized brand service center (EPR take-back), or municipal e-waste collection drive.',
+        batteryDrop: 'Authorized battery collection point under Battery Waste Management Rules, 2022 or brand EPR drop-off.'
+      },
+      us: {
+        name: 'USA (EPA / R2)',
+        notice: 'US EPA recommends certified electronics recyclers accredited to R2 (Responsible Recycling) or e-Stewards standards, plus dedicated battery/HHW collection sites.',
+        url: 'https://www.epa.gov/recycle/electronics-donation-and-recycling',
+        ewasteDrop: 'R2 or e-Stewards certified electronics recycler, municipal HHW facility, or participating retail take-back.',
+        batteryDrop: 'Participating battery retail drop-off or local Household Hazardous Waste (HHW) collection center.'
+      }
+    };
+
+    const STREAM_META = {
+      ewaste: {
+        label: 'Certified E-Waste Recycler',
+        short: 'E-WASTE',
+        badge: 'bg-emerald-950 text-limeaccent border-emerald-900',
+        dot: 'bg-emerald-600',
+        color: '#065f46'
+      },
+      battery: {
+        label: 'Battery / HHW Drop-Off',
+        short: 'HAZARD / HHW',
+        badge: 'bg-rose-50 text-vermilion border-rose-200',
+        dot: 'bg-vermilion',
+        color: '#D94326'
+      },
+      curbside: {
+        label: 'Curbside Recycling',
+        short: 'CURBSIDE',
+        badge: 'bg-sky-50 text-sky-900 border-sky-200',
+        dot: 'bg-sky-600',
+        color: '#0369a1'
+      },
+      trash: {
+        label: 'Municipal Trash (Do Not Recycle)',
+        short: 'TRASH ONLY',
+        badge: 'bg-neutral-100 text-neutral-700 border-neutral-300',
+        dot: 'bg-neutral-500',
+        color: '#525252'
+      }
+    };
+
+    const ITEMS = [
+      {
+        id: 'smartphone',
+        code: 'EW-01',
+        name: 'Smartphone / Tablet',
+        aliases: 'iphone android mobile cell phone ipad screen',
+        category: 'E-Waste & Tech',
+        stream: 'ewaste',
+        hazard: 'Fire & Data Risk',
+        hazardClass: 'text-vermilion',
+        icon: 'smartphone',
+        summary: 'Contains a lithium-ion battery, precious metals, and personal data. Never place in household trash or curbside recycling.',
+        prepSteps: [
+          'Back up photos and contacts, then sign out of Apple ID / Google Account and turn off Find My Device.',
+          'Physically remove the SIM card and any microSD memory card.',
+          'Perform a full factory reset (hard reset) to wipe encrypted user data.',
+          'Do not puncture or crush the battery; if swollen, place in a cool, non-flammable container and take straight to HHW.'
+        ],
+        reuseTip: 'SDG 12.5 First: If it turns on, trade it in, repair the battery/screen, or donate to a local school or community program.',
+        recoverable: 'Gold, silver, copper, cobalt, lithium, aluminum, rare earth elements',
+        sourceLabel: 'US EPA Electronics Recycling & CISA',
+        sourceUrl: 'https://www.epa.gov/recycle/electronics-donation-and-recycling'
+      },
+      {
+        id: 'laptop',
+        code: 'EW-02',
+        name: 'Laptop / Desktop Computer',
+        aliases: 'macbook pc notebook computer chromebook hard drive ssd',
+        category: 'E-Waste & Tech',
+        stream: 'ewaste',
+        hazard: 'Fire & Data Risk',
+        hazardClass: 'text-vermilion',
+        icon: 'laptop',
+        summary: 'Small IT equipment has only a 22% global documented recycling rate despite high gold, copper, and aluminum content.',
+        prepSteps: [
+          'Back up essential files and deauthorize cloud/software accounts.',
+          'Use OS full-drive clean reset (Windows "Remove everything + clean drive" or macOS Disk Utility erase).',
+          'Keep the battery intact inside the chassis unless easily removable; never toss loose laptop packs in trash.',
+          'Bundle power adapters and cables together for certified e-waste drop-off.'
+        ],
+        reuseTip: 'US EPA recommends upgrading RAM/SSD or installing a lightweight OS to extend laptop life before recycling.',
+        recoverable: 'Gold, copper, aluminum, iron, palladium, lithium-ion battery minerals',
+        sourceLabel: 'UN GEM 2024 & US EPA',
+        sourceUrl: 'https://www.epa.gov/recycle/electronics-donation-and-recycling'
+      },
+      {
+        id: 'powerbank',
+        code: 'BT-01',
+        name: 'Lithium-Ion Power Bank',
+        aliases: 'portable charger battery pack li-ion rechargeable swollen',
+        category: 'Batteries & Bulbs',
+        stream: 'battery',
+        hazard: 'Thermal Runaway Fire',
+        hazardClass: 'text-vermilion',
+        icon: 'battery-charging',
+        summary: 'High-energy lithium-ion cells can spark and cause thermal runaway fires if crushed in garbage trucks or sorting machinery.',
+        prepSteps: [
+          'Never throw in household garbage or municipal recycling bins.',
+          'Tape over exposed USB ports or terminals with non-conductive electrical tape.',
+          'Place each power bank in its own separate clear plastic bag.',
+          'If swollen, hot, or leaking, isolate away from flammables and contact your local HHW facility immediately.'
+        ],
+        reuseTip: 'Avoid deep-discharging to 0% or leaving power banks in hot cars to extend charge cycles.',
+        recoverable: 'Cobalt, lithium, nickel, copper, aluminum casing',
+        sourceLabel: 'US EPA Used Lithium-Ion Batteries',
+        sourceUrl: 'https://www.epa.gov/recycle/used-lithium-ion-batteries'
+      },
+      {
+        id: 'button-battery',
+        code: 'BT-02',
+        name: 'Button-Cell / Coin Batteries',
+        aliases: 'cr2032 watch battery hearing aid lithium coin cell',
+        category: 'Batteries & Bulbs',
+        stream: 'battery',
+        hazard: 'Fire & Swallowing Hazard',
+        hazardClass: 'text-vermilion',
+        icon: 'disc',
+        summary: 'Tiny coin batteries can short-circuit against other metals and pose a severe swallowing hazard to young children.',
+        prepSteps: [
+          'Store spent coin batteries strictly out of reach of children in a sealed jar.',
+          'Wrap non-conductive tape (e.g., electrical tape) completely around each button cell or bag individually.',
+          'Never place in household trash or curbside recycling bins.',
+          'Drop off at a specialized battery recycler, participating retailer, or HHW program.'
+        ],
+        reuseTip: 'Where compatible, choose rechargeable devices over single-use coin-cell gadgets.',
+        recoverable: 'Lithium, silver oxide, zinc, steel',
+        sourceLabel: 'US EPA Used Household Batteries',
+        sourceUrl: 'https://www.epa.gov/recycle/used-household-batteries'
+      },
+      {
+        id: 'alkaline-battery',
+        code: 'BT-03',
+        name: 'AA / AAA Alkaline Batteries',
+        aliases: 'single use remote battery duracell energizer 9v',
+        category: 'Batteries & Bulbs',
+        stream: 'battery',
+        hazard: 'Leakage / Short Risk',
+        hazardClass: 'text-amber-700',
+        icon: 'battery',
+        summary: 'Single-use alkaline and 9V batteries are best collected separately for battery recycling rather than tossed in curbside bins.',
+        prepSteps: [
+          'Tape terminals of 9V batteries with non-conductive tape so contacts cannot touch.',
+          'Keep spent batteries in a dry, non-metallic container until drop-off.',
+          'Never put batteries in municipal curbside recycling bins.',
+          'Bring to a local battery take-back kiosk or household hazardous waste drop-off.'
+        ],
+        reuseTip: 'Switch high-drain remotes, mice, and toys to rechargeable NiMH AA/AAA cells to cut single-use waste.',
+        recoverable: 'Zinc, manganese, steel',
+        sourceLabel: 'US EPA Used Household Batteries',
+        sourceUrl: 'https://www.epa.gov/recycle/used-household-batteries'
+      },
+      {
+        id: 'earbuds',
+        code: 'EW-03',
+        name: 'Wireless Earbuds & Smartwatches',
+        aliases: 'airpods bluetooth headphones fitness tracker wearables',
+        category: 'E-Waste & Tech',
+        stream: 'battery',
+        hazard: 'Embedded Li-Ion Fire',
+        hazardClass: 'text-vermilion',
+        icon: 'headphones',
+        summary: 'Tiny embedded lithium-ion batteries in earbuds and charging cases ignite easily if compacted in regular trash.',
+        prepSteps: [
+          'Unpair the device from your phone and factory-reset smartwatches to clear health/account data.',
+          'Keep earbuds inside their charging case so contacts stay insulated.',
+          'Do not attempt to pry open glued lithium cells.',
+          'Take to a certified e-waste or battery drop-off point.'
+        ],
+        reuseTip: 'Check if only one earbud or the charging case needs replacement before discarding the whole set.',
+        recoverable: 'Cobalt, lithium, gold micro-contacts, copper, neodymium magnets',
+        sourceLabel: 'US EPA Used Lithium-Ion Batteries',
+        sourceUrl: 'https://www.epa.gov/recycle/used-lithium-ion-batteries'
+      },
+      {
+        id: 'cfl-bulb',
+        code: 'BT-04',
+        name: 'CFL Bulbs & Fluorescent Tubes',
+        aliases: 'compact fluorescent light tube mercury bulb',
+        category: 'Batteries & Bulbs',
+        stream: 'battery',
+        hazard: 'Toxic Mercury Vapor',
+        hazardClass: 'text-vermilion',
+        icon: 'lightbulb',
+        summary: 'Compact fluorescent lamps contain mercury, a neurotoxin that contaminates landfills and water if broken.',
+        prepSteps: [
+          'Handle gently and place intact bulbs in a padded cardboard box or original sleeve.',
+          'Never put CFLs or fluorescent tubes in curbside glass recycling or household trash.',
+          'If a bulb breaks, ventilate the room and sweep fragments onto stiff paper — avoid vacuuming.',
+          'Drop off at a hardware store bulb-recycling bin or HHW collection point.'
+        ],
+        reuseTip: 'Replace burned-out CFLs with mercury-free, longer-lasting LED bulbs.',
+        recoverable: 'Glass, aluminum end caps, safely captured mercury & phosphor',
+        sourceLabel: 'WHO E-Waste & Hazardous Substances',
+        sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/electronic-waste-(e-waste)'
+      },
+      {
+        id: 'led-bulb',
+        code: 'BT-05',
+        name: 'LED Light Bulbs',
+        aliases: 'led lamp smart bulb',
+        category: 'Batteries & Bulbs',
+        stream: 'ewaste',
+        hazard: 'Circuit Board E-Waste',
+        hazardClass: 'text-amber-700',
+        icon: 'sun',
+        summary: 'LED bulbs contain no mercury, but they house circuit boards, heat sinks, and diodes that belong in e-waste recycling.',
+        prepSteps: [
+          'Let the bulb cool completely before unscrewing.',
+          'Do not place LED bulbs in curbside glass recycling (mixed plastic/electronics contaminate glass cullet).',
+          'Store intact in a small box with other e-waste items.',
+          'Drop off at a certified e-waste recycler or participating lighting retailer.'
+        ],
+        reuseTip: 'Check warranty coverage — quality LED bulbs often carry 3–5 year replacement warranties.',
+        recoverable: 'Aluminum heat sinks, copper wiring, circuit board metals, glass/plastic',
+        sourceLabel: 'UN Global E-waste Monitor 2024',
+        sourceUrl: 'https://ewastemonitor.info/the-global-e-waste-monitor-2024/'
+      },
+      {
+        id: 'chargers-cables',
+        code: 'EW-04',
+        name: 'Chargers, Adapters & USB Cables',
+        aliases: 'hdmi wire power cord usb-c lightning brick extension',
+        category: 'E-Waste & Tech',
+        stream: 'ewaste',
+        hazard: 'Sorting Tangler',
+        hazardClass: 'text-amber-700',
+        icon: 'cable',
+        summary: 'Cables jam municipal recycling conveyor belts ("tanglers") yet contain high-purity copper that e-waste recyclers easily reclaim.',
+        prepSteps: [
+          'Never put cords or power bricks into curbside recycling bins.',
+          'Coil cables neatly and tie with a twist-tie or rubber band.',
+          'Separate working USB-C/HDMI cables for donation or spare use.',
+          'Bring frayed or obsolete cables to a certified e-waste collection bin.'
+        ],
+        reuseTip: 'Standardizing on USB-C chargers dramatically reduces duplicate adapter clutter across devices.',
+        recoverable: 'High-grade copper wiring, aluminum, recyclable PVC/TPE insulation',
+        sourceLabel: 'UN GEM 2024 — $19B Copper in E-Waste',
+        sourceUrl: 'https://unitar.org/about/news-stories/press/global-e-waste-monitor-2024-electronic-waste-rising-five-times-faster-documented-e-waste-recycling'
+      },
+      {
+        id: 'router',
+        code: 'EW-05',
+        name: 'Wi-Fi Router / Modem',
+        aliases: 'internet box network switch gateway',
+        category: 'E-Waste & Tech',
+        stream: 'ewaste',
+        hazard: 'Network Credentials',
+        hazardClass: 'text-amber-700',
+        icon: 'wifi',
+        summary: 'Routers store Wi-Fi passwords and ISP configurations, and belong to the small IT e-waste stream.',
+        prepSteps: [
+          'Check if the router is leased from your ISP — return it to avoid equipment fees.',
+          'Hold the physical pinhole reset button for 10–15 seconds while powered on to restore factory defaults.',
+          'Include the matching power adapter and Ethernet cables.',
+          'Drop off at a certified e-waste recycler.'
+        ],
+        reuseTip: 'Working dual-band routers can be donated or reused as a wired Wi-Fi access point.',
+        recoverable: 'Copper, gold circuit traces, aluminum, iron, plastics',
+        sourceLabel: 'CISA Electronic Device Disposal',
+        sourceUrl: 'https://www.cisa.gov/news-events/news/proper-disposal-electronic-devices'
+      },
+      {
+        id: 'printer',
+        code: 'EW-06',
+        name: 'Printer & Ink/Toner Cartridges',
+        aliases: 'scanner copier hp canon ink cartridge laser toner',
+        category: 'E-Waste & Tech',
+        stream: 'ewaste',
+        hazard: 'Toner & Memory Storage',
+        hazardClass: 'text-amber-700',
+        icon: 'printer',
+        summary: 'Multifunction printers can retain scanned documents in internal memory, while cartridges should be recycled separately.',
+        prepSteps: [
+          'Remove any SD/memory cards and run a full manufacturer factory reset (per CISA guidance).',
+          'Remove ink or toner cartridges and seal them in a zip-top bag to prevent leaks.',
+          'Return cartridges to office-supply or manufacturer cartridge recycling programs.',
+          'Deliver the printer body to a certified e-waste recycler.'
+        ],
+        reuseTip: 'Refillable ink-tank printers cut plastic cartridge waste significantly compared to disposable cartridges.',
+        recoverable: 'Steel, copper motors, circuit boards, remanufacturable cartridge shells',
+        sourceLabel: 'CISA & US EPA Electronics Stewardship',
+        sourceUrl: 'https://www.cisa.gov/news-events/news/proper-disposal-electronic-devices'
+      },
+      {
+        id: 'monitor-tv',
+        code: 'AP-01',
+        name: 'TV / LCD or CRT Monitor',
+        aliases: 'television screen display desktop monitor led tv',
+        category: 'Appliances',
+        stream: 'ewaste',
+        hazard: 'Lead / Heavy Metals',
+        hazardClass: 'text-vermilion',
+        icon: 'monitor',
+        summary: 'Older CRT screens contain leaded glass and older LCD backlights contain mercury; never dismantle at home.',
+        prepSteps: [
+          'Do not attempt to open or break the screen glass at home.',
+          'Sign out of streaming apps and factory-reset Smart TVs before handing off.',
+          'Keep the remote (remove its AA/AAA batteries separately) and power cord together.',
+          'Use municipal bulky e-waste drop-off, retailer haul-away, or a certified e-waste recycler.'
+        ],
+        reuseTip: 'Working monitors are in high demand at community centers, student groups, and repair cafes.',
+        recoverable: 'Copper, aluminum, iron, gold/silver from boards, safely treated glass',
+        sourceLabel: 'WHO E-Waste Fact Sheet & CPCB Rules',
+        sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/electronic-waste-(e-waste)'
+      },
+      {
+        id: 'microwave',
+        code: 'AP-02',
+        name: 'Microwave Oven / Small Appliance',
+        aliases: 'toaster kettle vacuum blender iron hairdryer fan',
+        category: 'Appliances',
+        stream: 'ewaste',
+        hazard: 'High-Voltage Capacitor',
+        hazardClass: 'text-amber-700',
+        icon: 'zap',
+        summary: 'Small appliances make up 33% (20.4 Mt) of global e-waste, yet only 12% are formally recycled.',
+        prepSteps: [
+          'Unplug and let cool; never open a microwave casing (internal capacitors can hold lethal charge).',
+          'Remove glass turntable trays only if safe, or tape the door shut for transport.',
+          'Never leave small plug-in appliances in curbside recycling bins.',
+          'Take to a certified e-waste drop-off or municipal scrap-electronics collection.'
+        ],
+        reuseTip: 'Check if a blown fuse, power cord, or simple switch can be fixed at a local repair shop first.',
+        recoverable: 'Steel/iron (major share), copper transformer coils, aluminum, circuit boards',
+        sourceLabel: 'UN Global E-waste Monitor 2024',
+        sourceUrl: 'https://unitar.org/about/news-stories/press/global-e-waste-monitor-2024-electronic-waste-rising-five-times-faster-documented-e-waste-recycling'
+      },
+      {
+        id: 'refrigerator-ac',
+        code: 'AP-03',
+        name: 'Refrigerator / Air Conditioner',
+        aliases: 'fridge freezer ac cooling unit compressor',
+        category: 'Appliances',
+        stream: 'ewaste',
+        hazard: 'Greenhouse Refrigerants',
+        hazardClass: 'text-vermilion',
+        icon: 'snowflake',
+        summary: 'Recapturing refrigerants properly prevented 41 Mt of CO₂-equivalent emissions globally in 2022.',
+        prepSteps: [
+          'Never puncture cooling coils or let an informal scrap dealer vent refrigerant gas into the air.',
+          'Defrost, empty, and clean the interior before scheduled pickup.',
+          'Book manufacturer exchange/haul-away or a certified appliance/e-waste recycler equipped for refrigerant recovery.',
+          'Secure or remove doors if storing temporarily for child safety.'
+        ],
+        reuseTip: 'Clean condenser coils and check door seals annually to keep efficiency high and extend lifespan.',
+        recoverable: 'Captured refrigerants, steel, copper tubing, aluminum fins',
+        sourceLabel: 'UN GEM 2024 — 41 Mt CO2e Refrigerants',
+        sourceUrl: 'https://unitar.org/about/news-stories/press/global-e-waste-monitor-2024-electronic-waste-rising-five-times-faster-documented-e-waste-recycling'
+      },
+      {
+        id: 'gaming-camera',
+        code: 'EW-07',
+        name: 'Gaming Console / Digital Camera',
+        aliases: 'playstation xbox nintendo switch dslr gopro',
+        category: 'E-Waste & Tech',
+        stream: 'ewaste',
+        hazard: 'Data & Battery Risk',
+        hazardClass: 'text-amber-700',
+        icon: 'gamepad-2',
+        summary: 'Consoles and cameras hold saved accounts, payment methods, and removable lithium batteries.',
+        prepSteps: [
+          'Deactivate primary console status and perform a factory hard reset (per CISA guidance).',
+          'Remove game discs, SD cards, and external hard drives.',
+          'Remove detachable camera battery packs and tape their terminals if recycling separately.',
+          'Donate working units or bring broken units to a certified e-waste recycler.'
+        ],
+        reuseTip: 'Retro consoles and older DSLR lenses retain high reuse value — sell or donate before recycling.',
+        recoverable: 'Gold, silver, copper, aluminum, optical glass, lithium battery metals',
+        sourceLabel: 'CISA Electronic Device Disposal',
+        sourceUrl: 'https://www.cisa.gov/news-events/news/proper-disposal-electronic-devices'
+      },
+      {
+        id: 'pizza-box',
+        code: 'HH-01',
+        name: 'Greasy Pizza Box',
+        aliases: 'cardboard food box oil stained paper',
+        category: 'Tricky Household',
+        stream: 'trash',
+        hazard: 'Paper Contamination',
+        hazardClass: 'text-amber-700',
+        icon: 'package-x',
+        summary: 'Heavy grease and cheese soak into paper fibers and ruin entire paper-recycling batches. Split clean lids from greasy bottoms.',
+        prepSteps: [
+          'Remove all leftover food, wax paper liners, and plastic box spacers.',
+          'Tear off the clean, grease-free top lid — recycle that clean cardboard half in curbside paper recycling.',
+          'Put the heavily grease-soaked bottom half in compost (if accepted locally) or municipal trash.',
+          'Flatten clean cardboard portions to save bin space.'
+        ],
+        reuseTip: 'Only clean, dry cardboard recovers high-value fiber during paper pulping.',
+        recoverable: 'Clean lid fiber only (greasy half compostable where organic pickup exists)',
+        sourceLabel: 'US EPA Reduce, Reuse, Recycle',
+        sourceUrl: 'https://www.epa.gov/recycle'
+      },
+      {
+        id: 'plastic-bottles',
+        code: 'HH-02',
+        name: 'Rigid Plastic Bottles (#1 PET, #2 HDPE)',
+        aliases: 'water bottle milk jug shampoo bottle detergent container',
+        category: 'Tricky Household',
+        stream: 'curbside',
+        hazard: 'Low Hazard · Rinse',
+        hazardClass: 'text-emerald-800',
+        icon: 'cup-soda',
+        summary: 'Empty, rinsed #1 PET and #2 HDPE bottles are the most widely recycled household plastics worldwide.',
+        prepSteps: [
+          'Empty all liquid and give a quick rinse to prevent odor and contamination.',
+          'Keep the plastic cap screwed back on (loose small caps fall through sorting screens).',
+          'Do not bag recyclables inside tied plastic grocery bags — place loose in the recycling bin.',
+          'Keep out black plastic trays and flexible film wraps.'
+        ],
+        reuseTip: 'SDG 12.5 Prevention: Switch to a reusable insulated bottle and refillable soap/detergent concentrates.',
+        recoverable: 'Recycled rPET & rHDPE pellets for new bottles, textiles, and piping',
+        sourceLabel: 'US EPA Reduce, Reuse, Recycle',
+        sourceUrl: 'https://www.epa.gov/recycle'
+      },
+      {
+        id: 'aluminum-cans',
+        code: 'HH-03',
+        name: 'Aluminum & Tin Food Cans',
+        aliases: 'soda can beverage tin steel can metal container',
+        category: 'Tricky Household',
+        stream: 'curbside',
+        hazard: 'Low Hazard · Sharp Edge',
+        hazardClass: 'text-emerald-800',
+        icon: 'cylinder',
+        summary: 'Aluminum and steel cans are infinitely recyclable with minimal quality loss when emptied and rinsed.',
+        prepSteps: [
+          'Empty and rinse food residue from cans.',
+          'Leave beverage cans uncrushed if your local sorting facility uses optical/eddy-current sorters.',
+          'Tuck sharp steel lids safely inside the can before placing in the recycling bin.',
+          'Never include pressurized aerosol cans unless fully empty and explicitly accepted locally.'
+        ],
+        reuseTip: 'Choosing aluminum over multi-layer pouches dramatically improves local recyclability.',
+        recoverable: 'Closed-loop aluminum and steel metal stock',
+        sourceLabel: 'US EPA Reduce, Reuse, Recycle',
+        sourceUrl: 'https://www.epa.gov/recycle'
+      },
+      {
+        id: 'styrofoam',
+        code: 'HH-04',
+        name: 'Styrofoam / EPS Foam Packaging',
+        aliases: 'polystyrene foam peanuts takeout container packing blocks',
+        category: 'Tricky Household',
+        stream: 'trash',
+        hazard: 'Curbside Contaminant',
+        hazardClass: 'text-amber-700',
+        icon: 'box',
+        summary: 'Expanded polystyrene (EPS) breaks into tiny beads that contaminate curbside recycling streams and is rarely accepted curbside.',
+        prepSteps: [
+          'Do NOT put foam blocks or foam food containers in curbside recycling.',
+          'Check if a local shipping store accepts clean packing peanuts for reuse.',
+          'Bag loose foam securely before placing in municipal trash so beads do not blow into waterways.',
+          'Prefer cardboard or molded-pulp packaging when possible.'
+        ],
+        reuseTip: 'Reuse clean foam corner blocks for moving or shipping fragile items.',
+        recoverable: 'Only at specialized EPS densifier drop-offs (not curbside)',
+        sourceLabel: 'US EPA Reduce, Reuse, Recycle',
+        sourceUrl: 'https://www.epa.gov/recycle'
+      },
+      {
+        id: 'plastic-film',
+        code: 'HH-05',
+        name: 'Plastic Grocery Bags & Bubble Wrap',
+        aliases: 'polythene bag bread bag mailer film shrink wrap',
+        category: 'Tricky Household',
+        stream: 'trash',
+        hazard: 'Sorting Machine Tangler',
+        hazardClass: 'text-amber-700',
+        icon: 'shopping-bag',
+        summary: 'Soft plastic films wrap around sorting gears at municipal recycling plants, forcing costly shutdowns.',
+        prepSteps: [
+          'Never place loose plastic bags or bagged recyclables in curbside recycling bins.',
+          'Keep clean, dry film bags for reuse or take them to participating grocery store film drop-off bins.',
+          'If no film drop-off exists locally, dispose of soiled film in municipal trash.',
+          'Carry reusable cloth totes to eliminate single-use film bags at the source.'
+        ],
+        reuseTip: 'SDG 12.5 Prevention: Keeping two foldable cloth bags in your backpack/vehicle avoids hundreds of film bags a year.',
+        recoverable: 'Composite decking lumber when collected clean at store drop-offs',
+        sourceLabel: 'US EPA Reduce, Reuse, Recycle',
+        sourceUrl: 'https://www.epa.gov/recycle'
+      }
+    ];
+
+    const PREP_CHECKLISTS = {
+      phone: {
+        label: 'Smartphone / Tablet',
+        icon: 'smartphone',
+        steps: [
+          { id: 'p1', title: 'Back up photos, contacts & authenticator keys', detail: 'Sync to cloud or encrypted computer backup before wiping.' },
+          { id: 'p2', title: 'Sign out of Apple ID / Google Account & disable Find My', detail: 'Prevents activation locks if the device is refurbished or donated.' },
+          { id: 'p3', title: 'Physically remove SIM card & microSD memory card', detail: 'Recommended by CISA to prevent accidental identity or file exposure.' },
+          { id: 'p4', title: 'Run full Factory Reset (Hard Reset)', detail: 'Confirm the device reboots to the initial welcome setup screen.' },
+          { id: 'p5', title: 'Inspect battery for swelling or damage', detail: 'If bulging or cracked, do not mail—take directly to HHW/certified e-waste drop-off.' }
+        ]
+      },
+      laptop: {
+        label: 'Laptop / Desktop',
+        icon: 'laptop',
+        steps: [
+          { id: 'l1', title: 'Back up documents & export browser passwords', detail: 'Verify files open cleanly on your backup drive before erasing.' },
+          { id: 'l2', title: 'Sign out of cloud drives, email & licensed software', detail: 'Deauthorize iCloud, Microsoft 365, and banking sessions.' },
+          { id: 'l3', title: 'Perform full OS clean wipe / NIST-style overwrite', detail: 'Windows: Reset this PC → Remove everything → Clean data. Mac: Disk Utility erase.' },
+          { id: 'l4', title: 'Remove optical discs, USB dongles & SD cards', detail: 'Check all ports and slots before packing.' },
+          { id: 'l5', title: 'Pack power brick & cables together', detail: 'Keep battery intact; bring to a certified e-waste recycler or refurbisher.' }
+        ]
+      },
+      console: {
+        label: 'Camera / Console / Router',
+        icon: 'gamepad-2',
+        steps: [
+          { id: 'c1', title: 'Remove SD cards, game discs & external drives', detail: 'CISA recommends physically removing all removable storage media.' },
+          { id: 'c2', title: 'Deactivate accounts & payment methods', detail: 'Unlink PlayStation/Xbox/Nintendo accounts or ISP credentials.' },
+          { id: 'c3', title: 'Execute hardware factory reset', detail: 'Use pinhole reset on routers or system initialization on consoles/cameras.' },
+          { id: 'c4', title: 'Separate removable battery packs', detail: 'Tape exposed terminals on detachable lithium battery packs with electrical tape.' }
+        ]
+      },
+      battery: {
+        label: 'Lithium & Coin Batteries',
+        icon: 'battery-charging',
+        steps: [
+          { id: 'b1', title: 'Confirm battery chemistry (Lithium-ion, Coin, or Alkaline)', detail: 'Look for the word "Lithium" or "Li-ion" printed on the casing.' },
+          { id: 'b2', title: 'Tape terminals with non-conductive electrical tape', detail: 'US EPA recommends taping terminals (or wrapping coin cells) to prevent sparks.' },
+          { id: 'b3', title: 'Place each lithium battery in a separate clear plastic bag', detail: 'Prevents metal contacts from touching other batteries during transport.' },
+          { id: 'b4', title: 'Store in a cool, dry container out of reach of children', detail: 'Coin cells are a serious swallowing hazard; never leave loose on counters.' },
+          { id: 'b5', title: 'Deliver only to Battery / HHW Drop-Off (Never Trash)', detail: 'Garbage truck compactors can crush lithium cells and trigger fires.' }
+        ]
+      }
+    };
+
+    const QUIZ_QUESTIONS = [
+      {
+        q: 'According to the UN Global E-waste Monitor 2024, what percentage of the 62 million tonnes of e-waste generated in 2022 was formally collected and recycled?',
+        options: ['62.5%', '41.0%', '22.3%', '8.5%'],
+        correct: 2,
+        explanation: 'Only 22.3% (about 13.8 Mt) of global e-waste was documented as formally collected and recycled in 2022.',
+        sourceLabel: 'WHO / UN GEM 2024',
+        sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/electronic-waste-(e-waste)'
+      },
+      {
+        q: 'Why must lithium-ion batteries and power banks NEVER go into household trash or curbside recycling bins?',
+        options: [
+          'They are too heavy for plastic bins',
+          'Compaction and sorting equipment can crush them, triggering thermal runaway fires',
+          'They dissolve into harmless saltwater',
+          'They are legally required to be buried in backyards'
+        ],
+        correct: 1,
+        explanation: 'US EPA warns that crushed lithium-ion batteries can spark and cause fires in garbage trucks and recycling facilities. Always tape terminals and take them to battery/HHW drop-offs.',
+        sourceLabel: 'US EPA Used Lithium-Ion Batteries',
+        sourceUrl: 'https://www.epa.gov/recycle/used-lithium-ion-batteries'
+      },
+      {
+        q: 'What is the safest way to prepare loose lithium-ion or button-cell batteries before drop-off?',
+        options: [
+          'Wrap them tightly in aluminum foil',
+          'Soak them in tap water overnight',
+          'Tape terminals with non-conductive electrical tape or place each in a separate plastic bag',
+          'Throw them loose into a metal coffee tin'
+        ],
+        correct: 2,
+        explanation: 'Conductive foil or metal tins can short-circuit batteries. Non-conductive electrical tape or separate plastic bags prevent terminals from touching.',
+        sourceLabel: 'US EPA Used Household Batteries',
+        sourceUrl: 'https://www.epa.gov/recycle/used-household-batteries'
+      },
+      {
+        q: 'Under India’s E-Waste (Management) Rules, 2022 (effective April 1, 2023), who should households hand over old electronics to?',
+        options: [
+          'Any informal scrap dealer who melts wires in the open',
+          'Regular municipal wet-waste collectors',
+          'CPCB-registered recyclers/dismantlers or authorized brand EPR take-back centers',
+          'Local landfill dumping grounds'
+        ],
+        correct: 2,
+        explanation: 'CPCB rules promote environmentally sound management through registered recyclers and Extended Producer Responsibility (EPR), avoiding toxic informal burning.',
+        sourceLabel: 'CPCB E-Waste EPR Portal',
+        sourceUrl: 'https://eprewaste.cpcb.gov.in/'
+      },
+      {
+        q: 'What should you do with a pizza box that has a clean lid and a heavily grease-soaked bottom?',
+        options: [
+          'Put the entire greasy box in paper recycling',
+          'Tear off and recycle the clean top lid; put the greasy bottom in compost or trash',
+          'Wash the cardboard in a dishwasher first',
+          'Burn it indoors'
+        ],
+        correct: 1,
+        explanation: 'Grease ruins recycled paper pulp. Separating the clean lid lets good cardboard fiber be recovered without contaminating the batch.',
+        sourceLabel: 'US EPA Reduce, Reuse, Recycle',
+        sourceUrl: 'https://www.epa.gov/recycle'
+      },
+      {
+        q: 'Before donating or recycling a smartphone, which step does CISA recommend alongside a factory reset?',
+        options: [
+          'Leave the SIM card inside for the next owner',
+          'Physically remove the SIM card and any memory/SD card',
+          'Only delete photos from the gallery app',
+          'Leave your cloud account signed in'
+        ],
+        correct: 1,
+        explanation: 'CISA advises performing a factory hard reset AND physically removing SIM and memory cards so personal data cannot be recovered.',
+        sourceLabel: 'CISA Proper Disposal of Electronic Devices',
+        sourceUrl: 'https://www.cisa.gov/news-events/news/proper-disposal-electronic-devices'
+      },
+      {
+        q: 'Roughly how much were the metals embedded in 2022 global e-waste worth (including gold, copper, and iron)?',
+        options: ['US $4 billion', 'US $19 billion', 'US $91 billion', 'US $450 million'],
+        correct: 2,
+        explanation: 'The UN Global E-waste Monitor 2024 valued embedded metals in 2022 e-waste at US $91 billion ($19B copper, $15B gold, $16B iron), with $28B reclaimed via urban mining.',
+        sourceLabel: 'UNITAR / UN GEM 2024',
+        sourceUrl: 'https://unitar.org/about/news-stories/press/global-e-waste-monitor-2024-electronic-waste-rising-five-times-faster-documented-e-waste-recycling'
+      },
+      {
+        q: 'Which UN SDG 12 target explicitly calls for substantially reducing waste generation through prevention, reduction, recycling, and reuse by 2030?',
+        options: ['Target 12.1', 'Target 12.3', 'Target 12.5', 'Target 12.c'],
+        correct: 2,
+        explanation: 'UN SDG Target 12.5 focuses on substantially reducing waste generation by 2030 through prevention, reduction, recycling, and reuse.',
+        sourceLabel: 'United Nations SDG 12',
+        sourceUrl: 'https://www.un.org/sustainabledevelopment/sustainable-consumption-production/'
+      }
+    ];
+
+    // =========================================================================
+    // 2. APPLICATION STATE (with safe localStorage persistence)
+    // =========================================================================
+    const STORAGE_KEY = 'recircuit_sdg12_state_v1';
+
+    let state = {
+      activeTab: 'lookup',
+      region: 'global',
+      search: '',
+      category: 'all',
+      stream: 'all',
+      box: {},
+      prepDevice: 'phone',
+      prepChecked: {},
+      wizard: { step: 1, hasPower: null, works: null, hazard: null, hasData: null },
+      quiz: { index: 0, score: 0, answered: false, selected: null }
+    };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed.region && REGION_INFO[parsed.region]) state.region = parsed.region;
+          if (parsed.box && typeof parsed.box === 'object') state.box = parsed.box;
+          if (parsed.prepChecked && typeof parsed.prepChecked === 'object') state.prepChecked = parsed.prepChecked;
+        }
+      } catch (e) {}
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          region: state.region,
+          box: state.box,
+          prepChecked: state.prepChecked
+        }));
+      } catch (e) {}
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      const txt = document.getElementById('toastText');
+      txt.textContent = msg;
+      el.classList.remove('hidden');
+      el.classList.add('flex');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      }, 2800);
+    }
+
+    function refreshIcons() {
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    // =========================================================================
+    // 3. REGION & TAB NAVIGATION
+    // =========================================================================
+    function renderRegionNotice() {
+      const info = REGION_INFO[state.region];
+      document.getElementById('regionNoticeText').textContent = info.notice;
+      const link = document.getElementById('regionNoticeLink');
+      link.href = info.url;
+      link.textContent = `${info.name} ↗`;
+      document.getElementById('regionSelect').value = state.region;
+    }
+
+    function switchTab(tabName) {
+      state.activeTab = tabName;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.setAttribute('aria-selected', btn.dataset.tab === tabName ? 'true' : 'false');
+      });
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.toggle('hidden', panel.id !== `tab-${tabName}`);
+      });
+
+      if (tabName === 'impact') {
+        renderBox();
+        renderCharts();
+      } else if (tabName === 'prep') {
+        renderPrep();
+      } else if (tabName === 'wizard') {
+        renderWizard();
+      } else if (tabName === 'quiz') {
+        renderQuiz();
+      }
+      refreshIcons();
+    }
+
+    function updateNavBoxCount() {
+      const total = Object.values(state.box).reduce((a, b) => a + b, 0);
+      document.getElementById('navBoxCount').textContent = String(total);
+    }
+
+    function syncSearchInputs(val) {
+      state.search = val;
+      const a = document.getElementById('searchInput');
+      const b = document.getElementById('heroSearchInput');
+      if (a && a.value !== val) a.value = val;
+      if (b && b.value !== val) b.value = val;
+      if (state.activeTab !== 'lookup' && val.trim().length > 0) {
+        switchTab('lookup');
+      }
+      renderLookup();
+    }
+
+    // =========================================================================
+    // 4. TAB 1: SMART LOOKUP & RIGHT-SIDE DRAWER
+    // =========================================================================
+    function renderLookup() {
+      const q = state.search.trim().toLowerCase();
+      const filtered = ITEMS.filter(item => {
+        const matchCat = state.category === 'all' || item.category === state.category;
+        const matchStream = state.stream === 'all' || item.stream === state.stream;
+        const matchText = !q ||
+          item.name.toLowerCase().includes(q) ||
+          item.aliases.toLowerCase().includes(q) ||
+          item.summary.toLowerCase().includes(q) ||
+          item.recoverable.toLowerCase().includes(q) ||
+          item.code.toLowerCase().includes(q);
+        return matchCat && matchStream && matchText;
+      });
+
+      document.getElementById('lookupCount').textContent = `${filtered.length} / ${ITEMS.length} ITEMS`;
+      document.getElementById('clearSearchBtn').classList.toggle('hidden', !q);
+
+      const grid = document.getElementById('itemsGrid');
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full bg-white rounded-2xl border border-dashed hairline p-10 text-center">
+            <p class="font-editorial text-xl text-ink">No items match "${escapeHtml(state.search)}"</p>
+            <p class="text-xs text-neutral-500 mt-1.5">Try a broader keyword or run the 15-Second Triage Engine for any unlisted household item.</p>
+            <button type="button" data-action="go-wizard" class="mt-4 px-4 py-2.5 rounded-lg bg-obsidian hover:bg-neutral-800 text-limeaccent text-xs font-semibold transition">
+              Launch 15-Sec Triage →
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        const sm = STREAM_META[item.stream];
+        const qty = state.box[item.id] || 0;
+        return `
+          <article class="item-card rounded-xl p-5 flex flex-col justify-between gap-4">
+            <div>
+              <div class="flex items-center justify-between gap-2 pb-3 border-b hairline">
+                <div class="flex items-center gap-2">
+                  <span class="font-code text-[11px] text-neutral-400">${item.code}</span>
+                  <span class="text-neutral-300">·</span>
+                  <span class="text-[11px] font-medium ${item.hazardClass}">${item.hazard}</span>
+                </div>
+                <span class="font-code text-[10px] font-semibold px-2 py-0.5 rounded border ${sm.badge}">
+                  ${sm.short}
+                </span>
+              </div>
+
+              <div class="mt-4 flex items-start gap-3">
+                <div class="w-9 h-9 rounded-lg bg-paper border hairline text-ink flex items-center justify-center shrink-0 mt-0.5">
+                  <i data-lucide="${item.icon}" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-ink text-[15px] leading-snug">${item.name}</h3>
+                  <div class="text-[11px] text-neutral-500 mt-0.5">${item.category}</div>
+                </div>
+              </div>
+
+              <p class="mt-3 text-xs text-neutral-600 leading-relaxed">${item.summary}</p>
+            </div>
+
+            <div class="pt-3 border-t hairline flex items-center justify-between gap-2">
+              <button type="button" data-open-item="${item.id}" class="text-xs font-semibold text-ink hover:text-emerald-800 inline-flex items-center gap-1.5">
+                <span>Inspect Protocol</span>
+                <i data-lucide="arrow-right" class="card-arrow w-3.5 h-3.5"></i>
+              </button>
+              <button type="button" data-add-box="${item.id}" class="font-code px-2.5 py-1.5 rounded-md text-[11px] font-medium transition ${
+                qty > 0
+                  ? 'bg-obsidian text-limeaccent'
+                  : 'bg-paper border hairline text-ink hover:border-ink'
+              }">
+                ${qty > 0 ? `BOX (${qty}) +1` : '+ MANIFEST'}
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      refreshIcons();
+    }
+
+    let activeModalItemId = null;
+
+    function openItemModal(itemId) {
+      const item = ITEMS.find(i => i.id === itemId);
+      if (!item) return;
+      activeModalItemId = item.id;
+      const sm = STREAM_META[item.stream];
+      const reg = REGION_INFO[state.region];
+      const dropText = item.stream === 'ewaste'
+        ? reg.ewasteDrop
+        : item.stream === 'battery'
+          ? reg.batteryDrop
+          : item.stream === 'curbside'
+            ? 'Place loose, clean, and dry in your local municipal curbside recycling bin.'
+            : 'Place in regular municipal trash (do not contaminate curbside recycling).';
+
+      document.getElementById('modalBadges').innerHTML = `
+        <span class="font-code text-[10px] font-semibold px-2 py-0.5 rounded border ${sm.badge}">${sm.short}</span>
+        <span class="font-code text-[10px] font-medium px-2 py-0.5 rounded bg-white border hairline ${item.hazardClass}">${item.hazard}</span>
+        <span class="font-code text-[10px] text-neutral-400 px-1.5 py-0.5">${item.code}</span>
+      `;
+      document.getElementById('modalTitle').textContent = item.name;
+
+      document.getElementById('modalBody').innerHTML = `
+        <p class="text-neutral-700 leading-relaxed">${item.summary}</p>
+
+        <div class="rounded-xl bg-obsidian text-white p-4">
+          <div class="font-code text-[10px] uppercase tracking-[0.12em] text-limeaccent mb-1">ROUTING DESTINATION · ${reg.name}</div>
+          <p class="text-xs sm:text-sm text-neutral-100 leading-relaxed">${dropText}</p>
+        </div>
+
+        <div>
+          <div class="font-code text-[10px] uppercase tracking-[0.12em] text-neutral-500 mb-2.5">SAFE PREPARATION PROTOCOL</div>
+          <ol class="space-y-2.5">
+            ${item.prepSteps.map((s, idx) => `
+              <li class="flex items-start gap-3 p-3 rounded-lg bg-paper/70 border hairline text-xs sm:text-sm text-ink leading-relaxed">
+                <span class="font-code text-[11px] font-semibold text-neutral-400 mt-0.5">0${idx + 1}</span>
+                <span>${s}</span>
+              </li>
+            `).join('')}
+          </ol>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="rounded-xl bg-emerald-50/70 border border-emerald-200 p-4">
+            <div class="font-code text-[10px] uppercase tracking-wider text-emerald-900 font-semibold mb-1">SDG 12.5 · Reuse First</div>
+            <p class="text-xs text-emerald-950 leading-relaxed">${item.reuseTip}</p>
+          </div>
+          <div class="rounded-xl bg-paper border hairline p-4">
+            <div class="font-code text-[10px] uppercase tracking-wider text-neutral-600 font-semibold mb-1">Recoverable Materials</div>
+            <p class="text-xs text-neutral-700 leading-relaxed">${item.recoverable}</p>
+          </div>
+        </div>
+      `;
+
+      const srcLink = document.getElementById('modalSourceLink');
+      srcLink.href = item.sourceUrl;
+      srcLink.querySelector('span').textContent = `Source: ${item.sourceLabel}`;
+
+      const modal = document.getElementById('itemModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      refreshIcons();
+    }
+
+    function closeItemModal() {
+      const modal = document.getElementById('itemModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      activeModalItemId = null;
+    }
+
+    function addToBox(itemId) {
+      state.box[itemId] = (state.box[itemId] || 0) + 1;
+      saveState();
+      updateNavBoxCount();
+      renderLookup();
+      const item = ITEMS.find(i => i.id === itemId);
+      if (item) showToast(`Added "${item.name}" to Drop-Off Manifest`);
+    }
+
+    // =========================================================================
+    // 5. TAB 2: 15-SECOND TRIAGE WIZARD
+    // =========================================================================
+    function renderWizard() {
+      const w = state.wizard;
+      const body = document.getElementById('wizardBody');
+      const prog = document.getElementById('wizardProgress');
+      const label = document.getElementById('wizardStepLabel');
+
+      if (w.step === 1) {
+        prog.style.width = '25%';
+        label.textContent = 'STEP 1 / 4';
+        body.innerHTML = `
+          <h3 class="font-editorial text-xl sm:text-2xl text-ink">Does the item have a plug, power cord, circuit board, or battery?</h3>
+          <p class="text-xs sm:text-sm text-neutral-500 mt-1.5">Under UN Global E-waste Monitor definitions, any discarded product with a plug or battery counts as e-waste.</p>
+          <div class="grid sm:grid-cols-2 gap-3 mt-6">
+            <button type="button" data-wiz="hasPower:yes" class="p-5 rounded-xl border hairline hover:border-ink hover:bg-paper/60 text-left transition">
+              <div class="font-code text-[10px] text-neutral-400 uppercase mb-1">OPTION A</div>
+              <div class="font-semibold text-ink">Yes — Plug, Wire, or Battery</div>
+              <div class="text-xs text-neutral-500 mt-1">Phones, chargers, toys, bulbs, power banks, appliances</div>
+            </button>
+            <button type="button" data-wiz="hasPower:no" class="p-5 rounded-xl border hairline hover:border-ink hover:bg-paper/60 text-left transition">
+              <div class="font-code text-[10px] text-neutral-400 uppercase mb-1">OPTION B</div>
+              <div class="font-semibold text-ink">No — Non-Electronic Household Item</div>
+              <div class="text-xs text-neutral-500 mt-1">Packaging, bottles, cardboard, film bags, foam, glass</div>
+            </button>
+          </div>
+        `;
+      } else if (w.step === 2 && w.hasPower === 'yes') {
+        prog.style.width = '50%';
+        label.textContent = 'STEP 2 / 4';
+        body.innerHTML = `
+          <h3 class="font-editorial text-xl sm:text-2xl text-ink">Does it contain a swollen, leaking, cracked, or loose lithium/coin battery?</h3>
+          <p class="text-xs sm:text-sm text-neutral-500 mt-1.5">Damaged lithium cells pose an immediate fire risk and require isolated HHW handling.</p>
+          <div class="grid sm:grid-cols-2 gap-3 mt-6">
+            <button type="button" data-wiz="hazard:damaged" class="p-5 rounded-xl border border-rose-200 bg-rose-50/40 hover:border-vermilion text-left transition">
+              <div class="font-code text-[10px] text-vermilion uppercase mb-1">HIGH PRIORITY</div>
+              <div class="font-semibold text-rose-950">Yes — Swollen, Damaged, or Loose Battery</div>
+              <div class="text-xs text-rose-800 mt-1">Bulging phone/power bank, loose coin cells, or cracked pack</div>
+            </button>
+            <button type="button" data-wiz="hazard:intact" class="p-5 rounded-xl border hairline hover:border-ink hover:bg-paper/60 text-left transition">
+              <div class="font-code text-[10px] text-neutral-400 uppercase mb-1">STANDARD</div>
+              <div class="font-semibold text-ink">No — Intact Device or Corded Item</div>
+              <div class="text-xs text-neutral-500 mt-1">Normal wear, obsolete, or broken without battery swelling</div>
+            </button>
+          </div>
+        `;
+      } else if (w.step === 2 && w.hasPower === 'no') {
+        prog.style.width = '66%';
+        label.textContent = 'STEP 2 / 3';
+        body.innerHTML = `
+          <h3 class="font-editorial text-xl sm:text-2xl text-ink">Is the item clean, dry, rigid plastic (#1/#2), metal can, or clean cardboard?</h3>
+          <p class="text-xs sm:text-sm text-neutral-500 mt-1.5">Food grease, soft plastic bags, and Styrofoam contaminate municipal recycling batches.</p>
+          <div class="grid sm:grid-cols-2 gap-3 mt-6">
+            <button type="button" data-wiz="works:clean_recyclable" class="p-5 rounded-xl border hairline hover:border-ink hover:bg-paper/60 text-left transition">
+              <div class="font-code text-[10px] text-sky-700 uppercase mb-1">CLEAN STREAM</div>
+              <div class="font-semibold text-ink">Yes — Clean &amp; Dry Rigid Packaging</div>
+              <div class="text-xs text-neutral-500 mt-1">Rinsed bottles, cans, clean paper/cardboard</div>
+            </button>
+            <button type="button" data-wiz="works:contaminated" class="p-5 rounded-xl border hairline hover:border-ink hover:bg-paper/60 text-left transition">
+              <div class="font-code text-[10px] text-amber-700 uppercase mb-1">CONTAMINANT CHECK</div>
+              <div class="font-semibold text-ink">No — Greasy, Soft Film, or Foam</div>
+              <div class="text-xs text-neutral-500 mt-1">Greasy pizza bottom, Styrofoam, soft plastic bags, multi-layer wrappers</div>
+            </button>
+          </div>
+        `;
+      } else if (w.step === 3 && w.hasPower === 'yes') {
+        prog.style.width = '75%';
+        label.textContent = 'STEP 3 / 4';
+        body.innerHTML = `
+          <h3 class="font-editorial text-xl sm:text-2xl text-ink">Does the device still work (or only need a minor repair) AND store personal data?</h3>
+          <p class="text-xs sm:text-sm text-neutral-500 mt-1.5">SDG 12.5 prioritizes repair and reuse before recycling, while CISA recommends data wiping before hand-off.</p>
+          <div class="grid sm:grid-cols-2 gap-3 mt-6">
+            <button type="button" data-wiz="hasData:working_data" class="p-4 rounded-xl border hairline hover:border-ink hover:bg-paper/60 text-left transition">
+              <div class="font-semibold text-ink text-sm">Working / Repairable + Has Data</div>
+              <div class="text-xs text-neutral-500 mt-1">Old phone, laptop, tablet, or console that still powers on</div>
+            </button>
+            <button type="button" data-wiz="hasData:broken_data" class="p-4 rounded-xl border hairline hover:border-ink hover:bg-paper/60 text-left transition">
+              <div class="font-semibold text-ink text-sm">Broken / Dead + Has Data</div>
+              <div class="text-xs text-neutral-500 mt-1">Dead phone/PC/router that stored personal accounts or files</div>
+            </button>
+            <button type="button" data-wiz="hasData:nodata_working" class="p-4 rounded-xl border hairline hover:border-ink hover:bg-paper/60 text-left transition">
+              <div class="font-semibold text-ink text-sm">Working + No Personal Data</div>
+              <div class="text-xs text-neutral-500 mt-1">Working cable, kettle, monitor, fan, or lamp</div>
+            </button>
+            <button type="button" data-wiz="hasData:nodata_broken" class="p-4 rounded-xl border hairline hover:border-ink hover:bg-paper/60 text-left transition">
+              <div class="font-semibold text-ink text-sm">Broken + No Personal Data</div>
+              <div class="text-xs text-neutral-500 mt-1">Dead charger, toaster, LED bulb, or frayed cord</div>
+            </button>
+          </div>
+        `;
+      } else {
+        prog.style.width = '100%';
+        label.textContent = 'VERDICT READY';
+        const reg = REGION_INFO[state.region];
+        let verdict = '';
+        let tone = 'bg-obsidian text-white border-neutral-800';
+        let accent = 'text-limeaccent';
+        let steps = [];
+        let ctaTab = null;
+        let ctaLabel = '';
+
+        if (w.hasPower === 'no' && w.works === 'clean_recyclable') {
+          verdict = 'Curbside Recycling Bin';
+          steps = [
+            'Ensure the item is empty, rinsed, and dry.',
+            'Place it loose in your municipal recycling bin (never tied inside a plastic grocery bag).',
+            'Keep caps screwed onto plastic bottles so small caps do not fall through sorting screens.'
+          ];
+        } else if (w.hasPower === 'no' && w.works === 'contaminated') {
+          verdict = 'Keep Out of Curbside Recycling (Prevent Wish-Cycling)';
+          steps = [
+            'Do not toss greasy paper, Styrofoam, or soft plastic film into curbside bins — they contaminate entire loads.',
+            'If it is a clean plastic grocery bag, return it to a grocery store film drop-off bin.',
+            'Otherwise, place soiled/foam items in regular municipal trash (or compost greasy uncoated paper where accepted).'
+          ];
+        } else if (w.hazard === 'damaged') {
+          verdict = 'PRIORITY SAFETY: Battery / Household Hazardous Waste (HHW) Drop-Off';
+          tone = 'bg-rose-950 text-white border-rose-800';
+          accent = 'text-rose-300';
+          steps = [
+            'NEVER place in household trash, curbside recycling, or mail-in envelopes.',
+            'Tape exposed terminals with non-conductive electrical tape or isolate in a separate clear plastic bag.',
+            'If swollen or warm, store in a cool, dry, non-flammable container away from combustibles.',
+            `Bring directly to: ${reg.batteryDrop}`
+          ];
+          ctaTab = 'prep';
+          ctaLabel = 'Open Battery Safety Checklist →';
+        } else if (w.hasData === 'working_data') {
+          verdict = 'Wipe Data First, Then Donate / Refurbish (SDG 12.5)';
+          steps = [
+            'Back up files, sign out of Apple/Google/Microsoft accounts, and remove SIM/SD cards.',
+            'Run a full factory hard reset before handing the device to anyone.',
+            'Donate to a local school, trade in, or hand to a certified refurbisher to extend product life.'
+          ];
+          ctaTab = 'prep';
+          ctaLabel = 'Open Data Wipe Checklist →';
+        } else if (w.hasData === 'broken_data') {
+          verdict = 'Certified E-Waste Recycler (With Data Destruction)';
+          steps = [
+            'Remove SIM cards, microSD cards, and accessible hard drives/SSDs if possible.',
+            'Never hand data-bearing electronics to informal scrap dealers.',
+            `Deliver to: ${reg.ewasteDrop}`
+          ];
+          ctaTab = 'prep';
+          ctaLabel = 'Review Data Safety Checklist →';
+        } else if (w.hasData === 'nodata_working') {
+          verdict = 'Donate / Reuse First (SDG 12.5 Prevention)';
+          steps = [
+            'Clean the item and bundle its original power cord or accessories.',
+            'Offer via local community reuse groups, thrift stores, or repair cafes.',
+            `If unclaimed, take to: ${reg.ewasteDrop}`
+          ];
+        } else {
+          verdict = 'Certified E-Waste Recycler (Urban Mining Recovery)';
+          steps = [
+            'Do not dismantle the device or put it in curbside recycling/trash.',
+            'Coil any attached cords neatly so they stay bundled.',
+            `Deliver to: ${reg.ewasteDrop}`
+          ];
+        }
+
+        body.innerHTML = `
+          <div class="rounded-2xl border p-6 ${tone}">
+            <div class="font-code text-[10px] uppercase tracking-[0.14em] ${accent}">DISPOSAL VERDICT · ${reg.name}</div>
+            <h3 class="font-editorial text-xl sm:text-2xl mt-1.5">${verdict}</h3>
+            <ol class="mt-4 space-y-2.5 text-sm text-neutral-200">
+              ${steps.map((s, idx) => `
+                <li class="flex items-start gap-3">
+                  <span class="font-code text-xs ${accent} mt-0.5">0${idx + 1}</span>
+                  <span class="leading-relaxed">${s}</span>
+                </li>
+              `).join('')}
+            </ol>
+          </div>
+          <div class="mt-5 flex flex-wrap items-center gap-3">
+            ${ctaTab ? `<button type="button" data-jump-tab="${ctaTab}" class="px-4 py-2.5 rounded-lg bg-obsidian hover:bg-neutral-800 text-limeaccent text-xs font-semibold transition">${ctaLabel}</button>` : ''}
+            <button type="button" data-wiz-reset="true" class="px-4 py-2.5 rounded-lg border hairline hover:border-ink text-ink text-xs font-medium transition">
+              Diagnose Another Item
+            </button>
+          </div>
+        `;
+      }
+      refreshIcons();
+    }
+
+    // =========================================================================
+    // 6. TAB 3: DATA WIPE & BATTERY PREP CHECKLIST
+    // =========================================================================
+    function renderPrep() {
+      const tabsEl = document.getElementById('prepDeviceTabs');
+      tabsEl.innerHTML = Object.entries(PREP_CHECKLISTS).map(([key, cfg]) => {
+        const active = state.prepDevice === key;
+        return `
+          <button type="button" data-prep-device="${key}" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-medium border transition ${
+            active
+              ? 'bg-obsidian text-limeaccent border-obsidian'
+              : 'bg-paper text-neutral-700 hairline hover:border-ink'
+          }">
+            <i data-lucide="${cfg.icon}" class="w-3.5 h-3.5"></i>
+            <span>${cfg.label}</span>
+          </button>
+        `;
+      }).join('');
+
+      const activeCfg = PREP_CHECKLISTS[state.prepDevice];
+      const listEl = document.getElementById('prepChecklistContainer');
+      let done = 0;
+
+      listEl.innerHTML = activeCfg.steps.map((step, idx) => {
+        const checked = !!state.prepChecked[step.id];
+        if (checked) done++;
+        return `
+          <label class="flex items-start gap-3.5 p-4 rounded-xl border cursor-pointer transition ${
+            checked ? 'bg-paper border-ink' : 'bg-white hairline hover:border-neutral-400'
+          }">
+            <input type="checkbox" data-prep-step="${step.id}" ${checked ? 'checked' : ''} class="mt-1 w-4 h-4 accent-obsidian cursor-pointer" />
+            <div class="flex-1">
+              <div class="flex items-center gap-2">
+                <span class="font-code text-[10px] text-neutral-400">0${idx + 1}</span>
+                <span class="text-sm font-semibold ${checked ? 'line-through text-neutral-500' : 'text-ink'}">${step.title}</span>
+              </div>
+              <div class="text-xs text-neutral-600 mt-1 leading-relaxed">${step.detail}</div>
+            </div>
+          </label>
+        `;
+      }).join('');
+
+      const pct = activeCfg.steps.length ? Math.round((done / activeCfg.steps.length) * 100) : 0;
+      document.getElementById('prepPercentText').textContent = `${pct}%`;
+      document.getElementById('prepProgressBar').style.width = `${pct}%`;
+
+      const banner = document.getElementById('prepStatusBanner');
+      if (pct === 100) {
+        banner.className = 'rounded-lg p-3.5 text-xs leading-relaxed bg-limeaccent text-ink font-semibold';
+        banner.textContent = `CLEARED FOR DROP-OFF — All ${activeCfg.steps.length} safety & privacy steps for ${activeCfg.label} are verified.`;
+      } else {
+        banner.className = 'rounded-lg p-3.5 text-xs leading-relaxed bg-white/5 border border-white/10 text-neutral-200';
+        banner.textContent = `${done} of ${activeCfg.steps.length} steps completed for ${activeCfg.label}. Finish all checks before handing off your item.`;
+      }
+      refreshIcons();
+    }
+
+    // =========================================================================
+    // 7. TAB 4: DROP-OFF MANIFEST & SDG 12 CHARTS
+    // =========================================================================
+    let streamChartInstance = null;
+    let globalGapChartInstance = null;
+
+    function getBoxEntries() {
+      return Object.entries(state.box)
+        .filter(([, qty]) => qty > 0)
+        .map(([id, qty]) => ({ item: ITEMS.find(i => i.id === id), qty }))
+        .filter(e => !!e.item);
+    }
+
+    function renderBox() {
+      const entries = getBoxEntries();
+      const container = document.getElementById('boxContent');
+
+      if (entries.length === 0) {
+        container.innerHTML = `
+          <div class="rounded-xl border border-dashed hairline bg-paper/60 p-8 text-center">
+            <div class="w-11 h-11 rounded-lg bg-white border hairline mx-auto flex items-center justify-center text-neutral-500">
+              <i data-lucide="layers" class="w-5 h-5"></i>
+            </div>
+            <h3 class="mt-3 font-editorial text-lg text-ink">Your Drop-Off Manifest is empty</h3>
+            <p class="text-xs text-neutral-500 mt-1 max-w-md mx-auto leading-relaxed">
+              Add items from Smart Lookup as you clear a drawer, or click "Load Sample Junk Drawer" above to preview a sorted household dispatch plan.
+            </p>
+            <button type="button" data-jump-tab="lookup" class="mt-4 px-4 py-2 rounded-lg bg-obsidian hover:bg-neutral-800 text-limeaccent text-xs font-semibold transition">
+              Browse 20 Household Items →
+            </button>
+          </div>
+        `;
+        refreshIcons();
+        return;
+      }
+
+      const grouped = { ewaste: [], battery: [], curbside: [], trash: [] };
+      entries.forEach(e => grouped[e.item.stream].push(e));
+      const reg = REGION_INFO[state.region];
+
+      container.innerHTML = Object.entries(grouped)
+        .filter(([, list]) => list.length > 0)
+        .map(([streamKey, list]) => {
+          const sm = STREAM_META[streamKey];
+          const destHint = streamKey === 'ewaste'
+            ? reg.ewasteDrop
+            : streamKey === 'battery'
+              ? reg.batteryDrop
+              : streamKey === 'curbside'
+                ? 'Municipal curbside recycling bin (clean & dry)'
+                : 'Municipal trash (keep out of recycling)';
+
+          return `
+            <div class="mb-4 last:mb-0 rounded-xl border hairline overflow-hidden">
+              <div class="px-4 py-2.5 bg-paper border-b hairline flex flex-wrap items-center justify-between gap-2">
+                <span class="font-code text-[10px] font-semibold px-2 py-0.5 rounded border ${sm.badge}">${sm.short}</span>
+                <span class="text-[11px] text-neutral-600">${destHint}</span>
+              </div>
+              <div class="divide-y divide-[#ECEAE4]">
+                ${list.map(({ item, qty }) => `
+                  <div class="px-4 py-3 flex items-center justify-between gap-3 bg-white">
+                    <div class="min-w-0">
+                      <button type="button" data-open-item="${item.id}" class="text-sm font-semibold text-ink hover:text-emerald-800 text-left truncate block">
+                        ${item.name}
+                      </button>
+                      <span class="font-code text-[10px] text-neutral-500">${item.code} · ${item.hazard}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0 no-print">
+                      <button type="button" data-box-delta="${item.id}:-1" class="w-7 h-7 rounded-md border hairline hover:border-ink text-ink font-code text-xs">−</button>
+                      <span class="w-6 text-center font-code text-xs font-semibold text-ink">${qty}</span>
+                      <button type="button" data-box-delta="${item.id}:1" class="w-7 h-7 rounded-md border hairline hover:border-ink text-ink font-code text-xs">+</button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+      refreshIcons();
+    }
+
+    function renderCharts() {
+      if (typeof window.Chart === 'undefined') return;
+
+      const entries = getBoxEntries();
+      const ctx1 = document.getElementById('streamChart');
+      if (streamChartInstance) {
+        streamChartInstance.destroy();
+        streamChartInstance = null;
+      }
+
+      const titleEl = document.getElementById('streamChartTitle');
+      const subEl = document.getElementById('streamChartSub');
+
+      if (entries.length > 0) {
+        const counts = { ewaste: 0, battery: 0, curbside: 0, trash: 0 };
+        entries.forEach(({ item, qty }) => { counts[item.stream] += qty; });
+        const totalItems = Object.values(counts).reduce((a, b) => a + b, 0);
+        titleEl.textContent = `Manifest Split (${totalItems} item${totalItems === 1 ? '' : 's'})`;
+        subEl.textContent = 'Keep these streams in separate bags/boxes before drop-off.';
+
+        streamChartInstance = new Chart(ctx1, {
+          type: 'doughnut',
+          data: {
+            labels: ['Certified E-Waste', 'Battery / HHW', 'Curbside Recycle', 'Municipal Trash'],
+            datasets: [{
+              data: [counts.ewaste, counts.battery, counts.curbside, counts.trash],
+              backgroundColor: ['#141715', '#D94326', '#0369a1', '#A3A199'],
+              borderWidth: 2,
+              borderColor: '#FFFFFF'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '64%',
+            plugins: {
+              legend: { position: 'bottom', labels: { boxWidth: 10, font: { family: 'JetBrains Mono', size: 11 } } }
+            }
+          }
+        });
+      } else {
+        titleEl.textContent = 'Global E-Waste Mass (2022)';
+        subEl.textContent = 'UN GEM 2024 breakdown: 31 Mt metals, 17 Mt plastics, 14 Mt other.';
+
+        streamChartInstance = new Chart(ctx1, {
+          type: 'doughnut',
+          data: {
+            labels: ['Metals (31 Mt)', 'Plastics (17 Mt)', 'Minerals & Glass (14 Mt)'],
+            datasets: [{
+              data: [31, 17, 14],
+              backgroundColor: ['#141715', '#D94326', '#A3A199'],
+              borderWidth: 2,
+              borderColor: '#FFFFFF'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '64%',
+            plugins: {
+              legend: { position: 'bottom', labels: { boxWidth: 10, font: { family: 'JetBrains Mono', size: 11 } } }
+            }
+          }
+        });
+      }
+
+      const ctx2 = document.getElementById('globalGapChart');
+      if (globalGapChartInstance) {
+        globalGapChartInstance.destroy();
+        globalGapChartInstance = null;
+      }
+
+      globalGapChartInstance = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ['2022 Actual', '2023 Actual', '2030 Trend (20%)', '2030 Target (60%)'],
+          datasets: [
+            {
+              label: 'Total E-Waste Generated (Mt)',
+              data: [62, 65, 82, 82],
+              backgroundColor: '#D6D3CB',
+              borderRadius: 4
+            },
+            {
+              label: 'Formally Collected & Recycled (Mt)',
+              data: [13.8, 15.5, 16.4, 49.2],
+              backgroundColor: '#141715',
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: '#ECEAE4' },
+              title: { display: true, text: 'Million Tonnes (Mt)', font: { family: 'JetBrains Mono', size: 11 } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { family: 'JetBrains Mono', size: 11 } }
+            }
+          },
+          plugins: {
+            legend: { position: 'top', labels: { boxWidth: 10, font: { family: 'JetBrains Mono', size: 11 } } }
+          }
+        }
+      });
+    }
+
+    function copyDropOffPlan() {
+      const entries = getBoxEntries();
+      if (entries.length === 0) {
+        showToast('Add at least one item to your Manifest first.');
+        return;
+      }
+      const reg = REGION_INFO[state.region];
+      const lines = [`ReCircuit Household Drop-Off Manifest (${reg.name})`, '============================================'];
+      ['ewaste', 'battery', 'curbside', 'trash'].forEach(stream => {
+        const list = entries.filter(e => e.item.stream === stream);
+        if (list.length) {
+          lines.push(`\n[${STREAM_META[stream].label}]`);
+          list.forEach(({ item, qty }) => lines.push(`- ${item.name} (x${qty}) — ${item.hazard}`));
+        }
+      });
+      const text = lines.join('\n');
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast('Manifest copied to clipboard')).catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast('Manifest copied to clipboard');
+      } catch (e) {
+        showToast('Could not copy automatically — use Print instead.');
+      }
+      document.body.removeChild(ta);
+    }
+
+    // =========================================================================
+    // 8. TAB 5: MYTH-BUSTER QUIZ
+    // =========================================================================
+    function renderQuiz() {
+      const qState = state.quiz;
+      document.getElementById('quizScoreBadge').textContent = `${qState.score} / ${QUIZ_QUESTIONS.length}`;
+      const container = document.getElementById('quizContainer');
+
+      if (qState.index >= QUIZ_QUESTIONS.length) {
+        const pct = Math.round((qState.score / QUIZ_QUESTIONS.length) * 100);
+        const badge = pct >= 85
+          ? 'CIRCULAR ECONOMY CHAMPION'
+          : pct >= 60
+            ? 'VERIFIED SMART RECYCLER'
+            : 'SDG 12 EXPLORER';
+        container.innerHTML = `
+          <div class="text-center py-6 space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-obsidian text-limeaccent mx-auto flex items-center justify-center">
+              <i data-lucide="trophy" class="w-7 h-7"></i>
+            </div>
+            <div>
+              <span class="font-code text-[10px] tracking-widest px-3 py-1 rounded-full bg-paper border hairline text-ink font-semibold">${badge}</span>
+              <h3 class="font-editorial text-2xl sm:text-3xl text-ink mt-3">You scored ${qState.score} of ${QUIZ_QUESTIONS.length} (${pct}%)</h3>
+              <p class="text-sm text-neutral-600 mt-1.5 max-w-md mx-auto leading-relaxed">
+                Every properly sorted battery, wiped phone, and avoided wish-cycling mistake helps close the global 77.7% e-waste recycling gap.
+              </p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 pt-2">
+              <button type="button" data-quiz-restart="true" class="px-5 py-2.5 rounded-lg bg-obsidian hover:bg-neutral-800 text-limeaccent text-xs font-semibold transition">
+                Retake Quiz
+              </button>
+              <button type="button" data-jump-tab="lookup" class="px-5 py-2.5 rounded-lg border hairline hover:border-ink text-ink text-xs font-medium transition">
+                Return to Smart Lookup
+              </button>
+            </div>
+          </div>
+        `;
+        refreshIcons();
+        return;
+      }
+
+      const item = QUIZ_QUESTIONS[qState.index];
+      container.innerHTML = `
+        <div class="flex items-center justify-between font-code text-[11px] text-neutral-500 mb-3">
+          <span>QUESTION 0${qState.index + 1} / 0${QUIZ_QUESTIONS.length}</span>
+          <span>${Math.round((qState.index / QUIZ_QUESTIONS.length) * 100)}% COMPLETE</span>
+        </div>
+        <h3 class="font-editorial text-xl sm:text-2xl text-ink leading-snug">${item.q}</h3>
+
+        <div class="space-y-2.5 mt-6">
+          ${item.options.map((opt, idx) => {
+            let cls = 'border-[#DDDAD2] bg-white hover:border-ink hover:bg-paper/60 text-ink';
+            if (qState.answered) {
+              if (idx === item.correct) {
+                cls = 'border-emerald-800 bg-emerald-50 text-emerald-950 font-semibold';
+              } else if (idx === qState.selected) {
+                cls = 'border-vermilion bg-rose-50 text-rose-950';
+              } else {
+                cls = 'border-[#ECEAE4] bg-paper/50 text-neutral-400';
+              }
+            }
+            return `
+              <button type="button" data-quiz-opt="${idx}" ${qState.answered ? 'disabled' : ''} class="w-full text-left px-4 py-3.5 rounded-xl border text-sm transition flex items-start gap-3 ${cls}">
+                <span class="font-code text-xs opacity-60 mt-0.5">${String.fromCharCode(65 + idx)}.</span>
+                <span>${opt}</span>
+              </button>
+            `;
+          }).join('')}
+        </div>
+
+        ${qState.answered ? `
+          <div class="mt-6 rounded-xl p-4 border ${qState.selected === item.correct ? 'bg-obsidian text-white border-neutral-800' : 'bg-paper border-ink text-ink'}">
+            <div class="font-code text-[10px] uppercase tracking-wider ${qState.selected === item.correct ? 'text-limeaccent' : 'text-vermilion'}">
+              ${qState.selected === item.correct ? 'VERIFIED CORRECT' : 'CORRECTION'}
+            </div>
+            <p class="text-xs sm:text-sm mt-1.5 leading-relaxed">${item.explanation}</p>
+            <div class="mt-3 pt-3 border-t ${qState.selected === item.correct ? 'border-white/10' : 'hairline'} flex items-center justify-between gap-2">
+              <a href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer" class="font-code text-[11px] underline">Source: ${item.sourceLabel} ↗</a>
+              <button type="button" data-quiz-next="true" class="px-4 py-2 rounded-lg ${qState.selected === item.correct ? 'bg-limeaccent text-ink' : 'bg-obsidian text-white'} text-xs font-semibold transition">
+                ${qState.index + 1 === QUIZ_QUESTIONS.length ? 'View Final Score →' : 'Next Question →'}
+              </button>
+            </div>
+          </div>
+        ` : ''}
+      `;
+    }
+
+    // =========================================================================
+    // 9. EVENT LISTENERS & INITIALIZATION
+    // =========================================================================
+    function init() {
+      loadState();
+      renderRegionNotice();
+      updateNavBoxCount();
+      renderLookup();
+
+      document.getElementById('regionSelect').addEventListener('change', e => {
+        state.region = e.target.value;
+        saveState();
+        renderRegionNotice();
+        if (state.activeTab === 'impact') renderBox();
+        if (state.activeTab === 'wizard') renderWizard();
+        showToast(`Protocol switched to ${REGION_INFO[state.region].name}`);
+      });
+
+      document.getElementById('navBoxBtn').addEventListener('click', () => switchTab('impact'));
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+      });
+
+      const searchInput = document.getElementById('searchInput');
+      const heroSearchInput = document.getElementById('heroSearchInput');
+      searchInput.addEventListener('input', e => syncSearchInputs(e.target.value));
+      heroSearchInput.addEventListener('input', e => syncSearchInputs(e.target.value));
+
+      document.getElementById('clearSearchBtn').addEventListener('click', () => {
+        syncSearchInputs('');
+        searchInput.focus();
+      });
+
+      document.getElementById('streamFilter').addEventListener('change', e => {
+        state.stream = e.target.value;
+        renderLookup();
+      });
+
+      document.getElementById('categoryPills').addEventListener('click', e => {
+        const btn = e.target.closest('.cat-pill');
+        if (!btn) return;
+        state.category = btn.dataset.cat;
+        document.querySelectorAll('.cat-pill').forEach(p => {
+          const active = p.dataset.cat === state.category;
+          p.className = active
+            ? 'cat-pill px-3 py-1.5 rounded-md text-xs font-medium bg-obsidian text-white'
+            : 'cat-pill px-3 py-1.5 rounded-md text-xs font-medium bg-paper text-neutral-700 border hairline hover:border-ink';
+        });
+        renderLookup();
+      });
+
+      // Modal / Drawer controls
+      document.getElementById('closeModalBtn').addEventListener('click', closeItemModal);
+      document.getElementById('modalDoneBtn').addEventListener('click', closeItemModal);
+      document.getElementById('modalAddBtn').addEventListener('click', () => {
+        if (activeModalItemId) addToBox(activeModalItemId);
+      });
+      document.getElementById('itemModal').addEventListener('click', e => {
+        if (e.target.id === 'itemModal') closeItemModal();
+      });
+
+      // Keyboard shortcuts: Esc closes drawer, "/" focuses search
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && activeModalItemId) {
+          closeItemModal();
+        } else if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          heroSearchInput.focus();
+        }
+      });
+
+      document.getElementById('wizardResetBtn').addEventListener('click', () => {
+        state.wizard = { step: 1, hasPower: null, works: null, hazard: null, hasData: null };
+        renderWizard();
+      });
+
+      document.getElementById('resetPrepBtn').addEventListener('click', () => {
+        const activeCfg = PREP_CHECKLISTS[state.prepDevice];
+        activeCfg.steps.forEach(s => { delete state.prepChecked[s.id]; });
+        saveState();
+        renderPrep();
+        showToast(`Reset checklist for ${activeCfg.label}`);
+      });
+
+      document.getElementById('loadDemoBoxBtn').addEventListener('click', () => {
+        state.box = {
+          smartphone: 1,
+          powerbank: 1,
+          'chargers-cables': 3,
+          'button-battery': 2,
+          'cfl-bulb': 2,
+          'plastic-bottles': 4
+        };
+        saveState();
+        updateNavBoxCount();
+        renderLookup();
+        renderBox();
+        renderCharts();
+        showToast('Loaded sample household junk drawer (6 item types)');
+      });
+
+      document.getElementById('copyBoxBtn').addEventListener('click', copyDropOffPlan);
+      document.getElementById('printBoxBtn').addEventListener('click', () => window.print());
+      document.getElementById('clearBoxBtn').addEventListener('click', () => {
+        state.box = {};
+        saveState();
+        updateNavBoxCount();
+        renderLookup();
+        renderBox();
+        renderCharts();
+        showToast('Cleared Drop-Off Manifest');
+      });
+
+      document.addEventListener('click', e => {
+        const quickBtn = e.target.closest('[data-quick-term]');
+        if (quickBtn) {
+          syncSearchInputs(quickBtn.dataset.quickTerm);
+          return;
+        }
+
+        const openBtn = e.target.closest('[data-open-item]');
+        if (openBtn) {
+          openItemModal(openBtn.dataset.openItem);
+          return;
+        }
+
+        const addBtn = e.target.closest('[data-add-box]');
+        if (addBtn) {
+          addToBox(addBtn.dataset.addBox);
+          return;
+        }
+
+        const goWiz = e.target.closest('[data-action="go-wizard"]');
+        if (goWiz) {
+          switchTab('wizard');
+          return;
+        }
+
+        const jumpBtn = e.target.closest('[data-jump-tab]');
+        if (jumpBtn) {
+          switchTab(jumpBtn.dataset.jumpTab);
+          return;
+        }
+
+        const wizBtn = e.target.closest('[data-wiz]');
+        if (wizBtn) {
+          const [key, val] = wizBtn.dataset.wiz.split(':');
+          state.wizard[key] = val;
+          if (key === 'hasPower') {
+            state.wizard.step = 2;
+          } else if (key === 'hazard') {
+            state.wizard.step = val === 'damaged' ? 4 : 3;
+          } else {
+            state.wizard.step = 4;
+          }
+          renderWizard();
+          return;
+        }
+
+        const wizReset = e.target.closest('[data-wiz-reset]');
+        if (wizReset) {
+          state.wizard = { step: 1, hasPower: null, works: null, hazard: null, hasData: null };
+          renderWizard();
+          return;
+        }
+
+        const prepDev = e.target.closest('[data-prep-device]');
+        if (prepDev) {
+          state.prepDevice = prepDev.dataset.prepDevice;
+          renderPrep();
+          return;
+        }
+
+        const deltaBtn = e.target.closest('[data-box-delta]');
+        if (deltaBtn) {
+          const [id, d] = deltaBtn.dataset.boxDelta.split(':');
+          const next = (state.box[id] || 0) + parseInt(d, 10);
+          if (next <= 0) delete state.box[id];
+          else state.box[id] = next;
+          saveState();
+          updateNavBoxCount();
+          renderLookup();
+          renderBox();
+          renderCharts();
+          return;
+        }
+
+        const quizOpt = e.target.closest('[data-quiz-opt]');
+        if (quizOpt && !state.quiz.answered) {
+          const idx = parseInt(quizOpt.dataset.quizOpt, 10);
+          state.quiz.selected = idx;
+          state.quiz.answered = true;
+          if (idx === QUIZ_QUESTIONS[state.quiz.index].correct) {
+            state.quiz.score += 1;
+          }
+          renderQuiz();
+          return;
+        }
+
+        const quizNext = e.target.closest('[data-quiz-next]');
+        if (quizNext) {
+          state.quiz.index += 1;
+          state.quiz.answered = false;
+          state.quiz.selected = null;
+          renderQuiz();
+          return;
+        }
+
+        const quizRestart = e.target.closest('[data-quiz-restart]');
+        if (quizRestart) {
+          state.quiz = { index: 0, score: 0, answered: false, selected: null };
+          renderQuiz();
+          return;
+        }
+      });
+
+      document.addEventListener('change', e => {
+        const stepInput = e.target.closest('[data-prep-step]');
+        if (stepInput) {
+          state.prepChecked[stepInput.dataset.prepStep] = stepInput.checked;
+          saveState();
+          renderPrep();
+        }
+      });
+
+      refreshIcons();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
