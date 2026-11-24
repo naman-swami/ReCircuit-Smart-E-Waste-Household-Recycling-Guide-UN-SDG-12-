@@ -10,11 +10,11 @@ ReCircuit is an open-source, client-side circular intelligence platform aligned 
 
 ## 📸 Project Interface & Screenshots
 
-### 1. UN SDG 12 Hub & Real-Time E-Waste Ticker (`index.html`)
-Live global indicators tracking 62M tonnes of annual e-waste, $62B in lost critical minerals, and a 100× urban ore concentration multiplier.
+### 1. UN SDG 12 Hub & Live Global Telemetry (`index.html`)
+Live global indicators tracking 62M tonnes of annual e-waste, $91B in lost critical minerals, and a 100× urban ore concentration multiplier.
 ![ReCircuit Homepage](screenshots/screenshot1_homepage_sdg12.png)
 
-### 2. Smart Item Directory with 36+ Specialized Recyclables (`lookup.html`)
+### 2. Smart Item Directory with 36 Specialized Recyclables (`lookup.html`)
 Complete chemical hazards, recoverable critical minerals (Au, Ag, Cu, Co, Li, Nd), NIST SP 800-88 data sanitization checklists, and regional law tags (CPCB 2022, EPA RCRA, EU WEEE).
 ![Smart Item Directory](screenshots/screenshot2_smart_directory.png)
 
@@ -25,6 +25,10 @@ Scientific mathematical calculators quantifying precious metals yield, avoided p
 ### 4. 15-Second Triage & Red Box Battery Thermal Protocol (`triage.html`)
 A rapid 4-step diagnostic wizard paired with life-safety containment protocols for swollen, bulging, and hissing lithium-ion batteries.
 ![Triage & Thermal Emergency](screenshots/screenshot4_thermal_emergency.png)
+
+### 5. Certified Drop-Off Manifest & Recycler Hubs (`dropoff.html`)
+Dynamic collection box manifest persisted across sessions via `localStorage`, 1-click printable dispatch labels, and 12 verified facilities across India, USA, and Global/EU.
+![Drop-Off Manifest & Hubs](screenshots/screenshot5_dropoff_manifest.png)
 
 ---
 
@@ -46,13 +50,14 @@ ReCircuit is architected into 6 modular, dedicated pages:
 
 1. **Mission Hub (`index.html`)**:
    - Hero search with auto-suggestions, global e-waste ticker, 4-pillar navigation gateway, and metallurgical comparison data.
+   - Built-in global **Cmd / Ctrl + K** Command Palette for instant keyboard navigation across all 36 items and tools.
 2. **Smart Item Directory (`lookup.html`)**:
-   - 36+ grounded items across Consumer Tech, Batteries & Power, Lighting & Small Appliances, and Wish-Cycling Traps.
+   - 36 grounded items across Consumer Tech, Batteries & Power, Lighting & Small Appliances, and Wish-Cycling Traps.
    - Real-time search, category filtering, stream isolation (E-Waste, Battery, Curbside, Household).
    - Interactive Modal Drawer with step-by-step chemical prep instructions, CISA NIST 800-88 data wiping guidelines, and 1-click "Add to Manifest".
 3. **Urban Mine & Repair Calculator (`calculator.html`)**:
    - **Urban Mine Estimator**: Interactive household device inventory computing recovered Gold, Silver, Copper, Cobalt, and Palladium, avoided virgin ore excavation, and embodied carbon avoided.
-   - **Right-to-Repair Lifespan Simulator (SDG 12.5)**: Interactive slider model computing net carbon avoided ($\text{kg CO}_2\text{e}$) and consumer financial savings by replacing batteries and screens instead of buying new.
+   - **Right-to-Repair Lifespan Simulator (SDG 12.5)**: Interactive slider model computing net carbon avoided (kg CO₂e) and consumer financial savings by replacing batteries and screens instead of buying new.
 4. **15-Second Triage & Thermal Safety (`triage.html`)**:
    - 4-question decision matrix routing unknown items to donate, repair, battery-tape, or hazardous collection.
    - **"Red Box" Lithium Battery Thermal Runaway Protocol**: Step-by-step containment instructions for swollen and hissing batteries (terminal taping, non-combustible sand container, 10m outdoor perimeter).
@@ -96,17 +101,17 @@ $$\Delta \text{C}_{\text{repair}} = E_{\text{mfg}} \cdot \left(1 - \frac{L_{\tex
 ## 🛠️ Technology Stack & Resilience
 
 - **Architecture:** Zero-build, 100% client-side HTML5, CSS3, JavaScript (ES6+).
-- **Styling:** Tailwind CSS CDN (v3.4.17) + Editorial typography (Fraunces serif, Inter, JetBrains Mono) + Warm paper `#F4F3EF` & Obsidian `#141715` aesthetic.
+- **Styling:** Tailwind CSS CDN (v3.4.17) + Editorial typography (Fraunces serif, Inter, JetBrains Mono) + Warm paper `#F4F3EF` & Obsidian `#121513` aesthetic.
+- **Command Palette:** Global Cmd/Ctrl + K modal for instant search and keyboard navigation.
 - **Icons & Data Viz:** Lucide Icons (v0.460.0), Chart.js (v4.4.1).
-- **Persistence:** Client-side `localStorage` state management for manifests and regional preferences.
+- **Persistence:** Safe client-side `localStorage` state management for manifests and regional preferences.
 - **No Node/npm Build Required:** Runs natively in any modern browser without bundlers or server-side dependencies.
 
 ---
 
-## 🚀 Quick Start & Local Run
+## 🚀 Quick Start & Deployment
 
-Clone the repository and serve with any local HTTP server:
-
+### Run Locally:
 ```bash
 # Clone the repository
 git clone https://github.com/naman-swami/ReCircuit-Smart-E-Waste-Household-Recycling-Guide-UN-SDG-12-.git
@@ -115,8 +120,12 @@ cd ReCircuit-Smart-E-Waste-Household-Recycling-Guide-UN-SDG-12-
 # Serve with Python (built-in)
 python -m http.server 8080
 ```
+Open `http://localhost:8080/index.html`.
 
-Open your browser at `http://localhost:8080/index.html`.
+### Deploy on Netlify (1 Click):
+1. Download or locate `ReCircuit-Netlify-Deploy.zip`.
+2. Go to [app.netlify.com/drop](https://app.netlify.com/drop).
+3. Drag & drop `ReCircuit-Netlify-Deploy.zip`. Your site goes live instantly with a free SSL subdomain.
 
 ---
 

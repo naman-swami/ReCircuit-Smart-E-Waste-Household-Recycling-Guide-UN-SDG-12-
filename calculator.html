@@ -22,7 +22,7 @@
           colors: {
             paper: '#F4F3EF',
             ink: '#111210',
-            obsidian: '#141715',
+            obsidian: '#121513',
             line: '#DDDAD2',
             limeaccent: '#B8F25A',
             forest: '#164E3B',
@@ -36,604 +36,426 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-limeaccent selection:text-ink">
 
-  <!-- Architectural Top Header -->
-  <header class="sticky top-0 z-40 bg-paper/95 backdrop-blur-md border-b hairline no-print">
+  <header class="sticky top-0 z-40 glass-header border-b hairline no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-      <a href="index.html" class="flex items-center gap-3 min-w-0 group">
-        <div class="w-9 h-9 rounded-lg bg-obsidian text-limeaccent flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+      <a href="index.html" class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-lg bg-obsidian text-limeaccent flex items-center justify-center shrink-0">
           <i data-lucide="orbit" class="w-4 h-4"></i>
         </div>
-        <div class="min-w-0">
-          <div class="flex items-center gap-2">
-            <span class="font-editorial text-lg font-bold tracking-tight text-ink leading-none">ReCircuit</span>
-            <span class="text-[10px] uppercase font-mono font-semibold tracking-wider px-1.5 py-0.5 rounded bg-obsidian text-limeaccent">SDG 12</span>
-          </div>
-          <p class="text-[11px] text-stone-500 truncate hidden sm:block">Smart E-Waste &amp; Critical Mineral Recovery</p>
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-ink tracking-tight text-base">ReCircuit</span>
+          <span class="font-code text-[10px] font-semibold tracking-wider px-1.5 py-0.5 rounded bg-obsidian text-limeaccent">SDG 12</span>
         </div>
       </a>
 
-      <!-- Desktop Navigation -->
-      <nav class="hidden md:flex items-center gap-1">
-        <a href="index.html" class="nav-link"><i data-lucide="home" class="w-3.5 h-3.5"></i>Home</a>
-        <a href="lookup.html" class="nav-link"><i data-lucide="search" class="w-3.5 h-3.5"></i>Smart Directory</a>
-        <a href="calculator.html" class="nav-link active"><i data-lucide="calculator" class="w-3.5 h-3.5"></i>Urban Mine Calculator</a>
-        <a href="triage.html" class="nav-link"><i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>Triage &amp; Safety</a>
-        <a href="dropoff.html" class="nav-link"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>Drop-Off Manifest</a>
-        <a href="quiz.html" class="nav-link"><i data-lucide="help-circle" class="w-3.5 h-3.5"></i>Myth Quiz</a>
+      <nav class="hidden lg:flex items-center gap-1">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="lookup.html" class="nav-link">Directory <span class="font-code text-[10px] opacity-55">36</span></a>
+        <a href="calculator.html" class="nav-link active">Urban Mine</a>
+        <a href="triage.html" class="nav-link">Triage &amp; Red Box</a>
+        <a href="dropoff.html" class="nav-link">Manifest &amp; Hubs</a>
+        <a href="quiz.html" class="nav-link">Quiz</a>
       </nav>
 
-      <!-- Utility Controls -->
-      <div class="flex items-center gap-2.5">
-        <div class="hidden lg:flex items-center text-xs border hairline rounded-lg bg-white px-2 py-1 gap-1.5 shadow-sm">
-          <i data-lucide="globe" class="w-3.5 h-3.5 text-stone-400"></i>
-          <select id="region-selector" class="bg-transparent text-xs text-stone-700 font-medium focus:outline-none cursor-pointer">
-            <option value="IN">India (CPCB EPR 2022)</option>
-            <option value="US">USA (EPA RCRA)</option>
-            <option value="EU">Global / EU (WEEE)</option>
+      <div class="flex items-center gap-2">
+        <button type="button" data-open-cmd class="hidden sm:inline-flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-white border hairline hover:border-ink text-xs text-neutral-500 transition">
+          <i data-lucide="search" class="w-3.5 h-3.5"></i>
+          <kbd class="font-code text-[10px] px-1 rounded bg-paper border hairline text-neutral-600">⌘K</kbd>
+        </button>
+
+        <div class="hidden md:flex items-center border hairline rounded-lg bg-white px-2 py-1.5 gap-1.5">
+          <i data-lucide="globe" class="w-3.5 h-3.5 text-neutral-400"></i>
+          <select id="region-selector" class="bg-transparent font-code text-[11px] text-ink font-medium focus:outline-none cursor-pointer">
+            <option value="IN">IN · CPCB 2022</option>
+            <option value="US">US · EPA RCRA</option>
+            <option value="EU">EU · WEEE</option>
           </select>
         </div>
 
-        <a href="dropoff.html" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-obsidian text-paper hover:bg-stone-800 transition-colors text-xs font-semibold shadow-sm">
-          <i data-lucide="package" class="w-3.5 h-3.5 text-limeaccent"></i>
-          <span class="hidden sm:inline">My Manifest</span>
-          <span class="manifest-counter hidden w-4 h-4 rounded-full bg-limeaccent text-ink text-[10px] font-bold flex items-center justify-center">0</span>
+        <a href="dropoff.html" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-obsidian text-paper hover:bg-neutral-800 transition text-xs font-medium">
+          <i data-lucide="layers" class="w-3.5 h-3.5 text-limeaccent"></i>
+          <span class="hidden sm:inline">Manifest</span>
+          <span class="manifest-counter font-code min-w-[18px] h-[18px] px-1 rounded bg-limeaccent text-ink text-[10px] font-bold items-center justify-center" style="display:none">0</span>
         </a>
 
-        <button id="mobile-menu-btn" class="md:hidden p-1.5 rounded-md hover:bg-stone-200 text-stone-700" aria-label="Toggle Menu">
-          <i data-lucide="menu" class="w-5 h-5"></i>
+        <button id="mobile-menu-btn" type="button" class="lg:hidden p-1.5 rounded-lg border hairline bg-white text-ink" aria-label="Toggle Menu">
+          <i data-lucide="menu" class="w-4 h-4"></i>
         </button>
       </div>
     </div>
 
-    <!-- Mobile Dropdown Navigation -->
-    <div id="mobile-menu" class="md:hidden hidden border-t hairline bg-paper px-4 py-3 space-y-1">
-      <a href="index.html" class="nav-link w-full py-2"><i data-lucide="home" class="w-4 h-4"></i>Home</a>
-      <a href="lookup.html" class="nav-link w-full py-2"><i data-lucide="search" class="w-4 h-4"></i>Smart Directory (36+ Items)</a>
-      <a href="calculator.html" class="nav-link active w-full py-2"><i data-lucide="calculator" class="w-4 h-4"></i>Urban Mine &amp; Repair Calculator</a>
-      <a href="triage.html" class="nav-link w-full py-2"><i data-lucide="shield-alert" class="w-4 h-4"></i>15s Triage &amp; Thermal Emergency</a>
-      <a href="dropoff.html" class="nav-link w-full py-2"><i data-lucide="map-pin" class="w-4 h-4"></i>Drop-Off Manifest &amp; Centers</a>
-      <a href="quiz.html" class="nav-link w-full py-2"><i data-lucide="help-circle" class="w-4 h-4"></i>Wish-Cycling Myth Quiz</a>
+    <div id="mobile-menu" class="lg:hidden hidden border-t hairline bg-paper px-4 py-3 space-y-1">
+      <a href="index.html" class="nav-link w-full py-2">Home</a>
+      <a href="lookup.html" class="nav-link w-full py-2">Smart Directory (36 Items)</a>
+      <a href="calculator.html" class="nav-link active w-full py-2">Urban Mine &amp; Repair Calculator</a>
+      <a href="triage.html" class="nav-link w-full py-2">15s Triage &amp; Red Box Emergency</a>
+      <a href="dropoff.html" class="nav-link w-full py-2">Drop-Off Manifest &amp; 12 Hubs</a>
+      <a href="quiz.html" class="nav-link w-full py-2">Wish-Cycling Myth Quiz</a>
     </div>
   </header>
 
-  <!-- Main Calculator Container -->
   <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full space-y-12">
 
-    <!-- Page Title & Scientific Overview -->
-    <div class="border-b hairline pb-6 space-y-2">
-      <div class="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-stone-500">
-        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-forest"></i>
-        <span>Scientific Impact Modeling Engine &bull; UN SDG 12.4 &amp; 12.5</span>
-      </div>
-      <h1 class="font-editorial text-3xl sm:text-4xl font-bold text-ink">Urban Mine &amp; Right-to-Repair Calculator</h1>
-      <p class="text-sm text-stone-600 max-w-3xl leading-relaxed">
-        Model the exact chemical yield of Gold, Silver, Copper, and Cobalt sitting in your retired electronics, calculate avoided primary ore blasting, and simulate the carbon savings of extending device lifespan.
+    <div class="border-b hairline pb-6 space-y-1.5">
+      <div class="font-code text-[11px] uppercase tracking-[0.14em] text-neutral-500">SCIENTIFIC IMPACT MODELING · SDG 12.4 &amp; 12.5</div>
+      <h1 class="font-editorial text-3xl sm:text-4xl text-ink">Urban Mine &amp; Right-to-Repair Calculator</h1>
+      <p class="text-sm text-neutral-600 max-w-3xl">
+        Quantify the exact grams of Gold, Silver, Copper, Cobalt, and Palladium locked in your retired electronics, compute avoided virgin ore excavation, and simulate lifespan-extension carbon savings.
       </p>
     </div>
 
-    <!-- TOOL 1: URBAN MINE MINERAL RECOVERY CALCULATOR -->
-    <section class="space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b hairline pb-3">
+    <!-- PILLAR 1: URBAN MINE SIMULATOR -->
+    <section class="space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
         <div>
-          <span class="text-xs font-mono font-semibold uppercase tracking-wider text-stone-500">Pillar 1 &bull; SDG 12.4</span>
-          <h2 class="font-editorial text-2xl font-bold text-ink">Household Urban Mine Simulator</h2>
+          <span class="font-code text-[10px] uppercase tracking-[0.14em] text-neutral-500">MODULE 01 · METALLURGICAL RECOVERY</span>
+          <h2 class="font-editorial text-2xl text-ink mt-0.5">Household Urban Mine Simulator</h2>
         </div>
-        <div class="text-xs font-mono text-stone-500">
-          Ore Displacement Ratio: <span class="font-bold text-ink">100&times; primary ore grade</span>
-        </div>
+        <span class="font-code text-[11px] text-forest font-semibold">100× RICHER THAN VIRGIN ORE</span>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        <!-- Left: Inventory Selector (7 cols) -->
-        <div class="lg:col-span-7 bg-white rounded-2xl p-6 border hairline shadow-sm space-y-5">
+      <div class="grid lg:grid-cols-12 gap-6 items-start">
+        <!-- Device Selector -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-6 border hairline space-y-4">
           <div class="flex items-center justify-between">
-            <h3 class="font-editorial text-lg font-bold text-ink">Select Your Retired Devices</h3>
-            <button id="reset-inventory-btn" class="text-xs font-semibold text-stone-500 hover:text-ink">
-              Reset Counts
-            </button>
-          </div>
-          <p class="text-xs text-stone-500">
-            Add the quantities of devices currently lying idle in your drawers or closets.
-          </p>
-
-          <!-- Device Row Items -->
-          <div class="space-y-3 pt-2" id="inventory-list">
-            <!-- Injected via JavaScript -->
+            <h3 class="font-semibold text-ink text-sm">Select Retired Devices in Your Household</h3>
+            <button id="reset-inventory-btn" type="button" class="font-code text-[11px] text-neutral-500 hover:text-ink underline">Reset Counts</button>
           </div>
 
-          <div class="pt-4 border-t hairline flex items-center justify-between">
-            <span class="text-xs text-stone-500">Ready to recycle?</span>
-            <button id="add-calculated-to-manifest-btn" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-obsidian text-paper hover:bg-stone-800 transition-colors text-xs font-semibold shadow-sm">
-              <i data-lucide="package-plus" class="w-3.5 h-3.5 text-limeaccent"></i>
-              <span>Add All to Drop-Off Manifest</span>
+          <div class="grid sm:grid-cols-2 gap-2.5" id="inventory-list"></div>
+
+          <div class="pt-4 border-t hairline flex flex-wrap items-center justify-between gap-3">
+            <span class="text-xs text-neutral-500">Push this batch directly into your printable manifest:</span>
+            <button id="add-calculated-to-manifest-btn" type="button" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-obsidian text-limeaccent hover:bg-neutral-800 transition text-xs font-semibold">
+              <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+              <span>Add Batch to Manifest</span>
             </button>
           </div>
         </div>
 
-        <!-- Right: Results & Science Dashboard (5 cols) -->
+        <!-- Obsidian Yield Panel + Chart -->
         <div class="lg:col-span-5 space-y-5">
-          
-          <!-- Key Metrics Obsidian Card -->
-          <div class="rounded-2xl obsidian-grid text-paper p-6 border border-white/10 shadow-xl space-y-5">
-            <div class="flex items-center justify-between border-b border-white/10 pb-3">
-              <span class="text-xs font-mono font-semibold uppercase tracking-wider text-limeaccent">Your Batch Recovery Yield</span>
-              <span class="text-[11px] font-mono text-stone-400" id="total-devices-count">0 devices</span>
+          <div class="rounded-2xl obsidian-grid text-white p-6 border border-white/10 shadow-xl space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-white/10">
+              <span class="font-code text-[10px] uppercase tracking-[0.14em] text-limeaccent">RECOVERABLE MINERAL YIELD</span>
+              <span class="font-code text-[11px] text-neutral-400" id="total-devices-count">0 DEVICES</span>
             </div>
 
-            <!-- Mineral Grid -->
-            <div class="grid grid-cols-3 gap-3">
+            <div class="grid grid-cols-3 gap-2.5">
               <div class="p-3 rounded-xl bg-white/5 border border-white/10">
-                <div class="text-[10px] font-mono uppercase text-amber-400">Gold (Au)</div>
-                <div class="text-xl font-bold font-editorial text-white mt-1" id="yield-gold">0.00 <span class="text-xs font-sans font-normal text-stone-400">g</span></div>
+                <div class="font-code text-[10px] uppercase text-amber-300">Gold (Au)</div>
+                <div class="font-code text-lg font-semibold text-white mt-1" id="yield-gold">0.000 g</div>
               </div>
               <div class="p-3 rounded-xl bg-white/5 border border-white/10">
-                <div class="text-[10px] font-mono uppercase text-stone-300">Silver (Ag)</div>
-                <div class="text-xl font-bold font-editorial text-white mt-1" id="yield-silver">0.00 <span class="text-xs font-sans font-normal text-stone-400">g</span></div>
+                <div class="font-code text-[10px] uppercase text-neutral-300">Silver (Ag)</div>
+                <div class="font-code text-lg font-semibold text-white mt-1" id="yield-silver">0.00 g</div>
               </div>
               <div class="p-3 rounded-xl bg-white/5 border border-white/10">
-                <div class="text-[10px] font-mono uppercase text-orange-400">Copper (Cu)</div>
-                <div class="text-xl font-bold font-editorial text-white mt-1" id="yield-copper">0 <span class="text-xs font-sans font-normal text-stone-400">g</span></div>
+                <div class="font-code text-[10px] uppercase text-orange-300">Copper (Cu)</div>
+                <div class="font-code text-lg font-semibold text-white mt-1" id="yield-copper">0 g</div>
               </div>
               <div class="p-3 rounded-xl bg-white/5 border border-white/10">
-                <div class="text-[10px] font-mono uppercase text-blue-400">Cobalt (Co)</div>
-                <div class="text-xl font-bold font-editorial text-white mt-1" id="yield-cobalt">0 <span class="text-xs font-sans font-normal text-stone-400">g</span></div>
+                <div class="font-code text-[10px] uppercase text-sky-300">Cobalt (Co)</div>
+                <div class="font-code text-lg font-semibold text-white mt-1" id="yield-cobalt">0 g</div>
               </div>
               <div class="p-3 rounded-xl bg-white/5 border border-white/10">
-                <div class="text-[10px] font-mono uppercase text-stone-300">Palladium (Pd)</div>
-                <div class="text-xl font-bold font-editorial text-white mt-1" id="yield-palladium">0.00 <span class="text-xs font-sans font-normal text-stone-400">g</span></div>
+                <div class="font-code text-[10px] uppercase text-neutral-300">Palladium</div>
+                <div class="font-code text-lg font-semibold text-white mt-1" id="yield-palladium">0.000 g</div>
               </div>
               <div class="p-3 rounded-xl bg-white/5 border border-white/10">
-                <div class="text-[10px] font-mono uppercase text-limeaccent">Urban Density</div>
-                <div class="text-xl font-bold font-editorial text-limeaccent mt-1">100&times;</div>
+                <div class="font-code text-[10px] uppercase text-limeaccent">Ore Grade</div>
+                <div class="font-code text-lg font-semibold text-limeaccent mt-1">100×</div>
               </div>
             </div>
 
-            <!-- Ore & Carbon Displacement -->
-            <div class="space-y-3 pt-2 border-t border-white/10">
-              <div class="flex items-center justify-between text-xs">
-                <span class="text-stone-300">Virgin Ore Mining Avoided:</span>
-                <span class="font-bold text-white font-mono text-sm" id="yield-ore">0.0 kg</span>
+            <div class="space-y-2.5 pt-3 border-t border-white/10 text-xs">
+              <div class="flex items-center justify-between">
+                <span class="text-neutral-300">Virgin Ore Blasting Avoided</span>
+                <span class="font-code font-semibold text-white text-sm" id="yield-ore">0.0 kg</span>
               </div>
-              <div class="flex items-center justify-between text-xs">
-                <span class="text-stone-300">Embodied Carbon Displaced:</span>
-                <span class="font-bold text-limeaccent font-mono text-sm" id="yield-carbon">0.0 kg CO&#8322;e</span>
-              </div>
-              <div class="text-[11px] text-stone-400 leading-relaxed">
-                Recovering these metals via certified hydrometallurgy bypasses primary rock excavation and toxic cyanide/mercury leaching.
+              <div class="flex items-center justify-between">
+                <span class="text-neutral-300">Net Carbon Displaced</span>
+                <span class="font-code font-semibold text-limeaccent text-sm" id="yield-carbon">0.0 kg CO₂e</span>
               </div>
             </div>
           </div>
 
-          <!-- Chart.js Carbon Comparison Container -->
-          <div class="bg-white rounded-2xl p-5 border hairline shadow-sm space-y-3">
+          <div class="bg-white rounded-2xl p-5 border hairline space-y-3">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-mono font-semibold uppercase text-stone-500">Emissions Comparison (kg CO&#8322;e)</span>
-              <span class="text-[10px] text-stone-400">Virgin Mining vs. ReCircuit</span>
+              <span class="font-code text-[10px] uppercase tracking-wider text-neutral-500">Virgin vs. Recycled Footprint (kg CO₂e)</span>
             </div>
-            <div class="h-44 w-full relative">
+            <div class="relative h-48 w-full">
               <canvas id="emissionsChart"></canvas>
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
 
-    <!-- TOOL 2: RIGHT-TO-REPAIR LIFESPAN EXTENSION SIMULATOR (SDG 12.5) -->
-    <section class="space-y-6 pt-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b hairline pb-3">
+    <!-- PILLAR 2: RIGHT-TO-REPAIR LIFESPAN SIMULATOR -->
+    <section class="space-y-5 pt-4 border-t hairline">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
         <div>
-          <span class="text-xs font-mono font-semibold uppercase tracking-wider text-stone-500">Pillar 2 &bull; SDG 12.5 Waste Prevention</span>
-          <h2 class="font-editorial text-2xl font-bold text-ink">Right-to-Repair Lifespan Extension Calculator</h2>
+          <span class="font-code text-[10px] uppercase tracking-[0.14em] text-neutral-500">MODULE 02 · SDG 12.5 PREVENTION</span>
+          <h2 class="font-editorial text-2xl text-ink mt-0.5">Right-to-Repair Lifespan Extension Simulator</h2>
         </div>
-        <div class="text-xs font-mono text-forest font-semibold">
-          Waste Hierarchy: Repair &gt; Reuse &gt; Recycle
-        </div>
+        <span class="font-code text-[11px] text-forest font-semibold">REPAIR &gt; REUSE &gt; RECYCLE</span>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        <!-- Left: Repair Configuration (7 cols) -->
-        <div class="lg:col-span-7 bg-white rounded-2xl p-6 border hairline shadow-sm space-y-6">
-          <div class="space-y-1">
-            <h3 class="font-editorial text-lg font-bold text-ink">Simulate Life-Extension Intervention</h3>
-            <p class="text-xs text-stone-500">
-              Over 80% of a gadget's total lifetime emissions are fixed during manufacturing. Extending its lifespan amortizes this embodied carbon.
-            </p>
-          </div>
-
-          <!-- Intervention Selector -->
+      <div class="grid lg:grid-cols-12 gap-6 items-start">
+        <div class="lg:col-span-7 bg-white rounded-2xl p-6 border hairline space-y-6">
           <div class="space-y-2">
-            <label class="text-xs font-bold text-stone-700 uppercase font-mono">Select Repair Intervention</label>
-            <select id="repair-select" class="w-full p-3 rounded-xl bg-paper border hairline text-sm font-semibold text-ink focus:outline-none focus:ring-2 focus:ring-obsidian">
-              <option value="smartphone_battery">Smartphone Battery Replacement (Extend from 2.5 &rarr; 4.5 yrs)</option>
-              <option value="smartphone_screen">Smartphone Screen Replacement (Extend from 2.5 &rarr; 4.0 yrs)</option>
-              <option value="laptop_battery">Laptop Battery Swap (Extend from 3.0 &rarr; 5.5 yrs)</option>
-              <option value="laptop_ram_ssd">Laptop RAM / SSD Upgrade (Extend from 3.0 &rarr; 6.0 yrs)</option>
-              <option value="tablet_screen">Tablet Screen Repair (Extend from 3.0 &rarr; 5.0 yrs)</option>
-              <option value="tv_backlight">TV Backlight LED Strip Solder Repair (Extend from 4.0 &rarr; 8.0 yrs)</option>
+            <label for="repair-select" class="font-code text-[10px] font-semibold uppercase tracking-wider text-neutral-500 block">Select Repair Intervention (7 Models)</label>
+            <select id="repair-select" class="w-full p-3 rounded-xl bg-paper border hairline text-sm font-medium text-ink focus:bg-white focus:outline-none focus:border-ink">
+              <option value="smartphone_battery">Smartphone Battery Replacement (2.5 → 4.5 yrs)</option>
+              <option value="smartphone_screen">Smartphone Screen Replacement (2.5 → 4.0 yrs)</option>
+              <option value="laptop_battery">Laptop Battery Swap (4.0 → 7.0 yrs)</option>
+              <option value="laptop_ram_ssd">Laptop RAM / SSD Upgrade (5.0 → 9.0 yrs)</option>
+              <option value="tablet_battery">Tablet Battery / Screen Repair (3.0 → 6.0 yrs)</option>
+              <option value="tv_backlight">TV LED Backlight Repair (6.0 → 11.0 yrs)</option>
+              <option value="powertool_battery">Power Tool Battery Rebuild (4.0 → 8.0 yrs)</option>
             </select>
           </div>
 
-          <!-- Lifespan Sliders -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="p-4 rounded-xl bg-paper border hairline space-y-2">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl bg-paper border hairline space-y-2.5">
               <div class="flex items-center justify-between text-xs">
-                <span class="font-semibold text-stone-700">Baseline Lifespan:</span>
-                <span class="font-mono font-bold text-ink" id="base-life-val">2.5 yrs</span>
+                <span class="font-medium text-neutral-700">Baseline Lifespan</span>
+                <span class="font-code font-semibold text-ink" id="base-life-val">2.5 yrs</span>
               </div>
-              <input type="range" id="base-life-slider" min="1.0" max="6.0" step="0.5" value="2.5" class="w-full accent-obsidian" />
-              <div class="text-[10px] text-stone-500">Default without repair intervention</div>
+              <input type="range" id="base-life-slider" min="1.0" max="8.0" step="0.5" value="2.5" class="rc-slider w-full" />
             </div>
 
-            <div class="p-4 rounded-xl bg-paper border hairline space-y-2">
+            <div class="p-4 rounded-xl bg-paper border hairline space-y-2.5">
               <div class="flex items-center justify-between text-xs">
-                <span class="font-semibold text-stone-700">Extended Lifespan:</span>
-                <span class="font-mono font-bold text-forest" id="ext-life-val">4.5 yrs</span>
+                <span class="font-medium text-neutral-700">Extended Lifespan</span>
+                <span class="font-code font-semibold text-forest" id="ext-life-val">4.5 yrs</span>
               </div>
-              <input type="range" id="ext-life-slider" min="2.0" max="10.0" step="0.5" value="4.5" class="w-full accent-forest" />
-              <div class="text-[10px] text-stone-500">Lifespan achieved post-repair</div>
+              <input type="range" id="ext-life-slider" min="2.0" max="12.0" step="0.5" value="4.5" class="rc-slider w-full" />
             </div>
           </div>
 
-          <!-- Formula Callout -->
-          <div class="p-4 rounded-xl bg-stone-50 border hairline space-y-1.5 font-mono text-xs">
-            <div class="text-[10px] text-stone-500 uppercase font-semibold">Scientific Lifecycle Model</div>
-            <div class="text-stone-800 font-semibold overflow-x-auto py-1">
-              &Delta;Carbon_repair = E_mfg &times; (1 - L_base / L_ext) - E_repair
-            </div>
-            <p class="text-[11px] text-stone-500 font-sans">
-              Where E_mfg is embodied manufacturing carbon, L_base and L_ext are lifespans, and E_repair is the replacement part footprint.
-            </p>
+          <div class="p-4 rounded-xl bg-paper border hairline space-y-1">
+            <div class="font-code text-[10px] uppercase tracking-wider text-neutral-500">Lifecycle Carbon Equation</div>
+            <div class="font-code text-xs sm:text-sm font-semibold text-ink">ΔC_repair = E_mfg × (1 − L_base / L_ext) − E_repair</div>
+            <p class="text-[11px] text-neutral-500 pt-1">Amortizes embodied manufacturing carbon (E_mfg) across extended years of active service.</p>
           </div>
         </div>
 
-        <!-- Right: Repair Impact Output (5 cols) -->
-        <div class="lg:col-span-5 bg-white rounded-2xl p-6 border hairline shadow-sm space-y-5">
-          <div class="space-y-1">
-            <span class="text-xs font-mono font-semibold uppercase text-forest">Repair vs. Replace Outcome</span>
-            <h3 class="font-editorial text-lg font-bold text-ink">Net Ecological Savings</h3>
+        <div class="lg:col-span-5 bg-white rounded-2xl p-6 border hairline space-y-4">
+          <div class="p-4 rounded-xl bg-obsidian text-white">
+            <div class="font-code text-[10px] uppercase tracking-wider text-limeaccent">Net Avoided Carbon Footprint</div>
+            <div class="font-code text-3xl font-semibold text-white mt-1" id="repair-saved-co2">34.8 kg CO₂e</div>
+            <p class="text-xs text-neutral-300 mt-1" id="repair-co2-summary"></p>
           </div>
 
-          <div class="space-y-4 pt-1">
-            <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200">
-              <div class="text-xs font-mono uppercase text-forest font-semibold">Net Avoided Carbon Footprint</div>
-              <div class="text-3xl font-bold font-editorial text-forest mt-1" id="repair-saved-co2">34.7 kg CO&#8322;e</div>
-              <p class="text-xs text-stone-600 mt-1" id="repair-co2-summary">
-                Equivalent to driving 140 km in a gasoline passenger car.
-              </p>
-            </div>
-
+          <div class="grid grid-cols-2 gap-3">
             <div class="p-4 rounded-xl bg-paper border hairline">
-              <div class="text-xs font-mono uppercase text-stone-500 font-semibold">Consumer Financial Savings</div>
-              <div class="text-2xl font-bold font-editorial text-ink mt-1" id="repair-saved-money">$350 &ndash; $600 USD</div>
-              <p class="text-xs text-stone-500 mt-1">
-                Savings by choosing a $35 battery replacement over a $500 new replacement phone.
-              </p>
+              <div class="font-code text-[10px] uppercase text-neutral-500">Est. Money Saved</div>
+              <div class="font-editorial text-xl text-ink mt-1" id="repair-saved-money">$350 – $650</div>
+              <p class="text-[11px] text-neutral-500 mt-1" id="repair-money-note"></p>
             </div>
-
             <div class="p-4 rounded-xl bg-paper border hairline">
-              <div class="text-xs font-mono uppercase text-stone-500 font-semibold">Impact vs. Early Recycling</div>
-              <div class="text-2xl font-bold font-editorial text-forest mt-1" id="repair-multiplier">4.1&times; More Carbon Saved</div>
-              <p class="text-xs text-stone-500 mt-1">
-                Extending device life saves vastly more carbon than simply shredding and recycling an operational device early.
-              </p>
+              <div class="font-code text-[10px] uppercase text-neutral-500">vs. Early Recycling</div>
+              <div class="font-editorial text-xl text-forest mt-1" id="repair-multiplier">3.4× Better</div>
+              <p class="text-[11px] text-neutral-500 mt-1">Repairing saves vastly more carbon than shredding early.</p>
             </div>
           </div>
         </div>
-
       </div>
     </section>
 
   </main>
 
-  <!-- Architectural Footer -->
-  <footer class="border-t hairline bg-white text-stone-600 py-12 px-4 sm:px-6 lg:px-8 mt-16 no-print">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-      <div class="space-y-3">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-md bg-obsidian text-limeaccent flex items-center justify-center">
-            <i data-lucide="orbit" class="w-4 h-4"></i>
-          </div>
-          <span class="font-editorial text-lg font-bold text-ink">ReCircuit</span>
-        </div>
-        <p class="text-xs leading-relaxed text-stone-500">
-          Aligned with UN Sustainable Development Goal 12. Complete scientific metadata for 36+ household items.
-        </p>
-      </div>
-
-      <div class="space-y-2 text-xs">
-        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Pages &amp; Tools</div>
-        <ul class="space-y-1.5">
-          <li><a href="index.html" class="hover:text-ink">Home &amp; SDG 12 Hub</a></li>
-          <li><a href="lookup.html" class="hover:text-ink">Smart Directory</a></li>
-          <li><a href="calculator.html" class="hover:text-ink font-semibold">Urban Mining Calculator</a></li>
-          <li><a href="triage.html" class="hover:text-ink">15s Triage &amp; Thermal Safety</a></li>
-          <li><a href="dropoff.html" class="hover:text-ink">Drop-Off Manifest &amp; Hubs</a></li>
-          <li><a href="quiz.html" class="hover:text-ink">Wish-Cycling Myth Quiz</a></li>
-        </ul>
-      </div>
-
-      <div class="space-y-2 text-xs">
-        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Lifecycle Models</div>
-        <ul class="space-y-1.5 text-stone-500">
-          <li>&bull; Ecoinvent v3.9 Life Cycle Inventories</li>
-          <li>&bull; USGS Mineral Commodity Summaries 2024</li>
-          <li>&bull; UN Global E-Waste Monitor Metallurgical Ratios</li>
-          <li>&bull; EU JRC Circular Economy Indicators</li>
-        </ul>
-      </div>
-
-      <div class="space-y-3 text-xs">
-        <div class="font-semibold text-ink uppercase tracking-wider font-mono text-[11px]">Repository</div>
-        <p class="text-xs text-stone-500 leading-relaxed">
-          Open-source submission for the Global SDG Hackathon on Devpost.
-        </p>
-        <a 
-          href="https://github.com/naman-swami/ReCircuit-Smart-E-Waste-Household-Recycling-Guide-UN-SDG-12-" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border hairline bg-paper hover:bg-stone-200 text-ink font-semibold transition-colors"
-        >
-          <i data-lucide="github" class="w-4 h-4"></i>
-          <span>GitHub Source</span>
-        </a>
-      </div>
+  <footer class="border-t hairline bg-white text-neutral-600 py-8 px-4 sm:px-6 lg:px-8 mt-12 no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-500">
+      <span><strong class="text-ink">ReCircuit</strong> · Scientific Urban Mining &amp; Right-to-Repair Simulator</span>
+      <a href="dropoff.html" class="font-code text-[11px] text-ink underline">Open Drop-Off Manifest →</a>
     </div>
   </footer>
 
-  <!-- Toast Notification Container -->
-  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- Scripts -->
   <script src="js/data.js"></script>
   <script src="js/shared.js"></script>
   <script>
-    // Calculator State & Logic
     const inventory = {
-      smartphone: 0,
-      laptop: 0,
-      tablet: 0,
-      tv: 0,
-      smartwatch: 0,
-      powerbank: 0,
-      powertool: 0,
-      cable: 0
+      smartphone: 2, laptop: 1, tablet: 0, tv: 0,
+      smartwatch: 0, powerbank: 1, powertool: 0, cable: 3
     };
 
     const deviceCatalog = [
-      { key: 'smartphone', name: 'Smartphone / Cellphone', icon: '📱', itemId: 1 },
-      { key: 'laptop', name: 'Laptop Computer', icon: '💻', itemId: 2 },
-      { key: 'tablet', name: 'Tablet / iPad', icon: '📲', itemId: 3 },
-      { key: 'tv', name: 'TV / Display Monitor', icon: '📺', itemId: 27 },
-      { key: 'smartwatch', name: 'Smartwatch / Fitness Band', icon: '⌚', itemId: 4 },
-      { key: 'powerbank', name: 'Li-Ion Power Bank', icon: '🔋', itemId: 13 },
-      { key: 'powertool', name: 'Cordless Power Tool Battery', icon: '🪛', itemId: 12 },
-      { key: 'cable', name: 'Charger & USB Cable (bundle)', icon: '🧵', itemId: 30 }
+      { key: 'smartphone', name: 'Smartphone', icon: 'smartphone', itemId: 1 },
+      { key: 'laptop', name: 'Laptop Computer', icon: 'laptop', itemId: 2 },
+      { key: 'tablet', name: 'Tablet / iPad', icon: 'tablet', itemId: 3 },
+      { key: 'tv', name: 'TV / Monitor', icon: 'monitor', itemId: 27 },
+      { key: 'smartwatch', name: 'Smartwatch', icon: 'watch', itemId: 4 },
+      { key: 'powerbank', name: 'Li-Ion Power Bank', icon: 'battery-charging', itemId: 13 },
+      { key: 'powertool', name: 'Power Tool Pack', icon: 'wrench', itemId: 12 },
+      { key: 'cable', name: 'Charger / USB Cable', icon: 'cable', itemId: 30 }
     ];
 
     let chartInstance = null;
 
     function renderInventoryList() {
       const list = document.getElementById('inventory-list');
-      list.innerHTML = deviceCatalog.map(dev => {
-        const qty = inventory[dev.key] || 0;
-        return `
-          <div class="flex items-center justify-between p-3 rounded-xl bg-paper border hairline">
-            <div class="flex items-center gap-3">
-              <span class="text-xl">${dev.icon}</span>
-              <span class="text-xs font-semibold text-ink">${dev.name}</span>
+      list.innerHTML = deviceCatalog.map(dev => `
+        <div class="flex items-center justify-between p-3 rounded-xl bg-paper border hairline">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-lg bg-white border hairline flex items-center justify-center text-ink shrink-0">
+              <i data-lucide="${dev.icon}" class="w-4 h-4"></i>
             </div>
-            <div class="flex items-center gap-2">
-              <button onclick="updateDevQty('${dev.key}', -1)" class="w-7 h-7 rounded-lg bg-white border hairline hover:border-ink flex items-center justify-center font-bold text-xs text-stone-700">
-                -
-              </button>
-              <span class="w-6 text-center font-mono font-bold text-xs text-ink">${qty}</span>
-              <button onclick="updateDevQty('${dev.key}', 1)" class="w-7 h-7 rounded-lg bg-white border hairline hover:border-ink flex items-center justify-center font-bold text-xs text-stone-700">
-                +
-              </button>
-            </div>
+            <span class="text-xs font-medium text-ink truncate">${dev.name}</span>
           </div>
-        `;
-      }).join('');
-    }
-
-    function updateDevQty(key, delta) {
-      inventory[key] = Math.max(0, (inventory[key] || 0) + delta);
-      renderInventoryList();
-      computeUrbanMining();
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button type="button" data-inv="${dev.key}:-1" class="w-7 h-7 rounded-md bg-white border hairline hover:border-ink font-code text-xs text-ink">−</button>
+            <span class="w-6 text-center font-code font-semibold text-xs text-ink">${inventory[dev.key] || 0}</span>
+            <button type="button" data-inv="${dev.key}:1" class="w-7 h-7 rounded-md bg-white border hairline hover:border-ink font-code text-xs text-ink">+</button>
+          </div>
+        </div>
+      `).join('');
+      if (window.lucide) lucide.createIcons({ root: list });
     }
 
     function computeUrbanMining() {
-      let totalGold = 0;
-      let totalSilver = 0;
-      let totalCopper = 0;
-      let totalCobalt = 0;
-      let totalPalladium = 0;
-      let totalOre = 0;
-      let totalAvoidedCarbon = 0;
-      let totalVirginCarbon = 0;
-      let totalRecycledCarbon = 0;
-      let totalCount = 0;
+      let gold = 0, silver = 0, copper = 0, cobalt = 0, palladium = 0, ore = 0, avoided = 0, virgin = 0, recycled = 0, count = 0;
 
-      for (const [key, count] of Object.entries(inventory)) {
-        if (count > 0 && MINERAL_METRICS[key]) {
-          const m = MINERAL_METRICS[key];
-          totalCount += count;
-          totalGold += (m.goldG || 0) * count;
-          totalSilver += (m.silverG || 0) * count;
-          totalCopper += (m.copperG || 0) * count;
-          totalCobalt += (m.cobaltG || 0) * count;
-          totalPalladium += (m.palladiumG || 0) * count;
-          totalOre += (m.virginOreMiningKg || 0) * count;
-          totalAvoidedCarbon += (m.avoidedCarbonKg || 0) * count;
-          totalVirginCarbon += (m.virginCarbonKg || 0) * count;
-          totalRecycledCarbon += (m.recycledCarbonKg || 0) * count;
+      Object.entries(inventory).forEach(([k, qty]) => {
+        if (qty > 0 && MINERAL_METRICS[k]) {
+          const m = MINERAL_METRICS[k];
+          count += qty;
+          gold += m.goldG * qty;
+          silver += m.silverG * qty;
+          copper += m.copperG * qty;
+          cobalt += m.cobaltG * qty;
+          palladium += m.palladiumG * qty;
+          ore += m.virginOreMiningKg * qty;
+          avoided += m.avoidedCarbonKg * qty;
+          virgin += m.virginCarbonKg * qty;
+          recycled += m.recycledCarbonKg * qty;
         }
-      }
+      });
 
-      document.getElementById('total-devices-count').textContent = `${totalCount} device${totalCount === 1 ? '' : 's'}`;
-      document.getElementById('yield-gold').innerHTML = `${totalGold.toFixed(3)} <span class="text-xs font-sans font-normal text-stone-400">g</span>`;
-      document.getElementById('yield-silver').innerHTML = `${totalSilver.toFixed(2)} <span class="text-xs font-sans font-normal text-stone-400">g</span>`;
-      document.getElementById('yield-copper').innerHTML = `${Math.round(totalCopper)} <span class="text-xs font-sans font-normal text-stone-400">g</span>`;
-      document.getElementById('yield-cobalt').innerHTML = `${Math.round(totalCobalt)} <span class="text-xs font-sans font-normal text-stone-400">g</span>`;
-      document.getElementById('yield-palladium').innerHTML = `${totalPalladium.toFixed(3)} <span class="text-xs font-sans font-normal text-stone-400">g</span>`;
-      
-      document.getElementById('yield-ore').textContent = totalOre >= 1000 
-        ? `${(totalOre / 1000).toFixed(2)} tonnes` 
-        : `${totalOre.toFixed(1)} kg`;
+      document.getElementById('total-devices-count').textContent = `${count} DEVICE${count === 1 ? '' : 'S'}`;
+      document.getElementById('yield-gold').textContent = `${gold.toFixed(3)} g`;
+      document.getElementById('yield-silver').textContent = `${silver.toFixed(2)} g`;
+      document.getElementById('yield-copper').textContent = `${Math.round(copper)} g`;
+      document.getElementById('yield-cobalt').textContent = `${Math.round(cobalt)} g`;
+      document.getElementById('yield-palladium').textContent = `${palladium.toFixed(3)} g`;
+      document.getElementById('yield-ore').textContent = ore >= 1000 ? `${(ore / 1000).toFixed(2)} tonnes` : `${ore.toFixed(1)} kg`;
+      document.getElementById('yield-carbon').textContent = `${avoided.toFixed(1)} kg CO₂e`;
 
-      document.getElementById('yield-carbon').textContent = `${totalAvoidedCarbon.toFixed(1)} kg CO₂e`;
-
-      updateEmissionsChart(totalVirginCarbon, totalRecycledCarbon);
-    }
-
-    function updateEmissionsChart(virginKg, recycledKg) {
       const ctx = document.getElementById('emissionsChart');
-      if (!ctx) return;
-
-      const v = Math.max(virginKg, 1);
-      const r = Math.max(recycledKg, 0.2);
-
-      if (chartInstance) {
-        chartInstance.data.datasets[0].data = [v, r];
-        chartInstance.update();
-      } else {
-        chartInstance = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['Virgin Extraction', 'Secondary Recycling'],
-            datasets: [{
-              label: 'Carbon Footprint (kg CO₂e)',
-              data: [v, r],
-              backgroundColor: ['#D94326', '#164E3B'],
-              borderRadius: 6
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false }
+      if (ctx && window.Chart) {
+        const data = [Math.max(virgin, 0.1), Math.max(recycled, 0.1)];
+        if (chartInstance) {
+          chartInstance.data.datasets[0].data = data;
+          chartInstance.update();
+        } else {
+          chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: ['Virgin Extraction', 'Certified Recycling'],
+              datasets: [{
+                data,
+                backgroundColor: ['#D94326', '#121513'],
+                borderRadius: 6
+              }]
             },
-            scales: {
-              y: {
-                beginAtZero: true,
-                grid: { color: '#DDDAD2' }
-              },
-              x: {
-                grid: { display: false }
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: true, grid: { color: '#EAE7DF' } },
+                x: { grid: { display: false }, ticks: { font: { family: 'JetBrains Mono', size: 11 } } }
               }
             }
-          }
-        });
+          });
+        }
       }
     }
 
-    // Repair Calculator Logic
     function computeRepair() {
-      const select = document.getElementById('repair-select');
-      const repKey = select.value;
-      const model = REPAIR_METRICS[repKey];
+      const key = document.getElementById('repair-select').value;
+      const model = REPAIR_METRICS[key];
       if (!model) return;
 
-      const baseLife = parseFloat(document.getElementById('base-life-slider').value);
-      const extLife = parseFloat(document.getElementById('ext-life-slider').value);
+      const base = parseFloat(document.getElementById('base-life-slider').value);
+      const ext = parseFloat(document.getElementById('ext-life-slider').value);
 
-      document.getElementById('base-life-val').textContent = `${baseLife.toFixed(1)} yrs`;
-      document.getElementById('ext-life-val').textContent = `${extLife.toFixed(1)} yrs`;
+      document.getElementById('base-life-val').textContent = `${base.toFixed(1)} yrs`;
+      document.getElementById('ext-life-val').textContent = `${ext.toFixed(1)} yrs`;
 
-      // Delta Carbon = E_mfg * (1 - L_base / L_ext) - E_repair
-      const ratio = Math.min(1, baseLife / Math.max(baseLife, extLife));
-      const grossSaved = model.mfgEmissionsKg * (1 - ratio);
-      const netSaved = Math.max(0, grossSaved - (model.repairEmissionsKg || 3));
+      const ratio = Math.min(1, base / Math.max(base, ext));
+      const netSaved = Math.max(0, model.mfgEmissionsKg * (1 - ratio) - model.repairEmissionsKg);
+      const earlyRecycle = Math.max(model.mfgEmissionsKg * 0.12, 1);
 
       document.getElementById('repair-saved-co2').textContent = `${netSaved.toFixed(1)} kg CO₂e`;
-      document.getElementById('repair-co2-summary').textContent = `Equivalent to driving ~${Math.round(netSaved * 4.1)} km in a gasoline passenger car.`;
-
-      // Multiplier comparison vs early recycling
-      const earlyRecyclingSaving = model.mfgEmissionsKg * 0.12; // recycling only recovers ~12% embodied carbon
-      const multiplier = (netSaved / Math.max(earlyRecyclingSaving, 1)).toFixed(1);
-      document.getElementById('repair-multiplier').textContent = `${multiplier}× More Carbon Saved`;
-
-      // Financial savings estimate
-      if (repKey.includes('smartphone')) {
-        document.getElementById('repair-saved-money').textContent = '$300 – $650 USD';
-      } else if (repKey.includes('laptop')) {
-        document.getElementById('repair-saved-money').textContent = '$500 – $1,200 USD';
-      } else if (repKey.includes('tv')) {
-        document.getElementById('repair-saved-money').textContent = '$250 – $700 USD';
-      } else {
-        document.getElementById('repair-saved-money').textContent = '$200 – $450 USD';
-      }
+      document.getElementById('repair-co2-summary').textContent = `Equivalent to ~${Math.round(netSaved * 4.1)} km of passenger car driving avoided.`;
+      document.getElementById('repair-multiplier').textContent = `${(netSaved / earlyRecycle).toFixed(1)}× More`;
+      document.getElementById('repair-saved-money').textContent = model.moneySaved;
+      document.getElementById('repair-money-note').textContent = model.moneyNote;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Initialize with 2 smartphones and 1 laptop for instant user preview
-      inventory.smartphone = 2;
-      inventory.laptop = 1;
-      inventory.cable = 3;
-
       renderInventoryList();
       computeUrbanMining();
+      computeRepair();
 
-      // Reset inventory
-      document.getElementById('reset-inventory-btn').addEventListener('click', () => {
-        for (const k in inventory) inventory[k] = 0;
+      document.getElementById('inventory-list').addEventListener('click', e => {
+        const btn = e.target.closest('[data-inv]');
+        if (!btn) return;
+        const [k, d] = btn.dataset.inv.split(':');
+        inventory[k] = Math.max(0, (inventory[k] || 0) + parseInt(d, 10));
         renderInventoryList();
         computeUrbanMining();
       });
 
-      // Add calculated items to manifest
+      document.getElementById('reset-inventory-btn').addEventListener('click', () => {
+        Object.keys(inventory).forEach(k => { inventory[k] = 0; });
+        renderInventoryList();
+        computeUrbanMining();
+      });
+
       document.getElementById('add-calculated-to-manifest-btn').addEventListener('click', () => {
-        let addedCount = 0;
+        let added = 0;
         deviceCatalog.forEach(d => {
           const qty = inventory[d.key] || 0;
           if (qty > 0) {
-            for (let i = 0; i < qty; i++) {
-              AppState.addToManifest(d.itemId);
-            }
-            addedCount += qty;
+            AppState.addToManifest(d.itemId, qty);
+            added += qty;
           }
         });
-        if (addedCount > 0) {
-          AppState.showToast(`Added ${addedCount} items to your Drop-Off Manifest!`);
-        } else {
-          AppState.showToast('Please add at least 1 device quantity first.');
-        }
+        if (!added) AppState.showToast('Add at least 1 device first.');
       });
 
-      // Repair controls
-      const repairSelect = document.getElementById('repair-select');
-      const baseSlider = document.getElementById('base-life-slider');
-      const extSlider = document.getElementById('ext-life-slider');
+      const repairSel = document.getElementById('repair-select');
+      const baseSl = document.getElementById('base-life-slider');
+      const extSl = document.getElementById('ext-life-slider');
 
-      repairSelect.addEventListener('change', () => {
-        const model = REPAIR_METRICS[repairSelect.value];
-        if (model) {
-          baseSlider.value = model.baselineLifespanYears;
-          extSlider.value = model.extendedLifespanYears;
+      repairSel.addEventListener('change', () => {
+        const m = REPAIR_METRICS[repairSel.value];
+        if (m) {
+          baseSl.value = m.baselineLifespanYears;
+          extSl.value = m.extendedLifespanYears;
           computeRepair();
         }
       });
 
-      baseSlider.addEventListener('input', () => {
-        if (parseFloat(baseSlider.value) >= parseFloat(extSlider.value)) {
-          extSlider.value = (parseFloat(baseSlider.value) + 0.5).toFixed(1);
+      baseSl.addEventListener('input', () => {
+        if (parseFloat(baseSl.value) >= parseFloat(extSl.value)) {
+          extSl.value = Math.min(12, parseFloat(baseSl.value) + 0.5).toFixed(1);
         }
         computeRepair();
       });
 
-      extSlider.addEventListener('input', () => {
-        if (parseFloat(extSlider.value) <= parseFloat(baseSlider.value)) {
-          baseSlider.value = (parseFloat(extSlider.value) - 0.5).toFixed(1);
+      extSl.addEventListener('input', () => {
+        if (parseFloat(extSl.value) <= parseFloat(baseSl.value)) {
+          baseSl.value = Math.max(1, parseFloat(extSl.value) - 0.5).toFixed(1);
         }
         computeRepair();
       });
-
-      computeRepair();
     });
   </script>
 </body>
