@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>15s Disposal Triage &amp; Red Box Emergency — ReCircuit (UN SDG 12)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
@@ -35,6 +34,7 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-limeaccent selection:text-ink">
 
+  <!-- Header (Hidden when printing) -->
   <header class="sticky top-0 z-40 glass-header border-b hairline no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       <a href="index.html" class="flex items-center gap-3 min-w-0">
@@ -95,7 +95,8 @@
 
   <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full space-y-12">
 
-    <div class="border-b hairline pb-6 space-y-1.5">
+    <!-- Page Intro Header (Hidden on print) -->
+    <div class="border-b hairline pb-6 space-y-1.5 no-print">
       <div class="font-code text-[11px] uppercase tracking-[0.14em] text-vermilion font-semibold">SAFETY-CRITICAL DIAGNOSTIC HUB · UN SDG 12.4</div>
       <h1 class="font-editorial text-3xl sm:text-4xl text-ink">15-Second Triage &amp; Battery Emergency</h1>
       <p class="text-sm text-neutral-600 max-w-2xl">
@@ -103,8 +104,8 @@
       </p>
     </div>
 
-    <!-- 15-SECOND DIAGNOSTIC WIZARD -->
-    <section class="bg-white rounded-2xl border hairline overflow-hidden">
+    <!-- 15-SECOND DIAGNOSTIC WIZARD (Hidden on print) -->
+    <section class="bg-white rounded-2xl border hairline overflow-hidden no-print">
       <div class="bg-obsidian text-white px-6 py-5 flex items-center justify-between gap-4">
         <div>
           <div class="font-code text-[10px] uppercase tracking-[0.14em] text-limeaccent">DECISION MATRIX</div>
@@ -215,60 +216,111 @@
       </div>
     </section>
 
-    <!-- RED BOX UN3480 LITHIUM BATTERY EMERGENCY PROTOCOL -->
+    <!-- ========================================================================= -->
+    <!-- RED BOX UN3480 LITHIUM BATTERY EMERGENCY PROTOCOL (PRINTS AS PLACARD)     -->
+    <!-- ========================================================================= -->
     <section class="rounded-2xl obsidian-red text-white p-6 sm:p-10 border border-red-500/30 shadow-2xl space-y-8" id="red-box-emergency">
+      
+      <!-- Placard Alert Header -->
       <div class="space-y-3 max-w-3xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-vermilion/20 text-red-200 font-code text-[10px] uppercase tracking-wider border border-red-500/40">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-vermilion/20 text-red-300 text-xs font-code font-semibold border border-red-500/40">
           <i data-lucide="flame" class="w-3.5 h-3.5 text-vermilion"></i>
-          <span>LIFE-SAFETY CRITICAL · UN3480 THERMAL PROTOCOL</span>
+          <span class="print-emergency-badge">LIFE-SAFETY CRITICAL &bull; UN3480 EMERGENCY PROTOCOL</span>
         </div>
-        <h2 class="font-editorial text-2xl sm:text-4xl text-white">The “Red Box” Lithium Thermal Runaway Protocol</h2>
+        <h2 class="font-editorial text-2xl sm:text-4xl text-white tracking-tight">
+          The "Red Box" Lithium Battery Thermal Protocol
+        </h2>
         <p class="text-neutral-300 text-xs sm:text-sm leading-relaxed">
-          A swollen, bulging, hissing, or hot lithium battery is experiencing internal shorting and electrolyte gas buildup. It can ignite into thermal runaway (&gt;600°C) in seconds. Follow these 4 containment imperatives immediately.
+          A swollen, bulging, hissing, or hot lithium battery is experiencing internal shorting and electrolyte gas buildup. It can undergo <strong>thermal runaway (&gt;600&deg;C)</strong> in seconds. Follow these 4 containment imperatives immediately.
         </p>
-      </div>
 
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="p-5 rounded-xl bg-white/5 border border-white/10 space-y-2.5">
-          <div class="font-code text-xs text-vermilion font-bold">STEP 01</div>
-          <h3 class="font-semibold text-white text-sm">Do NOT Charge or Puncture</h3>
-          <p class="text-xs text-neutral-300 leading-relaxed">Unplug immediately. Never pierce, press, or try to flatten a swollen pouch cell — puncturing the separator triggers instant ignition.</p>
-        </div>
-
-        <div class="p-5 rounded-xl bg-white/5 border border-white/10 space-y-2.5">
-          <div class="font-code text-xs text-amber-300 font-bold">STEP 02</div>
-          <h3 class="font-semibold text-white text-sm">Tape Terminal Contacts</h3>
-          <p class="text-xs text-neutral-300 leading-relaxed">Wrap non-conductive electrical tape completely over exposed battery terminals or USB ports to prevent short-circuit sparks.</p>
-        </div>
-
-        <div class="p-5 rounded-xl bg-white/5 border border-white/10 space-y-2.5">
-          <div class="font-code text-xs text-sky-300 font-bold">STEP 03</div>
-          <h3 class="font-semibold text-white text-sm">Dry Sand Containment</h3>
-          <p class="text-xs text-neutral-300 leading-relaxed">Place inside a metal or ceramic bucket filled with <strong>dry sand, kitty litter, or baking soda</strong>. NEVER use water on lithium cells.</p>
-        </div>
-
-        <div class="p-5 rounded-xl bg-white/5 border border-white/10 space-y-2.5">
-          <div class="font-code text-xs text-limeaccent font-bold">STEP 04</div>
-          <h3 class="font-semibold text-white text-sm">Outdoor Isolation &amp; HHW</h3>
-          <p class="text-xs text-neutral-300 leading-relaxed">Move the container outdoors away from flammables and contact your municipal Household Hazardous Waste (HHW) depot for drop-off.</p>
+        <!-- Big Print Warning Banner -->
+        <div class="p-3 bg-red-950/40 border border-red-500/50 rounded-xl text-xs font-code font-bold text-red-300 flex items-center gap-2">
+          <span>⚠️ CRITICAL NOTICE: NEVER USE WATER ON SWOLLEN CELLS &bull; DO NOT PUNCTURE &bull; DO NOT ATTEMPT TO CHARGE</span>
         </div>
       </div>
 
-      <div class="flex flex-wrap items-center justify-between gap-4 pt-5 border-t border-white/10 no-print">
-        <span class="font-code text-[11px] text-neutral-400">Keep a printed copy in your garage, lab, or workshop:</span>
-        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-ink text-xs font-semibold hover:bg-neutral-200 transition">
-          <i data-lucide="printer" class="w-4 h-4"></i>
-          <span>Print Emergency Safety Sheet</span>
+      <!-- 4 Containment Step Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <div class="p-5 rounded-xl bg-white/5 border border-red-500/20 space-y-2.5 print-step-box">
+          <div class="w-8 h-8 rounded-lg bg-vermilion text-white font-code font-bold flex items-center justify-center text-xs">
+            01
+          </div>
+          <h3 class="font-editorial text-base font-bold text-white">Do NOT Charge or Puncture</h3>
+          <p class="text-xs text-neutral-300 leading-relaxed">
+            Unplug immediately. Never pierce, press, or attempt to "flatten" a swollen pouch cell. Puncturing the separator triggers instantaneous thermal ignition.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-white/5 border border-red-500/20 space-y-2.5 print-step-box">
+          <div class="w-8 h-8 rounded-lg bg-amber-600 text-white font-code font-bold flex items-center justify-center text-xs">
+            02
+          </div>
+          <h3 class="font-editorial text-base font-bold text-white">Tape Terminal Contacts</h3>
+          <p class="text-xs text-neutral-300 leading-relaxed">
+            Wrap non-conductive PVC electrical tape or duct tape completely over exposed contacts, pins, and wires to eliminate external spark bridges.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-white/5 border border-red-500/20 space-y-2.5 print-step-box">
+          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-code font-bold flex items-center justify-center text-xs">
+            03
+          </div>
+          <h3 class="font-editorial text-base font-bold text-white">Dry Sand Containment</h3>
+          <p class="text-xs text-neutral-300 leading-relaxed">
+            Place inside a metal or ceramic bucket filled with <strong>dry sand, cat litter, or baking soda</strong>. NEVER use water — lithium reacts with water forming flammable hydrogen gas.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-xl bg-white/5 border border-red-500/20 space-y-2.5 print-step-box">
+          <div class="w-8 h-8 rounded-lg bg-forest text-limeaccent font-code font-bold flex items-center justify-center text-xs">
+            04
+          </div>
+          <h3 class="font-editorial text-base font-bold text-white">Outdoor Isolation &amp; HHW</h3>
+          <p class="text-xs text-neutral-300 leading-relaxed">
+            Move the container outdoors away from combustible structures (10m perimeter). Transport directly to a municipal Household Hazardous Waste (HHW) depot.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Emergency Hotlines & Placement Instruction (Visible on Screen & Print) -->
+      <div class="p-4 rounded-xl bg-white/10 border border-white/15 text-xs text-neutral-200 grid sm:grid-cols-3 gap-3">
+        <div>
+          <span class="font-code text-[10px] uppercase font-bold text-limeaccent block">Emergency Fire &amp; Rescue</span>
+          <span class="font-semibold text-white">India: 101 &bull; USA: 911 &bull; EU: 112</span>
+        </div>
+        <div>
+          <span class="font-code text-[10px] uppercase font-bold text-limeaccent block">Hazmat Incident Hotline</span>
+          <span class="font-semibold text-white">CHEMTREC: 1-800-424-9300</span>
+        </div>
+        <div>
+          <span class="font-code text-[10px] uppercase font-bold text-limeaccent block">Placard Instruction</span>
+          <span class="font-semibold text-white">Post near battery charging benches</span>
+        </div>
+      </div>
+
+      <!-- Print Action Bar (Hidden on print) -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-5 border-t border-white/10 no-print">
+        <div class="flex items-center gap-2 text-xs text-neutral-400 font-code">
+          <i data-lucide="printer" class="w-4 h-4 text-limeaccent"></i>
+          <span>Keep a physical copy in your workshop, garage, or charging bench:</span>
+        </div>
+        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-ink text-xs font-semibold hover:bg-neutral-100 transition shadow-lg">
+          <i data-lucide="printer" class="w-4 h-4 text-neutral-700"></i>
+          <span>1-Click Print Emergency Protocol Sheet</span>
         </button>
       </div>
+
     </section>
 
   </main>
 
   <footer class="border-t hairline bg-white text-neutral-600 py-8 px-4 sm:px-6 lg:px-8 mt-12 no-print">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-500">
-      <span><strong class="text-ink">ReCircuit</strong> · 15-Second Triage &amp; UN3480 Battery Safety Hub</span>
-      <a href="dropoff.html" class="font-code text-[11px] text-ink underline">Open Drop-Off Manifest →</a>
+      <span><strong class="text-ink">ReCircuit</strong> · Safety-Critical Triage Matrix &amp; UN3480 Emergency Containment Guide</span>
+      <a href="dropoff.html" class="font-code text-[11px] text-ink underline">View Drop-Off Manifest &amp; Hubs →</a>
     </div>
   </footer>
 
@@ -277,83 +329,69 @@
   <script src="js/data.js"></script>
   <script src="js/shared.js"></script>
   <script>
+    const state = { q1: null, q2: null, q3: null, q4: null };
+
     function showResult(type) {
-      const card = document.getElementById('triage-result');
+      const res = document.getElementById('triage-result');
       const badge = document.getElementById('result-badge');
       const title = document.getElementById('result-title');
       const desc = document.getElementById('result-description');
       const steps = document.getElementById('result-action-steps');
-      const iconWrap = document.getElementById('result-icon-wrap');
 
-      const map = {
-        donate: {
-          badge: 'SDG 12.5 PRIORITY · REUSE FIRST',
-          title: 'Donate, Resell, or Refurbish',
-          icon: 'gift',
-          desc: 'This device is fully functional. Re-homing it preserves 85–300 kg CO₂e of embodied manufacturing carbon.',
-          items: [
-            'Sign out of all accounts, remove SIM/SD cards, and factory reset.',
-            'Donate to a local school, community center, or trade in via an OEM refurbisher.'
-          ]
-        },
-        repair: {
-          badge: 'SDG 12.5 · RIGHT TO REPAIR',
-          title: 'Repair Component or Swap Battery',
-          icon: 'wrench',
-          desc: 'Replacing a battery or screen extends life by 2–3 years, saving up to 4× more carbon than early recycling.',
-          items: [
-            'Check repair cost vs. replacement — battery swaps typically pay off within months.',
-            'Use the Urban Mine & Repair Calculator to quantify your exact CO₂e savings.'
-          ]
-        },
-        emergency: {
-          badge: 'IMMEDIATE HAZARD · UN3480',
-          title: 'Red Box Thermal Containment Required',
-          icon: 'flame',
-          desc: 'Swollen or warm lithium cells can ignite spontaneously. Do not charge, puncture, or place in regular bins.',
-          items: [
-            'Tape exposed terminals with non-conductive electrical tape.',
-            'Submerge in dry sand inside a metal/ceramic container and move outdoors.',
-            'Deliver directly to a municipal Household Hazardous Waste (HHW) facility.'
-          ]
-        },
-        recycle_battery: {
-          badge: 'CERTIFIED E-WASTE & BATTERY STREAM',
-          title: 'Wipe Data, Tape Terminals & Certified Drop-Off',
-          icon: 'battery-charging',
-          desc: 'Contains a sound rechargeable battery and recoverable gold/cobalt — never place in municipal trash.',
-          items: [
-            'Tape exposed battery contacts with non-conductive electrical tape.',
-            'Run NIST SP 800-88 wipe / factory reset if data-bearing.',
-            'Route to a CPCB (India), Call2Recycle / R2 (USA), or WEEE (EU) recycler.'
-          ]
-        },
-        recycle_nobattery: {
-          badge: 'CERTIFIED E-WASTE STREAM',
-          title: 'Standard Certified E-Waste Drop-Off',
-          icon: 'recycle',
-          desc: 'No live battery hazard, but houses copper, aluminum, and circuit boards for certified urban mining.',
-          items: [
-            'Coil power cords neatly and keep accessories together.',
-            'Add to your Drop-Off Manifest and deliver to an authorized recycler.'
-          ]
-        }
-      };
+      res.classList.remove('hidden');
 
-      const cfg = map[type];
-      badge.textContent = cfg.badge;
-      title.textContent = cfg.title;
-      desc.textContent = cfg.desc;
-      iconWrap.innerHTML = `<i data-lucide="${cfg.icon}" class="w-5 h-5"></i>`;
-      steps.innerHTML = cfg.items.map((s, i) => `
-        <li class="flex items-start gap-2.5">
-          <span class="font-code text-xs text-limeaccent mt-0.5">0${i + 1}</span>
-          <span>${s}</span>
-        </li>
-      `).join('');
+      if (type === 'donate') {
+        badge.textContent = 'WASTE PREVENTION · SDG 12.5 PRIORITY';
+        badge.className = 'font-code text-[10px] uppercase tracking-[0.14em] text-limeaccent font-semibold';
+        title.textContent = 'Donate, Resell, or Refurbish';
+        desc.textContent = 'This device is fully functional. Extending its lifespan in another home avoids 85–300 kg CO₂e of manufacturing emissions and preserves secondary device utility.';
+        steps.innerHTML = `
+          <li class="flex items-start gap-2.5"><span class="font-code text-limeaccent">✓</span><span>Back up data, remove cloud accounts / biometric locks, and perform a factory reset.</span></li>
+          <li class="flex items-start gap-2.5"><span class="font-code text-limeaccent">✓</span><span>Donate to a public school, library, community lab, or post on peer-to-peer re-commerce channels.</span></li>
+          <li class="flex items-start gap-2.5"><span class="font-code text-limeaccent">✓</span><span>Check manufacturer trade-in credit before opting for scrap disposal.</span></li>
+        `;
+      } else if (type === 'repair') {
+        badge.textContent = 'RIGHT-TO-REPAIR CANDIDATE · SDG 12.5';
+        badge.className = 'font-code text-[10px] uppercase tracking-[0.14em] text-amber-400 font-semibold';
+        title.textContent = 'Perform Modular Component Repair';
+        desc.textContent = 'A simple battery replacement or screen swap extends operational lifespan by 1.5–3 years, saving ~4× more carbon than premature recycling while saving you hundreds of dollars.';
+        steps.innerHTML = `
+          <li class="flex items-start gap-2.5"><span class="font-code text-amber-400">✓</span><span>Consult open repair manuals (e.g. iFixit) for disassembly steps and adhesive softening.</span></li>
+          <li class="flex items-start gap-2.5"><span class="font-code text-amber-400">✓</span><span>Source certified OEM or reputable modular replacement parts.</span></li>
+          <li class="flex items-start gap-2.5"><span class="font-code text-amber-400">✓</span><span>Retire only the defective submodule (e.g. tape the old battery terminals and recycle separately).</span></li>
+        `;
+      } else if (type === 'emergency') {
+        badge.textContent = 'IMMEDIATE HAZARD · UN3480 CLASS 9';
+        badge.className = 'font-code text-[10px] uppercase tracking-[0.14em] text-rose-300 font-semibold';
+        title.textContent = 'Red Box Thermal Containment Required!';
+        desc.textContent = 'This battery is in active danger of thermal runaway. Do not charge, pierce, or place in general e-waste or curbside bins. Follow the Red Box protocol below immediately.';
+        steps.innerHTML = `
+          <li class="flex items-start gap-2.5"><span class="font-code text-rose-300">!</span><span>Isolate battery terminals with heavy non-conductive electrical tape immediately.</span></li>
+          <li class="flex items-start gap-2.5"><span class="font-code text-rose-300">!</span><span>Submerge in a metal bucket filled with dry sand or baking soda (NEVER WATER).</span></li>
+          <li class="flex items-start gap-2.5"><span class="font-code text-rose-300">!</span><span>Move outdoors (10m perimeter from structures) and contact your municipal HHW depot.</span></li>
+        `;
+      } else if (type === 'recycle_battery') {
+        badge.textContent = 'CERTIFIED BATTERY DISPATCH';
+        badge.className = 'font-code text-[10px] uppercase tracking-[0.14em] text-limeaccent font-semibold';
+        title.textContent = 'Tape Terminals & Drop at Certified Recycler';
+        desc.textContent = 'The device is non-functional but contains a sound rechargeable cell and recoverable precious minerals (Au, Cu, Co, Li).';
+        steps.innerHTML = `
+          <li class="flex items-start gap-2.5"><span class="font-code text-limeaccent">✓</span><span>Tape over battery contact terminals with non-conductive PVC electrical tape.</span></li>
+          <li class="flex items-start gap-2.5"><span class="font-code text-limeaccent">✓</span><span>If data-bearing, apply NIST SP 800-88 cryptographic wipe or physically drill storage chip.</span></li>
+          <li class="flex items-start gap-2.5"><span class="font-code text-limeaccent">✓</span><span>Add to your ReCircuit Drop-Off Manifest and route to a certified CPCB / R2 hub.</span></li>
+        `;
+      } else {
+        badge.textContent = 'FORMAL E-WASTE STREAM';
+        badge.className = 'font-code text-[10px] uppercase tracking-[0.14em] text-neutral-300 font-semibold';
+        title.textContent = 'Standard Certified E-Waste Drop-Off';
+        desc.textContent = 'Contains no live battery risk, but contains copper, aluminum, and printed circuit boards that belong in formal metallurgical recovery channels.';
+        steps.innerHTML = `
+          <li class="flex items-start gap-2.5"><span class="font-code text-neutral-300">✓</span><span>Bundle cords and adapters neatly using twist-ties.</span></li>
+          <li class="flex items-start gap-2.5"><span class="font-code text-neutral-300">✓</span><span>Add to your ReCircuit Drop-Off Manifest and drop at an authorized collection center.</span></li>
+        `;
+      }
 
-      card.classList.remove('hidden');
-      if (window.lucide) lucide.createIcons({ root: card });
+      if (window.lucide) lucide.createIcons({ root: res });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -361,18 +399,25 @@
         btn.addEventListener('click', () => {
           const q = parseInt(btn.dataset.q, 10);
           const val = btn.dataset.val;
-          btn.parentElement.querySelectorAll('.triage-opt').forEach(b => b.classList.remove('ring-2', 'ring-obsidian'));
-          btn.classList.add('ring-2', 'ring-obsidian');
+          state[`q${q}`] = val;
+
+          btn.parentElement.querySelectorAll('.triage-opt').forEach(b => {
+            b.classList.remove('border-ink', 'bg-neutral-100');
+          });
+          btn.classList.add('border-ink', 'bg-neutral-100');
 
           if (q === 1) {
-            if (val === 'working') return showResult('donate');
-            if (val === 'fixable') return showResult('repair');
+            if (val === 'working') { showResult('donate'); return; }
+            if (val === 'fixable') { showResult('repair'); return; }
             document.getElementById('step-2').classList.remove('hidden');
           } else if (q === 2) {
             document.getElementById('step-3').classList.remove('hidden');
           } else if (q === 3) {
-            if (val === 'battery') document.getElementById('step-4').classList.remove('hidden');
-            else showResult('recycle_nobattery');
+            if (val === 'battery') {
+              document.getElementById('step-4').classList.remove('hidden');
+            } else {
+              showResult('recycle_nobattery');
+            }
           } else if (q === 4) {
             if (val === 'swollen') {
               showResult('emergency');
@@ -385,8 +430,12 @@
       });
 
       document.getElementById('reset-wizard-btn').addEventListener('click', () => {
-        document.querySelectorAll('.triage-opt').forEach(b => b.classList.remove('ring-2', 'ring-obsidian'));
-        ['step-2', 'step-3', 'step-4', 'triage-result'].forEach(id => document.getElementById(id).classList.add('hidden'));
+        state.q1 = state.q2 = state.q3 = state.q4 = null;
+        document.querySelectorAll('.triage-opt').forEach(b => b.classList.remove('border-ink', 'bg-neutral-100'));
+        document.getElementById('step-2').classList.add('hidden');
+        document.getElementById('step-3').classList.add('hidden');
+        document.getElementById('step-4').classList.add('hidden');
+        document.getElementById('triage-result').classList.add('hidden');
       });
     });
   </script>

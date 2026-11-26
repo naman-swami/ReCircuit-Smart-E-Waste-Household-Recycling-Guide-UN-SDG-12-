@@ -225,17 +225,120 @@ input[type="range"].rc-slider::-webkit-slider-thumb {
   background: #9E9B92;
 }
 
-/* Print Overrides for Manifest & Red Box Sheet */
+/* Hidden by default on screen */
+.only-print {
+  display: none !important;
+}
+
+/* ========================================================================= */
+/* DEDICATED PRINT ARCHITECTURE (Fixes whole-page printing bug)              */
+/* ========================================================================= */
 @media print {
-  .no-print { display: none !important; }
+  @page {
+    margin: 8mm 10mm;
+    size: auto;
+  }
+
+  *, *::before, *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   body {
     background: #FFFFFF !important;
     background-image: none !important;
-    color: #000000 !important;
+    color: #111210 !important;
+    font-size: 10pt !important;
+    line-height: 1.35 !important;
   }
-  .item-card {
-    border: 1px solid #BDBDBD !important;
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Automatically hide global screen Chrome & navigation */
+  .no-print,
+  header,
+  footer,
+  nav,
+  #cmd-palette,
+  #toast-container,
+  #mobile-menu,
+  .no-print-section {
+    display: none !important;
+  }
+
+  /* Show dedicated print sheets */
+  .only-print {
+    display: block !important;
+  }
+
+  /* Dedicated Printable Dispatch Slip */
+  .print-slip {
+    display: block !important;
+    border: 2px solid #111210 !important;
+    border-radius: 6px !important;
+    padding: 16px !important;
+    background: #FFFFFF !important;
+    color: #111210 !important;
+    page-break-inside: avoid;
+  }
+
+  .print-slip table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  .print-slip th, .print-slip td {
+    border: 1px solid #111210 !important;
+    padding: 4px 6px !important;
+  }
+
+  /* Dedicated Red Box Emergency Safety Placard */
+  #red-box-emergency {
+    background: #FFFFFF !important;
+    background-image: none !important;
+    color: #111210 !important;
+    border: 3px solid #D94326 !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    page-break-inside: avoid;
     box-shadow: none !important;
-    break-inside: avoid;
+  }
+
+  #red-box-emergency * {
+    color: #111210 !important;
+  }
+
+  #red-box-emergency h2,
+  #red-box-emergency h3 {
+    color: #D94326 !important;
+  }
+
+  #red-box-emergency .print-step-box {
+    border: 1.5px solid #D94326 !important;
+    background: #FFFBFB !important;
+    padding: 10px !important;
+    border-radius: 6px !important;
+  }
+
+  #red-box-emergency .print-emergency-badge {
+    background: #D94326 !important;
+    color: #FFFFFF !important;
+    padding: 2px 8px !important;
+    border-radius: 4px !important;
+    font-weight: bold !important;
+    display: inline-block !important;
+  }
+
+  .item-card {
+    border: 1px solid #DDDAD2 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
   }
 }

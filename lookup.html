@@ -431,6 +431,13 @@
         clearBtn.classList.remove('hidden');
       }
 
+      if (params.get('item')) {
+        const targetId = parseInt(params.get('item'), 10);
+        if (targetId) {
+          setTimeout(() => openItemModal(targetId), 60);
+        }
+      }
+
       searchInput.addEventListener('input', () => {
         clearBtn.classList.toggle('hidden', !searchInput.value.length);
         renderItems();

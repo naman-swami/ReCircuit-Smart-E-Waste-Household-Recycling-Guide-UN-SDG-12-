@@ -97,6 +97,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Au', 'Cu', 'Co', 'Li', 'Nd'],
     dataRisk: false,
+    mineralKey: 'smartwatch',
     complianceLaw: 'India: E-Waste Rules 2022 Schedule I; US: universal waste battery handling.',
     cpcbCategory: 'Consumer electronics / wearables (Schedule I)',
     epaRule: 'RCRA universal waste rule (embedded lithium)'
@@ -135,6 +136,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Au', 'Ag', 'Cu', 'Co', 'Li', 'Sn', 'Zn'],
     dataRisk: true,
+    mineralKey: 'laptop',
     complianceLaw: 'India: E-Waste Rules 2022; US: state e-waste programs + manufacturer take-back.',
     cpcbCategory: 'Consumer electronics for entertainment (Schedule I)',
     epaRule: 'RCRA universal waste (embedded battery)'
@@ -153,6 +155,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Al', 'Cu', 'Au', 'Nd', 'Dy', 'Co'],
     dataRisk: true,
+    mineralKey: 'laptop',
     complianceLaw: 'India: E-Waste Rules 2022 + IT Act 2000 data rules; US: NIST SP 800-88 media sanitization.',
     cpcbCategory: 'ICT equipment (Schedule I)',
     epaRule: 'RCRA universal waste; NIST 800-88 for data destruction'
@@ -173,6 +176,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Li', 'Cu', 'Co', 'Ni', 'Al'],
     dataRisk: false,
+    mineralKey: 'powerbank',
     complianceLaw: 'India: E-Waste Rules 2022 (embedded battery) + PECA 2019; US: EPA lithium battery guidance.',
     cpcbCategory: 'Battery / hazardous component of consumer product',
     epaRule: 'RCRA hazardous waste — reactive lithium cell'
@@ -191,6 +195,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Li', 'Co', 'Ni', 'Cu', 'Mn'],
     dataRisk: false,
+    mineralKey: 'powerbank',
     complianceLaw: 'India: Battery Waste Management Rules 2022; US: BATTERY Act 1996.',
     cpcbCategory: 'Battery Waste Management Rules 2022 — Schedule II',
     epaRule: 'RCRA universal waste — batteries (40 CFR 273)'
@@ -210,6 +215,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Li', 'Ni', 'Co', 'Mn', 'Cu', 'Al', 'Graphite'],
     dataRisk: false,
+    mineralKey: 'powertool',
     complianceLaw: 'India: Battery Waste Management Rules 2022 (EPR recovery targets); US: DOT 49 CFR 173.185 + EPA universal waste.',
     cpcbCategory: 'Battery Waste Management Rules 2022 — EV battery',
     epaRule: 'RCRA universal waste + DOT hazmat transport (49 CFR 173.185)'
@@ -267,6 +273,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Li', 'Mn', 'Zn', 'Ag'],
     dataRisk: false,
+    mineralKey: 'smartwatch',
     complianceLaw: 'India: Battery Waste Management Rules 2022; US: Reese\'s Law 2022 + EPA battery guidance.',
     cpcbCategory: 'Battery Waste Management Rules 2022 — Schedule II',
     epaRule: 'RCRA universal waste; Reese\'s Law (CPSC)'
@@ -285,6 +292,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Zn', 'Mn', 'Steel'],
     dataRisk: false,
+    mineralKey: 'powerbank',
     complianceLaw: 'India: Battery Waste Management Rules 2022; US: state-dependent (CA mandates recycling).',
     cpcbCategory: 'Battery Waste Management Rules 2022 — Schedule II (primary)',
     epaRule: 'Universal waste in California; recommended recycling nationwide'
@@ -303,6 +311,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Pb', 'Sb', 'PP Plastic'],
     dataRisk: false,
+    mineralKey: 'powertool',
     complianceLaw: 'India: Battery Waste Management Rules 2022 (90%+ recovery target); US: RCRA hazardous waste.',
     cpcbCategory: 'Battery Waste Management Rules 2022 — Lead-Acid',
     epaRule: 'RCRA hazardous waste (lead) — universal waste 40 CFR 273'
@@ -341,6 +350,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Au', 'Cu', 'Al', 'Sn', 'Ga', 'REE'],
     dataRisk: false,
+    mineralKey: 'cable',
     complianceLaw: 'India: E-Waste Rules 2022 Schedule I; US: accepted at e-waste / universal waste drop-offs.',
     cpcbCategory: 'Schedule I — Lighting equipment',
     epaRule: 'Non-hazardous electronics; recycle via e-waste stream'
@@ -359,6 +369,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Cu', 'Fe', 'Al', 'Steel'],
     dataRisk: false,
+    mineralKey: 'powertool',
     complianceLaw: 'India: E-Waste Rules 2022 Schedule I; US: state appliance recycling + R2 facilities.',
     cpcbCategory: 'Schedule I — Household appliances',
     epaRule: 'Recycle via certified scrap/WEEE stream'
@@ -377,6 +388,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Cu', 'Fe', 'Ni', 'Al'],
     dataRisk: false,
+    mineralKey: 'cable',
     complianceLaw: 'India: E-Waste Rules 2022 Schedule I; US: municipal small-appliance recycling.',
     cpcbCategory: 'Schedule I — Small household appliances',
     epaRule: 'Recycle via certified e-waste / scrap metal stream'
@@ -395,6 +407,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Li', 'Ni', 'Cu', 'Au'],
     dataRisk: false,
+    mineralKey: 'smartwatch',
     complianceLaw: 'India: E-Waste Rules 2022; US: BATTERY Act + brand take-back programs.',
     cpcbCategory: 'Schedule I — Consumer equipment with embedded battery',
     epaRule: 'RCRA universal waste (embedded rechargeable cell)'
@@ -413,6 +426,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Li', 'Nd', 'Dy', 'Cu', 'Al'],
     dataRisk: true,
+    mineralKey: 'powerbank',
     complianceLaw: 'India: E-Waste Rules 2022; US: state e-waste laws + universal waste battery rules.',
     cpcbCategory: 'Schedule I — Recreational electronics',
     epaRule: 'RCRA universal waste (Li-po battery)'
@@ -431,6 +445,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Au', 'Cu', 'Co', 'Li', 'Al', 'Sn'],
     dataRisk: true,
+    mineralKey: 'tablet',
     complianceLaw: 'India: E-Waste Rules 2022 + DPDP Act 2023; US: state e-waste laws.',
     cpcbCategory: 'Schedule I — Consumer electronics',
     epaRule: 'RCRA universal waste (for battery-powered models)'
@@ -449,6 +464,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Ni', 'Si', 'Cu', 'Glass', 'Al'],
     dataRisk: false,
+    mineralKey: 'smartwatch',
     complianceLaw: 'India: E-Waste Rules 2022 + Battery Rules 2022; US: state universal waste battery rules.',
     cpcbCategory: 'Schedule I Lighting + Schedule II Battery',
     epaRule: 'RCRA universal waste (rechargeable cell)'
@@ -467,6 +483,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Au', 'Cu', 'Al', 'Sn', 'Fe'],
     dataRisk: true,
+    mineralKey: 'tablet',
     complianceLaw: 'India: E-Waste Rules 2022; US: state e-waste laws + CISA device disposal.',
     cpcbCategory: 'Schedule I — ICT equipment',
     epaRule: 'Recycle via R2 / e-Stewards facility'
@@ -486,6 +503,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Au', 'Cu', 'Fe', 'ABS Plastic'],
     dataRisk: true,
+    mineralKey: 'laptop',
     complianceLaw: 'India: E-Waste Rules 2022 (cartridges in Schedule I); US: state e-waste laws + brand mail-back.',
     cpcbCategory: 'Schedule I — IT peripherals & consumables',
     epaRule: 'RCRA solid waste; toner handled as irritant dust'
@@ -523,6 +541,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Am-241 (regulated)', 'Au', 'Cu', 'Al'],
     dataRisk: false,
+    mineralKey: 'smartwatch',
     complianceLaw: 'India: AERB radiation rules + E-Waste Rules 2022; US: NRC 10 CFR 32.26 manufacturer return.',
     cpcbCategory: 'Hazardous — regulated consumer device (AERB)',
     epaRule: 'NRC-regulated source; return to manufacturer or HHW'
@@ -542,6 +561,7 @@ const ITEMS = [
     ],
     criticalMinerals: ['Hg (legacy)', 'Li', 'Au', 'Cu'],
     dataRisk: true,
+    mineralKey: 'smartwatch',
     complianceLaw: 'India: Mercury-free mandate + Bio-Medical / E-Waste Rules; US: EPA mercury rules.',
     cpcbCategory: 'Schedule I — Non-infectious medical electronics',
     epaRule: 'RCRA hazardous waste (mercury); e-waste for digital units'

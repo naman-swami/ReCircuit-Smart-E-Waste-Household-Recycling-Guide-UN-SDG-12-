@@ -184,7 +184,7 @@ function initCommandPalette() {
       if (matchedItems.length) {
         html += `<div class="px-2.5 py-1.5 font-code text-[10px] uppercase tracking-wider text-neutral-400">Matched Items (${matchedItems.length})</div>`;
         html += matchedItems.map(it => `
-          <a href="lookup.html?q=${encodeURIComponent(it.name)}" class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg hover:bg-paper transition">
+          <a href="lookup.html?item=${it.id}" class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg hover:bg-paper transition">
             <div class="flex items-center gap-3 min-w-0">
               <div class="w-8 h-8 rounded-lg bg-paper border hairline flex items-center justify-center text-ink shrink-0">
                 <i data-lucide="${it.icon || 'box'}" class="w-4 h-4"></i>

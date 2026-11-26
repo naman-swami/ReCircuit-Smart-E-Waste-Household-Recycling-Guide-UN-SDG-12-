@@ -35,6 +35,7 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-limeaccent selection:text-ink">
 
+  <!-- Architectural Top Header (Hidden when printing) -->
   <header class="sticky top-0 z-40 glass-header border-b hairline no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       <a href="index.html" class="flex items-center gap-3 min-w-0">
@@ -93,18 +94,128 @@
     </div>
   </header>
 
+  <!-- Main Content Container -->
   <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full space-y-12">
 
-    <div class="border-b hairline pb-6 space-y-1.5">
+    <!-- Page Intro Header (Hidden on print) -->
+    <div class="border-b hairline pb-6 space-y-1.5 no-print">
       <div class="font-code text-[11px] uppercase tracking-[0.14em] text-neutral-500">CERTIFIED LOGISTICS DISPATCH · UN SDG 12.4</div>
       <h1 class="font-editorial text-3xl sm:text-4xl text-ink">Drop-Off Manifest &amp; Verified Recyclers</h1>
       <p class="text-sm text-neutral-600 max-w-2xl">
-        Assemble your household e-waste box, inspect live recoverable mineral yields, print a dispatch label, and locate CPCB, EPA/R2, and WEEE hubs.
+        Assemble your household e-waste box, inspect live recoverable mineral yields, print an official dispatch label, and locate CPCB, EPA/R2, and WEEE hubs.
       </p>
     </div>
 
-    <!-- HOUSEHOLD DROP-OFF MANIFEST -->
-    <section class="bg-white rounded-2xl border hairline p-6 sm:p-8 space-y-6">
+    <!-- ========================================================================= -->
+    <!-- DEDICATED OFFICIAL PRINTABLE LOGISTICS DISPATCH MANIFEST (Prints ONLY this) -->
+    <!-- ========================================================================= -->
+    <div id="printable-dispatch-slip" class="only-print print-slip space-y-4">
+      <!-- Formal Logistics Header -->
+      <div class="flex items-start justify-between border-b-2 border-black pb-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-editorial text-2xl font-bold tracking-tight">ReCircuit</span>
+            <span class="font-code text-[10px] font-bold uppercase px-1.5 py-0.5 border border-black">UN SDG 12.4 / 12.5</span>
+          </div>
+          <div class="font-code text-xs uppercase tracking-wider font-bold text-neutral-900 mt-1">
+            OFFICIAL HOUSEHOLD E-WASTE DISPATCH MANIFEST &amp; CHAIN OF CUSTODY
+          </div>
+          <div class="text-[11px] text-neutral-700 mt-0.5">
+            Standard: <span id="print-region-standard" class="font-semibold">CPCB E-Waste Rules 2022 Schedule I</span> &bull; Generated: <span id="print-date-timestamp" class="font-code"></span>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="font-code text-[10px] font-bold tracking-widest text-neutral-700 uppercase">MANIFEST TRACKING ID</div>
+          <div id="print-tracking-id" class="font-code text-xs font-bold tracking-wider">RC-DISPATCH-2026-8821</div>
+          <!-- Visual Barcode Simulation -->
+          <div class="font-code text-base tracking-tighter select-none font-bold text-black mt-0.5">
+            ||| | ||||| || |||||| | |||| ||| |||| |
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Yield Summary Strip -->
+      <div class="grid grid-cols-4 gap-2 border border-black p-2 text-center font-code text-xs">
+        <div>
+          <div class="text-[9px] text-neutral-600 uppercase font-semibold">Total Quantity</div>
+          <div id="print-total-qty" class="text-sm font-bold text-black">0 Items</div>
+        </div>
+        <div>
+          <div class="text-[9px] text-neutral-600 uppercase font-semibold">Recoverable Gold (Au)</div>
+          <div id="print-gold" class="text-sm font-bold text-black">0.000 g</div>
+        </div>
+        <div>
+          <div class="text-[9px] text-neutral-600 uppercase font-semibold">Recoverable Copper (Cu)</div>
+          <div id="print-copper" class="text-sm font-bold text-black">0 g</div>
+        </div>
+        <div>
+          <div class="text-[9px] text-neutral-600 uppercase font-semibold">Avoided Embodied CO₂</div>
+          <div id="print-carbon" class="text-sm font-bold text-black">0.0 kg CO₂e</div>
+        </div>
+      </div>
+
+      <!-- Itemized Tabular Manifest -->
+      <div class="space-y-1">
+        <div class="font-code text-[11px] font-bold uppercase tracking-wider">Itemized Equipment Declaration</div>
+        <table class="w-full text-left border-collapse border border-black text-xs">
+          <thead>
+            <tr class="bg-neutral-100 border-b border-black font-code text-[10px]">
+              <th class="p-1 border-r border-black w-7 text-center">#</th>
+              <th class="p-1 border-r border-black w-14">CODE</th>
+              <th class="p-1 border-r border-black">EQUIPMENT / ITEM DESCRIPTION</th>
+              <th class="p-1 border-r border-black w-24">CATEGORY</th>
+              <th class="p-1 border-r border-black w-12 text-center">QTY</th>
+              <th class="p-1 border-r border-black">STREAM / HAZARD</th>
+              <th class="p-1 w-36">PREP VERIFICATION</th>
+            </tr>
+          </thead>
+          <tbody id="print-table-body" class="divide-y divide-black text-[11px]">
+            <!-- Injected dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pre-Drop Safety Checklist (Printed) -->
+      <div class="border border-black p-2.5 space-y-1 text-xs">
+        <div class="font-code text-[10px] font-bold uppercase tracking-wider">
+          ☑ PRE-DISPATCH SAFETY CERTIFICATION (MANDATORY COMPLIANCE)
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-[10px] text-neutral-800">
+          <div>[✓] <strong>NIST SP 800-88 Data Wipe:</strong> Accounts removed, storage encrypted &amp; factory-reset.</div>
+          <div>[✓] <strong>UN3480 Terminal Insulation:</strong> Battery contacts wrapped with PVC electrical tape.</div>
+          <div>[✓] <strong>Thermal Runaway Puncture Check:</strong> No swollen/warm batteries inside general box.</div>
+          <div>[✓] <strong>Corrosive &amp; Toner Containment:</strong> Liquids &amp; toners sealed in barrier poly bags.</div>
+        </div>
+      </div>
+
+      <!-- Chain of Custody Declaration & Sign-Off Blocks -->
+      <div class="grid grid-cols-2 gap-4 pt-1 text-xs">
+        <div class="border border-black p-2.5 space-y-3">
+          <div class="font-code text-[9px] font-bold uppercase">1. Household Declarant</div>
+          <div class="text-[10px] text-neutral-600">I declare that the equipment listed above contains no unsealed hazardous electrolytes and is prepared per safety guidelines.</div>
+          <div class="pt-4 border-b border-black"></div>
+          <div class="flex justify-between font-code text-[9px] text-neutral-500">
+            <span>Signature: ______________________</span>
+            <span>Date: ______________</span>
+          </div>
+        </div>
+
+        <div class="border border-black p-2.5 space-y-3">
+          <div class="font-code text-[9px] font-bold uppercase">2. Authorized Recycler / Collector</div>
+          <div class="text-[10px] text-neutral-600">Custody acknowledged for environmentally sound management under EPR / WEEE regulations.</div>
+          <div class="pt-4 border-b border-black"></div>
+          <div class="flex justify-between font-code text-[9px] text-neutral-500">
+            <span>Receiving Staff Stamp</span>
+            <span>Facility ID: ____________</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- INTERACTIVE SCREEN MANIFEST SECTION (HIDDEN ON PRINT)                     -->
+    <!-- ========================================================================= -->
+    <section class="bg-white rounded-2xl border hairline p-6 sm:p-8 space-y-6 no-print">
       <div class="flex flex-wrap items-start justify-between gap-4 pb-5 border-b hairline">
         <div>
           <div class="font-code text-[10px] uppercase tracking-[0.14em] text-neutral-500">HOUSEHOLD DISPATCH SLIP</div>
@@ -119,9 +230,9 @@
             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
             <span>Copy</span>
           </button>
-          <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border hairline bg-paper hover:border-ink text-ink text-xs font-medium transition">
-            <i data-lucide="printer" class="w-3.5 h-3.5"></i>
-            <span>Print Label</span>
+          <button id="print-label-btn" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border hairline bg-paper hover:border-ink text-ink text-xs font-semibold transition shadow-sm">
+            <i data-lucide="printer" class="w-3.5 h-3.5 text-forest"></i>
+            <span>1-Click Print Label</span>
           </button>
           <button id="clear-manifest-btn" type="button" class="px-3 py-2 rounded-lg border border-rose-200 hover:bg-rose-50 text-vermilion text-xs font-medium transition">
             Clear
@@ -130,7 +241,7 @@
       </div>
 
       <!-- Live Urban Mine Yield Strip -->
-      <div id="manifest-yield-strip" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div id="manifest-yield-strip" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-3 no-print">
         <div class="p-3.5 rounded-xl bg-obsidian text-white">
           <div class="font-code text-[10px] uppercase text-neutral-400">Total Items</div>
           <div class="font-code text-xl font-semibold text-limeaccent mt-0.5" id="mf-total-qty">0</div>
@@ -149,9 +260,9 @@
         </div>
       </div>
 
-      <div id="manifest-items-list" class="space-y-2.5"></div>
+      <div id="manifest-items-list" class="space-y-2.5 no-print"></div>
 
-      <div id="manifest-empty" class="hidden text-center py-12 bg-paper rounded-xl border border-dashed hairline space-y-3">
+      <div id="manifest-empty" class="hidden text-center py-12 bg-paper rounded-xl border border-dashed hairline space-y-3 no-print">
         <div class="w-11 h-11 rounded-xl bg-white border hairline flex items-center justify-center mx-auto text-neutral-400">
           <i data-lucide="package-open" class="w-5 h-5"></i>
         </div>
@@ -161,8 +272,8 @@
         </p>
       </div>
 
-      <!-- Safety Sign-Off Checklist -->
-      <div class="p-5 rounded-xl bg-paper border hairline space-y-3">
+      <!-- Safety Sign-Off Checklist (Interactive on Screen) -->
+      <div class="p-5 rounded-xl bg-paper border hairline space-y-3 no-print">
         <div class="flex items-center gap-2 font-code text-[10px] font-bold text-ink uppercase tracking-wider">
           <i data-lucide="shield-check" class="w-4 h-4 text-forest"></i>
           <span>Pre-Drop Safety Sign-Off</span>
@@ -188,8 +299,10 @@
       </div>
     </section>
 
-    <!-- 12 VERIFIED DROP-OFF HUBS -->
-    <section class="space-y-5">
+    <!-- ========================================================================= -->
+    <!-- 12 VERIFIED DROP-OFF HUBS (HIDDEN FROM PRINTING)                          -->
+    <!-- ========================================================================= -->
+    <section class="space-y-5 no-print">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b hairline pb-4">
         <div>
           <div class="font-code text-[10px] uppercase tracking-[0.14em] text-neutral-500">AUTHORIZED COLLECTION NETWORK</div>
@@ -233,6 +346,7 @@
         list.innerHTML = '';
         empty.classList.remove('hidden');
         strip.classList.add('hidden');
+        updatePrintSheet(0, 0, 0, 0, []);
         return;
       }
 
@@ -240,6 +354,7 @@
       strip.classList.remove('hidden');
 
       let totalQty = 0, gold = 0, copper = 0, carbon = 0;
+      const validEntries = [];
 
       list.innerHTML = manifest.map(entry => {
         const item = ITEMS.find(i => i.id === entry.id);
@@ -247,12 +362,15 @@
         const qty = entry.qty || 1;
         totalQty += qty;
 
-        if (item.mineralKey && MINERAL_METRICS[item.mineralKey]) {
-          const m = MINERAL_METRICS[item.mineralKey];
-          gold += m.goldG * qty;
-          copper += m.copperG * qty;
-          carbon += m.avoidedCarbonKg * qty;
+        const mKey = item.mineralKey || (item.category === 'Consumer Tech' ? 'smartphone' : null);
+        if (mKey && MINERAL_METRICS[mKey]) {
+          const m = MINERAL_METRICS[mKey];
+          gold += (m.goldG || 0) * qty;
+          copper += (m.copperG || 0) * qty;
+          carbon += (m.avoidedCarbonKg || 0) * qty;
         }
+
+        validEntries.push({ item, qty });
 
         return `
           <div class="flex items-center justify-between gap-3 p-4 rounded-xl bg-paper border hairline">
@@ -262,18 +380,18 @@
               </div>
               <div class="min-w-0">
                 <div class="flex items-center gap-1.5">
-                  <span class="font-code text-[10px] text-neutral-500">${item.code}</span>
+                  <span class="font-code text-[10px] text-neutral-500 font-bold">${item.code}</span>
                   <span class="font-code text-[9px] uppercase px-1.5 py-0.5 rounded bg-obsidian text-limeaccent font-semibold">${item.stream}</span>
                 </div>
                 <h4 class="font-semibold text-sm text-ink truncate mt-0.5">${item.name}</h4>
               </div>
             </div>
 
-            <div class="flex items-center gap-2 shrink-0 no-print">
+            <div class="flex items-center gap-2 shrink-0">
               <div class="flex items-center gap-1 bg-white border hairline rounded-lg px-1.5 py-1">
-                <button type="button" data-qty="${item.id}:${qty - 1}" class="w-6 h-6 rounded hover:bg-paper font-code text-xs text-ink">−</button>
-                <span class="w-6 text-center font-code font-semibold text-xs text-ink">${qty}</span>
-                <button type="button" data-qty="${item.id}:${qty + 1}" class="w-6 h-6 rounded hover:bg-paper font-code text-xs text-ink">+</button>
+                <button type="button" data-qty="${item.id}:${qty - 1}" class="w-6 h-6 rounded hover:bg-paper font-code text-xs text-ink font-bold">−</button>
+                <span class="w-6 text-center font-code font-bold text-xs text-ink">${qty}</span>
+                <button type="button" data-qty="${item.id}:${qty + 1}" class="w-6 h-6 rounded hover:bg-paper font-code text-xs text-ink font-bold">+</button>
               </div>
               <button type="button" data-remove="${item.id}" class="p-1.5 rounded-lg border hairline bg-white hover:border-vermilion text-neutral-400 hover:text-vermilion transition" aria-label="Remove item">
                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
@@ -288,7 +406,50 @@
       document.getElementById('mf-copper').textContent = `${Math.round(copper)} g`;
       document.getElementById('mf-carbon').textContent = `${carbon.toFixed(1)} kg CO₂e`;
 
+      updatePrintSheet(totalQty, gold, copper, carbon, validEntries);
+
       if (window.lucide) lucide.createIcons({ root: list });
+    }
+
+    function updatePrintSheet(totalQty, gold, copper, carbon, entries) {
+      document.getElementById('print-total-qty').textContent = `${totalQty} Items`;
+      document.getElementById('print-gold').textContent = `${gold.toFixed(3)} g`;
+      document.getElementById('print-copper').textContent = `${Math.round(copper)} g`;
+      document.getElementById('print-carbon').textContent = `${carbon.toFixed(1)} kg CO₂e`;
+      document.getElementById('print-date-timestamp').textContent = new Date().toLocaleString();
+
+      const reg = AppState.region || 'IN';
+      document.getElementById('print-region-standard').textContent = reg === 'IN'
+        ? 'India CPCB E-Waste Management Rules 2022'
+        : reg === 'US' ? 'USA EPA RCRA Universal Waste Rule' : 'EU WEEE Directive 2012/19/EU';
+
+      const tbody = document.getElementById('print-table-body');
+      if (!entries.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-3 text-center text-neutral-500 italic">No equipment declared on this manifest.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = entries.map((e, idx) => `
+        <tr>
+          <td class="p-1.5 border-r border-black text-center font-code">${idx + 1}</td>
+          <td class="p-1.5 border-r border-black font-code font-bold">${e.item.code}</td>
+          <td class="p-1.5 border-r border-black font-semibold">${e.item.name}</td>
+          <td class="p-1.5 border-r border-black text-neutral-700">${e.item.category}</td>
+          <td class="p-1.5 border-r border-black text-center font-code font-bold">${e.qty}</td>
+          <td class="p-1.5 border-r border-black text-neutral-700 text-[10px]">${e.item.hazard.split(';')[0]}</td>
+          <td class="p-1.5 text-[10px] font-code">[✓] Isolated &amp; Prepped</td>
+        </tr>
+      `).join('');
+    }
+
+    function triggerManifestPrint() {
+      const manifest = AppState.manifest || [];
+      if (!manifest.length) {
+        AppState.showToast('Your manifest is empty. Add items or click "Load Sample Junk Drawer" first.');
+        return;
+      }
+      renderManifest();
+      window.print();
     }
 
     function renderCenters() {
@@ -300,23 +461,23 @@
       });
 
       grid.innerHTML = filtered.map(c => `
-        <article class="item-card p-5 flex flex-col justify-between gap-4">
-          <div class="space-y-2.5">
-            <div class="flex items-center justify-between gap-2">
-              <span class="font-code text-[10px] px-2 py-0.5 rounded bg-paper border hairline text-neutral-700 font-semibold uppercase">${c.country} · ${c.city}</span>
-              <span class="font-code text-[10px] text-forest font-semibold inline-flex items-center gap-1">
-                <i data-lucide="check-circle-2" class="w-3 h-3"></i> VERIFIED
+        <article class="item-card p-4 sm:p-5 flex flex-col justify-between space-y-3">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-[11px] font-code">
+              <span class="px-2 py-0.5 rounded bg-paper border hairline text-neutral-600">${c.country} · ${c.city}</span>
+              <span class="text-forest font-semibold flex items-center gap-1">
+                <i data-lucide="check" class="w-3 h-3"></i> Verified
               </span>
             </div>
-            <h3 class="font-semibold text-ink text-[15px] leading-snug">${c.name}</h3>
+            <h3 class="font-editorial text-lg text-ink font-bold leading-snug">${c.name}</h3>
             <p class="text-xs text-neutral-600 leading-relaxed">${c.address}</p>
             <div class="flex flex-wrap gap-1 pt-1">
-              ${(c.accepts || []).map(s => `<span class="font-code text-[9px] uppercase px-2 py-0.5 rounded bg-paper border hairline text-neutral-600">${s}</span>`).join('')}
+              ${c.accepts.map(s => `<span class="font-code text-[9px] uppercase px-1.5 py-0.5 rounded bg-paper border hairline text-neutral-600">${s}</span>`).join('')}
             </div>
           </div>
           <div class="pt-3 border-t hairline space-y-1 text-[11px]">
             <div class="text-neutral-500"><strong class="text-ink">Cert:</strong> ${c.certification}</div>
-            <div class="font-code text-neutral-600">${c.phone}</div>
+            <div class="font-code text-neutral-600 font-semibold">${c.phone}</div>
           </div>
         </article>
       `).join('');
@@ -331,14 +492,17 @@
         return;
       }
       const lines = [
+        '==================================================',
         'ReCircuit — Household Drop-Off Manifest (UN SDG 12)',
         `Region: ${AppState.region} | Date: ${new Date().toLocaleDateString()}`,
-        '--------------------------------------------------'
+        '=================================================='
       ];
       manifest.forEach((entry, idx) => {
         const item = ITEMS.find(i => i.id === entry.id);
-        if (item) lines.push(`${idx + 1}. [${item.code}] ${item.name} (x${entry.qty || 1}) — ${item.stream.toUpperCase()}`);
+        if (item) lines.push(`${idx + 1}. [${item.code}] ${item.name} (Qty: ${entry.qty || 1}) — ${item.stream.toUpperCase()} | Hazard: ${item.hazard.split(';')[0]}`);
       });
+      lines.push('--------------------------------------------------');
+      lines.push('Pre-Drop Verification: Terminals taped, data wiped per NIST SP 800-88.');
       const text = lines.join('\n');
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -364,19 +528,26 @@
       renderCenters();
 
       window.addEventListener('manifestUpdated', renderManifest);
+      window.addEventListener('regionChanged', renderManifest);
+
       document.getElementById('load-sample-btn').addEventListener('click', () => AppState.loadSampleJunkDrawer());
       document.getElementById('copy-manifest-btn').addEventListener('click', copyManifest);
-      document.getElementById('clear-manifest-btn').addEventListener('click', () => AppState.clearManifest());
+      document.getElementById('print-label-btn').addEventListener('click', triggerManifestPrint);
+      document.getElementById('clear-manifest-btn').addEventListener('click', () => {
+        if (confirm('Clear all items from your manifest?')) AppState.clearManifest();
+      });
 
       document.getElementById('manifest-items-list').addEventListener('click', e => {
-        const qBtn = e.target.closest('[data-qty]');
-        if (qBtn) {
-          const [id, next] = qBtn.dataset.qty.split(':').map(Number);
-          AppState.updateQty(id, next);
+        const qtyBtn = e.target.closest('[data-qty]');
+        if (qtyBtn) {
+          const [idStr, qStr] = qtyBtn.dataset.qty.split(':');
+          AppState.updateQty(parseInt(idStr, 10), parseInt(qStr, 10));
           return;
         }
-        const rBtn = e.target.closest('[data-remove]');
-        if (rBtn) AppState.removeFromManifest(parseInt(rBtn.dataset.remove, 10));
+        const rmBtn = e.target.closest('[data-remove]');
+        if (rmBtn) {
+          AppState.removeFromManifest(parseInt(rmBtn.dataset.remove, 10));
+        }
       });
 
       document.querySelectorAll('.reg-pill').forEach(btn => {
