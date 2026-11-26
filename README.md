@@ -75,24 +75,40 @@ ReCircuit is architected into 6 modular, dedicated pages:
 ## 📐 Scientific & Mathematical Foundations
 
 ### 1. Urban Mine Mineral Recovery Index (MRI)
-$$M_k = \sum_{i} Q_i \cdot m_i \cdot c_{i,k} \cdot \eta_k$$
+
+$$
+M_k = \sum_{i} Q_i \cdot m_i \cdot c_{i,k} \cdot \eta_k
+$$
+
 - $Q_i$: Quantity of device category $i$.
 - $m_i$: Average device mass (kg).
 - $c_{i,k}$: Concentration of critical mineral $k$ (g/kg).
 - $\eta_k$: Metallurgical recovery yield factor ($\approx 0.90\text{--}0.95$ for hydrometallurgical refining).
 
 ### 2. Avoided Virgin Ore Mining Excavation
-$$\text{Ore}_{\text{avoided}} = \sum_{k} M_k \cdot \text{OreGradeFactor}_k$$
+
+$$
+\text{Ore}_{\text{avoided}} = \sum_{k} M_k \cdot \text{OreGradeFactor}_k
+$$
+
 - Primary gold ore contains only **1 to 5 ppm** of gold (extracting 1 kg of gold requires blasting ~333 tonnes of natural rock).
 - Recycled smartphone circuit boards hold **~300 to 350 ppm** of gold — a **100× higher concentration than natural rock**.
 
 ### 3. Embodied Carbon Displacement
-$$\Delta \text{CO}_{2,\text{avoided}} = \sum_{k} M_k \cdot \left(\epsilon_{\text{virgin}, k} - \epsilon_{\text{recycled}, k}\right)$$
+
+$$
+\Delta \text{CO}_{2,\text{avoided}} = \sum_{k} M_k \cdot \left(\epsilon_{\text{virgin}, k} - \epsilon_{\text{recycled}, k}\right)
+$$
+
 - Virgin gold mining emits ~18,000 kg CO₂e per kg of metal.
 - Secondary e-waste refining emits ~800 kg CO₂e per kg of metal — displacing **17,200 kg CO₂e per kg of recovered gold**.
 
 ### 4. Right-to-Repair Lifespan Extension Carbon Model (SDG 12.5)
-$$\Delta \text{C}_{\text{repair}} = E_{\text{mfg}} \cdot \left(1 - \frac{L_{\text{baseline}}}{L_{\text{extended}}}\right) - E_{\text{repair}}$$
+
+$$
+\Delta \text{Carbon}_{\text{repair}} = E_{\text{mfg}} \cdot \left(1 - \frac{L_{\text{baseline}}}{L_{\text{extended}}}\right) - E_{\text{repair}}
+$$
+
 - Over 80% of a smartphone's lifetime carbon footprint is locked in manufacturing ($E_{\text{mfg}} \approx 85\text{ kg CO}_2\text{e}$).
 - Extending a smartphone's lifespan from 2.5 to 4.5 years via a battery swap ($E_{\text{repair}} \approx 3\text{ kg CO}_2\text{e}$) saves **34.7 kg CO₂e** — 4× greater than the carbon saved by recycling it prematurely.
 
